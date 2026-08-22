@@ -1,23 +1,7 @@
-# Stage 1 — data collection dependencies
-#
-# NOTE: app-store-scraper hard-pins requests==2.23.0, which drags in an ancient
-# urllib3 that is broken on Python 3.12+. We pin modern requests/urllib3 AFTER it
-# so the install stays usable. app-store-scraper still works fine with them, and
-# collect.py falls back to Apple's iTunes RSS feed if the scraper misbehaves.
-# Strongly recommended: install into a fresh virtualenv (see README.md).
-google-play-scraper>=1.2.7      # Google Play reviews (no auth)
-app-store-scraper>=0.3.5        # Apple App Store reviews (no auth)
-praw>=7.7.1                     # Reddit API (needs free credentials)
-youtube-comment-downloader>=0.1.76  # YouTube comments (no auth)
-python-dotenv>=1.0.1           # loads Reddit creds from a .env file
-
-# Stage 2 — extraction
-anthropic>=0.40.0              # Claude API for structured insight extraction
-
-# Keep these modern despite app-store-scraper's stale pins.
-requests>=2.32
-urllib3>=2
-
-# Local dashboard (same shell as the Graduation project Streamlit app)
+# Streamlit Cloud / dashboard only.
+# Collector + LLM packages live in requirements-collect.txt (local pipeline).
+# Do not add app-store-scraper here — it hard-pins requests==2.23.0 and
+# Streamlit Cloud's resolver (uv + pip) cannot override that pin.
 streamlit>=1.40
 pandas>=2.0
+python-dotenv>=1.0.1

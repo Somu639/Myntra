@@ -78,6 +78,7 @@ python -m venv .venv
 # Windows PowerShell:  .venv\Scripts\Activate.ps1
 # macOS/Linux:         source .venv/bin/activate
 pip install -r requirements.txt
+pip install -r requirements-collect.txt   # scrapers + Claude (local pipeline only)
 ```
 
 Copy `.env.example` to `.env` and fill in keys as needed (see below).
