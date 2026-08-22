@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Myntra Discovery Engine - Raw Data</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#271719",
+                        "background": "#fff8f7",
+                        "primary-fixed": "#ffd9dc",
+                        "secondary": "#5a5d73",
+                        "primary-container": "#df2457",
+                        "on-primary-fixed": "#400011",
+                        "tertiary-container": "#008644",
+                        "tertiary": "#006a34",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-tertiary-container": "#f6fff3",
+                        "surface-container": "#ffe9ea",
+                        "surface-bright": "#fff8f7",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "outline": "#8f6f72",
+                        "inverse-surface": "#3e2c2d",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#7dfca2",
+                        "on-primary-container": "#fffbff",
+                        "on-tertiary-fixed-variant": "#005227",
+                        "outline-variant": "#e3bdc0",
+                        "secondary-container": "#dbdef8",
+                        "on-secondary-container": "#5e6177",
+                        "secondary-fixed": "#dee1fa",
+                        "on-secondary-fixed": "#161b2d",
+                        "surface-container-high": "#ffe1e3",
+                        "tertiary-fixed-dim": "#5fde88",
+                        "surface": "#fff8f7",
+                        "on-primary-fixed-variant": "#910031",
+                        "surface-tint": "#bd0043",
+                        "surface-variant": "#f9dbdd",
+                        "primary": "#b90041",
+                        "on-error": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#00210c",
+                        "surface-container-highest": "#f9dbdd",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#271719",
+                        "surface-dim": "#f1d3d5",
+                        "surface-container-low": "#fff0f0",
+                        "on-surface-variant": "#5b4042",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#ffb2ba",
+                        "error-container": "#ffdad6",
+                        "inverse-on-surface": "#ffeced",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#ffb2ba"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack_gap": "16px",
+                        "card_padding": "24px",
+                        "sidebar_width": "260px",
+                        "container_padding": "32px",
+                        "grid_gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Assistant"],
+                        "wordmark": ["Assistant"],
+                        "button": ["Assistant"],
+                        "subtitle": ["Assistant"],
+                        "h1": ["Assistant"],
+                        "h3": ["Assistant"],
+                        "body": ["Assistant"],
+                        "body-bold": ["Assistant"],
+                        "label": ["Assistant"]
+                    },
+                    "fontSize": {
+                        "h2": ["24px", { "lineHeight": "32px", "fontWeight": "800" }],
+                        "wordmark": ["24px", { "lineHeight": "100%", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+                        "button": ["13px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+                        "subtitle": ["11px", { "lineHeight": "16px", "letterSpacing": "0.12em", "fontWeight": "700" }],
+                        "h1": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "800" }],
+                        "h3": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "body": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-bold": ["14px", { "lineHeight": "20px", "fontWeight": "700" }],
+                        "label": ["12px", { "lineHeight": "16px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #F5F5F6; } /* Main Canvas Grey */
+        .surface-card { background-color: #FFFFFF; border: 1px solid #EAEAEC; border-radius: 4px; padding: 24px; box-shadow: none; }
+        .divider-solid { border-color: #EAEAEC; border-width: 1px; }
+        .chip-frustrated { background-color: #FEE8ED; color: #FF3F6C; border-radius: 2px; }
+        .chip-positive { background-color: #E8F2EE; color: #43665E; border-radius: 2px; }
+        .btn-primary { background-color: #FF3F6C; color: #FFFFFF; border-radius: 2px; font-weight: 700; }
+        .btn-secondary { background-color: transparent; border: 1px solid #EAEAEC; color: #282C3F; border-radius: 2px; font-weight: 700; }
+        .input-outline { border: 1px solid #EAEAEC; border-radius: 2px; }
+        .input-outline:focus { border-color: #282C3F; outline: none; box-shadow: none; }
+        
+        /* Sidebar layout override to match brand guidelines */
+        .sidebar-container { width: 260px; height: 100vh; position: fixed; left: 0; top: 0; background-color: #FFFFFF; border-right: 1px solid #EAEAEC; }
+        .main-content-offset { margin-left: 260px; min-height: 100vh; }
+        .topbar-container { height: 64px; position: sticky; top: 0; z-index: 10; background-color: #FFFFFF; border-bottom: 1px solid #EAEAEC; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; width: 100%; }
+        
+        /* Table overrides */
+        .table-header-cell { background-color: #F5F5F6; font-weight: 700; color: #282C3F; padding: 12px 16px; text-align: left; border-bottom: 1px solid #EAEAEC; }
+        .table-row { border-bottom: 1px solid #EAEAEC; transition: background-color 0.2s; }
+        .table-row:hover { background-color: #F5F5F6; }
+        .table-cell { padding: 12px 16px; color: #282C3F; vertical-align: top; }
+    </style>
+</head>
+<body class="font-body text-body bg-[#F5F5F6]">
+<!-- Sidebar Component (Injected from JSON + Rules) -->
+<aside class="sidebar-container flex flex-col h-full py-stack_gap z-20">
+<div class="px-container_padding pb-stack_gap mb-stack_gap border-b border-[#EAEAEC]">
+<div class="font-wordmark text-wordmark text-primary tracking-tighter" style="color: #FF3F6C;">Myntra</div>
+<div class="font-subtitle text-subtitle text-secondary mt-1">DISCOVERY ENGINE</div>
+</div>
+<nav class="flex-1 overflow-y-auto">
+<ul class="space-y-1 px-4">
+<li>
+<a class="flex items-center gap-3 px-4 py-2 font-body text-secondary hover:bg-[#F5F5F6] transition-colors rounded" href="index.html">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span>Home</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-2 font-body text-secondary hover:bg-[#F5F5F6] transition-colors rounded" href="discovery_lab.html">
+<span class="material-symbols-outlined" data-icon="science">science</span>
+<span>Discovery Lab</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-2 font-body text-secondary hover:bg-[#F5F5F6] transition-colors rounded" href="search_and_library.html">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span>Search and Library</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-2 font-body text-secondary hover:bg-[#F5F5F6] transition-colors rounded" href="segments.html">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span>Segments</span>
+</a>
+</li>
+<!-- ACTIVE NAV ITEM -->
+<li>
+<a class="flex items-center gap-3 px-4 py-2 font-body-bold border-l-4 bg-[#fff0f0]" href="raw_data.html" style="color: #FF3F6C; border-color: #FF3F6C;">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+<span>Raw Data</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-2 font-body text-secondary hover:bg-[#F5F5F6] transition-colors rounded" href="ai_roadmap.html">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span>AI Roadmap</span>
+</a>
+</li>
+</ul>
+</nav>
+<div class="px-container_padding pt-stack_gap border-t border-[#EAEAEC] mt-auto">
+<div class="text-xs text-secondary mb-2">LLM: Groq key present</div>
+<a class="flex items-center gap-3 py-2 font-body text-secondary hover:bg-[#F5F5F6] transition-colors rounded" href="#">
+<span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+<span class="text-xs truncate">Backend: local files (collect -&gt; extract -&gt; discover)</span>
+</a>
+</div>
+
+<a id="streamlit-backend-link" href="https://share.streamlit.io/deploy?repository=Somu639/Myntra&amp;branch=master&amp;mainModule=streamlit_app.py" target="_blank" rel="noopener"
+   class="mt-3 block w-full text-center py-2 rounded-DEFAULT font-button text-button"
+   style="background:#FF3F6C;color:#fff;text-decoration:none;">Open Streamlit backend</a>
+
+</aside>
+<!-- Main Content Area -->
+<div class="main-content-offset flex flex-col">
+<!-- TopAppBar Component -->
+<header class="topbar-container">
+<div class="font-h3 text-h3 text-primary">Myntra Discovery Engine</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden md:block">
+<!-- Search Bar logic (on_right) -->
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary">search</span>
+<input class="input-outline pl-10 pr-4 py-1 text-sm w-64 bg-[#F5F5F6]" placeholder="Search..." type="text"/>
+</div>
+<button class="text-secondary hover:text-primary transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-secondary hover:text-primary transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 p-container_padding">
+<div class="mb-8">
+<h1 class="font-h1 text-h1 text-on-background mb-2">Raw Data</h1>
+<p class="font-body text-secondary">Research data browser.</p>
+</div>
+<!-- Filters & Search Section -->
+<div class="surface-card mb-6">
+<div class="flex flex-wrap items-center gap-4 mb-4">
+<!-- Source Filter -->
+<div class="relative">
+<select class="input-outline font-body text-sm py-2 pl-3 pr-8 appearance-none bg-white min-w-[200px]">
+<option value="">Source (All)</option>
+<option value="app_store">App Store reviews</option>
+<option value="play_store">Play Store reviews</option>
+<option value="reddit">Reddit discussions</option>
+<option value="fashion_comm">Fashion and shopping communities</option>
+<option value="social">Social media conversations</option>
+<option value="youtube">YouTube comments</option>
+<option value="qa">Product reviews and Q&amp;A</option>
+<option value="other">Other public conversations</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-secondary">arrow_drop_down</span>
+</div>
+<!-- Blocker Filter -->
+<div class="relative">
+<select class="input-outline font-body text-sm py-2 pl-3 pr-8 appearance-none bg-white min-w-[180px]">
+<option value="">Blocker (All)</option>
+<option value="return_hassle">return_hassle</option>
+<option value="price">price</option>
+<option value="quality_doubt">quality_doubt</option>
+<option value="fit_sizing">fit_sizing</option>
+<option value="trust_authenticity">trust_authenticity</option>
+<option value="other">other</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-secondary">arrow_drop_down</span>
+</div>
+<!-- Sentiment Filter -->
+<div class="relative">
+<select class="input-outline font-body text-sm py-2 pl-3 pr-8 appearance-none bg-white min-w-[160px]">
+<option value="">Sentiment (All)</option>
+<option value="frustrated">Frustrated</option>
+<option value="mixed">Mixed</option>
+<option value="positive">Positive</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-secondary">arrow_drop_down</span>
+</div>
+<!-- Relevant Only Toggle -->
+<label class="flex items-center gap-2 cursor-pointer ml-auto">
+<input class="form-checkbox h-4 w-4 text-primary input-outline rounded-sm border-gray-300" type="checkbox"/>
+<span class="font-body-bold text-sm text-on-background">Relevant only</span>
+</label>
+</div>
+<!-- Full Width Search -->
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary">search</span>
+<input class="input-outline w-full pl-10 pr-4 py-2 font-body text-sm" placeholder="Search across all raw data texts..." type="text"/>
+</div>
+</div>
+<!-- Meta Data -->
+<div class="flex justify-between items-center mb-4 px-2">
+<span class="font-label text-label text-secondary uppercase tracking-wider">1,011 rows</span>
+<button class="btn-secondary px-3 py-1 text-xs flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">download</span> Export CSV
+                </button>
+</div>
+<!-- Data Table -->
+<div class="surface-card p-0 overflow-hidden">
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr>
+<th class="table-header-cell w-32">Source</th>
+<th class="table-header-cell w-24">Rating</th>
+<th class="table-header-cell w-28">Sentiment</th>
+<th class="table-header-cell w-32">Blocker</th>
+<th class="table-header-cell w-40">Segment</th>
+<th class="table-header-cell">Text preview</th>
+</tr>
+</thead>
+<tbody class="font-body text-sm">
+<!-- Row 1: Play Store / Frustrated -->
+<tr class="table-row">
+<td class="table-cell font-body-bold text-xs flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-[#008644]">shop</span> Play Store
+                                </td>
+<td class="table-cell">
+<div class="flex text-yellow-500">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]">star</span>
+<span class="material-symbols-outlined text-[14px]">star</span>
+<span class="material-symbols-outlined text-[14px]">star</span>
+<span class="material-symbols-outlined text-[14px]">star</span>
+</div>
+</td>
+<td class="table-cell">
+<span class="chip-frustrated px-2 py-0.5 text-[11px] font-bold uppercase inline-block">Frustrated</span>
+</td>
+<td class="table-cell"><code class="text-xs bg-gray-50 px-1 py-0.5 rounded border border-gray-200">return_hassle</code></td>
+<td class="table-cell">Price-Conscious Gen Z</td>
+<td class="table-cell text-secondary truncate max-w-md">"App keeps crashing when I try to process a return. It's been 3 days and customer service hasn't replied. Absolute nightmare..."</td>
+</tr>
+<!-- Row 2: Reddit / Mixed -->
+<tr class="table-row">
+<td class="table-cell font-body-bold text-xs flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-orange-500">forum</span> Reddit
+                                </td>
+<td class="table-cell text-secondary text-xs italic">N/A</td>
+<td class="table-cell">
+<span class="bg-gray-100 text-gray-700 px-2 py-0.5 text-[11px] font-bold uppercase inline-block rounded-sm">Mixed</span>
+</td>
+<td class="table-cell"><code class="text-xs bg-gray-50 px-1 py-0.5 rounded border border-gray-200">fit_sizing</code></td>
+<td class="table-cell">Trend Adapters</td>
+<td class="table-cell text-secondary truncate max-w-md">"Does anyone else find the new H&amp;M drop runs weirdly small on the shoulders? Love the design but the fit is just confusing."</td>
+</tr>
+<!-- Row 3: YouTube / Positive -->
+<tr class="table-row">
+<td class="table-cell font-body-bold text-xs flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-red-600">play_circle</span> YouTube
+                                </td>
+<td class="table-cell text-secondary text-xs italic">N/A</td>
+<td class="table-cell">
+<span class="chip-positive px-2 py-0.5 text-[11px] font-bold uppercase inline-block">Positive</span>
+</td>
+<td class="table-cell"><span class="text-gray-400 text-xs">-</span></td>
+<td class="table-cell">Premium Seekers</td>
+<td class="table-cell text-secondary truncate max-w-md">"Great haul review! I actually just bought those exact sneakers and they arrived in 2 days. The authenticity tag gave me peace of mind."</td>
+</tr>
+<!-- Row 4: Fashion Comm / Frustrated -->
+<tr class="table-row">
+<td class="table-cell font-body-bold text-xs flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-purple-600">diversity_2</span> Communities
+                                </td>
+<td class="table-cell text-secondary text-xs italic">N/A</td>
+<td class="table-cell">
+<span class="chip-frustrated px-2 py-0.5 text-[11px] font-bold uppercase inline-block">Frustrated</span>
+</td>
+<td class="table-cell"><code class="text-xs bg-gray-50 px-1 py-0.5 rounded border border-gray-200">trust_authenticity</code></td>
+<td class="table-cell">Sneakerheads</td>
+<td class="table-cell text-secondary truncate max-w-md">"Warning guys, the seller 'KicksRUs' on the marketplace is shipping obvious fakes. The stitching on the toe box is a dead giveaway."</td>
+</tr>
+<!-- Row 5: Play Store / Frustrated -->
+<tr class="table-row">
+<td class="table-cell font-body-bold text-xs flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-[#008644]">shop</span> Play Store
+                                </td>
+<td class="table-cell">
+<div class="flex text-yellow-500">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]">star</span>
+<span class="material-symbols-outlined text-[14px]">star</span>
+<span class="material-symbols-outlined text-[14px]">star</span>
+</div>
+</td>
+<td class="table-cell">
+<span class="chip-frustrated px-2 py-0.5 text-[11px] font-bold uppercase inline-block">Frustrated</span>
+</td>
+<td class="table-cell"><code class="text-xs bg-gray-50 px-1 py-0.5 rounded border border-gray-200">price</code></td>
+<td class="table-cell">Price-Conscious Gen Z</td>
+<td class="table-cell text-secondary truncate max-w-md">"Convenience fee? Packaging fee? By the time I get to checkout the cart value jumped 15%. Deleting the app."</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="border-t border-[#EAEAEC] p-4 flex items-center justify-between bg-gray-50">
+<span class="text-xs text-secondary">Showing 1 to 5 of 1,011 entries</span>
+<div class="flex gap-1">
+<button class="px-2 py-1 border border-[#EAEAEC] rounded text-xs text-gray-400 cursor-not-allowed bg-white">Prev</button>
+<button class="px-2 py-1 border border-[#282C3F] bg-[#282C3F] text-white rounded text-xs font-bold">1</button>
+<button class="px-2 py-1 border border-[#EAEAEC] rounded text-xs text-[#282C3F] hover:bg-gray-100 bg-white">2</button>
+<button class="px-2 py-1 border border-[#EAEAEC] rounded text-xs text-[#282C3F] hover:bg-gray-100 bg-white">3</button>
+<span class="px-2 py-1 text-xs text-secondary">...</span>
+<button class="px-2 py-1 border border-[#EAEAEC] rounded text-xs text-[#282C3F] hover:bg-gray-100 bg-white">Next</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+<script src="config.js"></script>
+<script>
+(function () {
+  var url = (window.STREAMLIT_BACKEND_URL || "").replace(/\/$/, "");
+  if (!url) return;
+  document.querySelectorAll("a[href='#']").forEach(function () {});
+  var link = document.getElementById("streamlit-backend-link");
+  if (link) link.href = url;
+})();
+</script>
+
+</body></html>

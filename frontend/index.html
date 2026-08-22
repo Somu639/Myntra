@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Myntra Discovery Engine - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#271719",
+                        "background": "#fff8f7",
+                        "primary-fixed": "#ffd9dc",
+                        "secondary": "#5a5d73",
+                        "primary-container": "#df2457",
+                        "on-primary-fixed": "#400011",
+                        "tertiary-container": "#008644",
+                        "tertiary": "#006a34",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-tertiary-container": "#f6fff3",
+                        "surface-container": "#ffe9ea",
+                        "surface-bright": "#fff8f7",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "outline": "#8f6f72",
+                        "inverse-surface": "#3e2c2d",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#7dfca2",
+                        "on-primary-container": "#fffbff",
+                        "on-tertiary-fixed-variant": "#005227",
+                        "outline-variant": "#e3bdc0",
+                        "secondary-container": "#dbdef8",
+                        "on-secondary-container": "#5e6177",
+                        "secondary-fixed": "#dee1fa",
+                        "on-secondary-fixed": "#161b2d",
+                        "surface-container-high": "#ffe1e3",
+                        "tertiary-fixed-dim": "#5fde88",
+                        "surface": "#fff8f7",
+                        "on-primary-fixed-variant": "#910031",
+                        "surface-tint": "#bd0043",
+                        "surface-variant": "#f9dbdd",
+                        "primary": "#b90041",
+                        "on-error": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#00210c",
+                        "surface-container-highest": "#f9dbdd",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#271719",
+                        "surface-dim": "#f1d3d5",
+                        "surface-container-low": "#fff0f0",
+                        "on-surface-variant": "#5b4042",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#ffb2ba",
+                        "error-container": "#ffdad6",
+                        "inverse-on-surface": "#ffeced",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#ffb2ba"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack_gap": "16px",
+                        "card_padding": "24px",
+                        "sidebar_width": "260px",
+                        "container_padding": "32px",
+                        "grid_gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Assistant"],
+                        "wordmark": ["Assistant"],
+                        "button": ["Assistant"],
+                        "subtitle": ["Assistant"],
+                        "h1": ["Assistant"],
+                        "h3": ["Assistant"],
+                        "body": ["Assistant"],
+                        "body-bold": ["Assistant"],
+                        "label": ["Assistant"]
+                    },
+                    "fontSize": {
+                        "h2": ["24px", { "lineHeight": "32px", "fontWeight": "800" }],
+                        "wordmark": ["24px", { "lineHeight": "100%", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+                        "button": ["13px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+                        "subtitle": ["11px", { "lineHeight": "16px", "letterSpacing": "0.12em", "fontWeight": "700" }],
+                        "h1": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "800" }],
+                        "h3": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "body": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-bold": ["14px", { "lineHeight": "20px", "fontWeight": "700" }],
+                        "label": ["12px", { "lineHeight": "16px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #F5F5F6; } /* Main canvas grey background */
+        .card-surface { background-color: #FFFFFF; border: 1px solid #EAEAEC; border-radius: 4px; }
+        .pink-brand { color: #FF3F6C; }
+        .pink-brand-bg { background-color: #FF3F6C; }
+        .text-neutral { color: #282C3F; }
+    </style>
+</head>
+<body class="font-body text-body text-on-background flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="w-[260px] h-screen fixed left-0 top-0 bg-surface border-r border-outline-variant flex flex-col py-stack_gap z-20">
+<div class="px-container_padding mb-8">
+<h1 class="font-wordmark text-wordmark text-primary tracking-tighter">Myntra</h1>
+<p class="font-subtitle text-subtitle text-secondary uppercase">DISCOVERY ENGINE</p>
+</div>
+<nav class="flex-1 flex flex-col gap-2 px-4">
+<a class="flex items-center gap-3 px-4 py-3 rounded text-primary font-body-bold border-l-4 border-primary bg-primary-fixed/20" href="index.html">
+<span class="material-symbols-outlined" data-icon="home" data-weight="fill" style="font-variation-settings: 'FILL' 1;">home</span>
+                Home
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-secondary font-body hover:bg-surface-container transition-colors cursor-pointer duration-200" href="discovery_lab.html">
+<span class="material-symbols-outlined" data-icon="science">science</span>
+                Discovery Lab
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-secondary font-body hover:bg-surface-container transition-colors cursor-pointer duration-200" href="search_and_library.html">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                Search and Library
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-secondary font-body hover:bg-surface-container transition-colors cursor-pointer duration-200" href="segments.html">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+                Segments
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-secondary font-body hover:bg-surface-container transition-colors cursor-pointer duration-200" href="raw_data.html">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+                Raw Data
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-secondary font-body hover:bg-surface-container transition-colors cursor-pointer duration-200" href="ai_roadmap.html">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+                AI Roadmap
+            </a>
+</nav>
+<div class="px-container_padding mt-auto">
+<button class="w-full pink-brand-bg text-on-primary font-button text-button py-2 rounded-DEFAULT mb-4">
+                LLM: Groq key present
+            </button>
+<div class="flex items-center gap-2 text-secondary font-label text-label opacity-70">
+<span class="material-symbols-outlined text-sm" data-icon="settings_input_component">settings_input_component</span>
+<span>Backend: local files (collect -&gt; extract -&gt; discover)</span>
+</div>
+</div>
+
+<a id="streamlit-backend-link" href="https://share.streamlit.io/deploy?repository=Somu639/Myntra&amp;branch=master&amp;mainModule=streamlit_app.py" target="_blank" rel="noopener"
+   class="mt-3 block w-full text-center py-2 rounded-DEFAULT font-button text-button"
+   style="background:#FF3F6C;color:#fff;text-decoration:none;">Open Streamlit backend</a>
+
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-[260px] flex flex-col">
+<!-- TopAppBar -->
+<header class="h-16 sticky top-0 z-10 bg-surface border-b border-outline-variant flex items-center justify-between px-container_padding w-full">
+<h2 class="font-h3 text-h3 text-primary">Myntra Discovery Engine</h2>
+<div class="flex items-center gap-4 text-secondary">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors duration-200" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors duration-200" data-icon="account_circle">account_circle</span>
+</div>
+</header>
+<!-- Canvas -->
+<div class="p-container_padding space-y-8 max-w-7xl mx-auto w-full">
+<!-- Hero Section -->
+<section class="mb-12">
+<h1 class="font-h1 text-[48px] leading-[56px] font-extrabold pink-brand mb-4 tracking-tight">Myntra Discovery Engine</h1>
+<p class="font-h3 text-h3 text-neutral max-w-4xl opacity-90 leading-relaxed">
+                    AI-powered review discovery for Myntra — collects public fashion-shopping feedback, extracts structured purchase blockers, and ranks opportunity areas that can move wishlist-to-purchase conversion.
+                </p>
+<div class="mt-8 flex gap-6">
+<div class="card-surface p-4 flex gap-4 items-center">
+<div class="p-3 bg-surface-container-high rounded-full text-primary">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<div>
+<p class="font-label text-label text-secondary uppercase">Records Analyzed</p>
+<p class="font-h2 text-h2 text-neutral">1,011 <span class="font-body text-body text-secondary ml-2">(359 relevant - 35.5%)</span></p>
+</div>
+</div>
+<div class="card-surface p-4 flex gap-4 items-center border-l-4" style="border-left-color: #FF3F6C;">
+<div class="p-3 bg-[#FEE8ED] rounded-full pink-brand">
+<span class="material-symbols-outlined">trending_up</span>
+</div>
+<div>
+<p class="font-label text-label text-secondary uppercase">Top Opportunity</p>
+<p class="font-h2 text-h2 text-neutral">Returns &amp; Exchange <span class="font-body-bold text-body-bold pink-brand ml-2">Score 78.6</span></p>
+</div>
+</div>
+</div>
+</section>
+<!-- Main 2-Column Grid -->
+<div class="grid grid-cols-12 gap-grid_gutter">
+<!-- Left Column: How analysis works -->
+<div class="col-span-12 lg:col-span-7 space-y-6">
+<h3 class="font-h3 text-h3 text-neutral border-b border-outline-variant pb-2 mb-6">How analysis works</h3>
+<div class="space-y-4 relative before:absolute before:inset-y-0 before:left-[19px] before:w-[2px] before:bg-outline-variant">
+<!-- Step 1 -->
+<div class="card-surface p-card_padding flex gap-6 relative z-10">
+<div class="w-10 h-10 rounded-full bg-surface border-2 flex items-center justify-center font-body-bold text-body-bold shrink-0" style="border-color: #FF3F6C; color: #FF3F6C; background-color: white;">1</div>
+<div>
+<h4 class="font-h3 text-h3 text-neutral mb-2">Collect</h4>
+<p class="font-body text-body text-secondary">Play Store, App Store, Reddit, fashion communities, social, YouTube, product reviews/Q&amp;A</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="card-surface p-card_padding flex gap-6 relative z-10 border-l-[4px]" style="border-left-color: #FF3F6C;">
+<div class="w-10 h-10 rounded-full pink-brand-bg text-white flex items-center justify-center font-body-bold text-body-bold shrink-0">2</div>
+<div>
+<h4 class="font-h3 text-h3 text-neutral mb-2">Extract</h4>
+<p class="font-body text-body text-secondary">Structured schema: relevant, wishlist signal, blocker, segment, resolution channel</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="card-surface p-card_padding flex gap-6 relative z-10">
+<div class="w-10 h-10 rounded-full bg-surface border-2 flex items-center justify-center font-body-bold text-body-bold shrink-0" style="border-color: #EAEAEC; color: #282C3F; background-color: white;">3</div>
+<div>
+<h4 class="font-h3 text-h3 text-neutral mb-2">Aggregate</h4>
+<p class="font-body text-body text-secondary">Opportunity score = reach × frustration</p>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="card-surface p-card_padding flex gap-6 relative z-10">
+<div class="w-10 h-10 rounded-full bg-surface border-2 flex items-center justify-center font-body-bold text-body-bold shrink-0" style="border-color: #EAEAEC; color: #282C3F; background-color: white;">4</div>
+<div>
+<h4 class="font-h3 text-h3 text-neutral mb-2">Discover</h4>
+<p class="font-body text-body text-secondary">10 research questions + ranked opportunities</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Sources -->
+<div class="col-span-12 lg:col-span-5 space-y-6">
+<h3 class="font-h3 text-h3 text-neutral border-b border-outline-variant pb-2 mb-6">Where reviews are fetched from</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="card-surface p-4 flex flex-col items-center justify-center text-center hover:bg-surface-container transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-3xl mb-2" data-icon="shop" style="color: #FF3F6C;">shop</span>
+<span class="font-body-bold text-body-bold text-neutral">Play Store</span>
+</div>
+<div class="card-surface p-4 flex flex-col items-center justify-center text-center hover:bg-surface-container transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-3xl mb-2" data-icon="phone_iphone" style="color: #FF3F6C;">phone_iphone</span>
+<span class="font-body-bold text-body-bold text-neutral">App Store</span>
+</div>
+<div class="card-surface p-4 flex flex-col items-center justify-center text-center hover:bg-surface-container transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-3xl mb-2" data-icon="forum" style="color: #FF3F6C;">forum</span>
+<span class="font-body-bold text-body-bold text-neutral">Reddit</span>
+</div>
+<div class="card-surface p-4 flex flex-col items-center justify-center text-center hover:bg-surface-container transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-3xl mb-2" data-icon="diversity_3" style="color: #FF3F6C;">diversity_3</span>
+<span class="font-body-bold text-body-bold text-neutral text-sm">Fashion Communities</span>
+</div>
+<div class="card-surface p-4 flex flex-col items-center justify-center text-center hover:bg-surface-container transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-3xl mb-2" data-icon="share" style="color: #FF3F6C;">share</span>
+<span class="font-body-bold text-body-bold text-neutral">Social Media</span>
+</div>
+<div class="card-surface p-4 flex flex-col items-center justify-center text-center hover:bg-surface-container transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-3xl mb-2" data-icon="play_circle" style="color: #FF3F6C;">play_circle</span>
+<span class="font-body-bold text-body-bold text-neutral">YouTube</span>
+</div>
+<div class="card-surface p-4 flex flex-col items-center justify-center text-center hover:bg-surface-container transition-colors cursor-pointer col-span-2">
+<span class="material-symbols-outlined text-3xl mb-2" data-icon="reviews" style="color: #FF3F6C;">reviews</span>
+<span class="font-body-bold text-body-bold text-neutral">Product Reviews &amp; Q&amp;A</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Shortcuts -->
+<section class="pt-8 mt-8 border-t border-outline-variant">
+<h3 class="font-h3 text-h3 text-neutral mb-6">Where to go next</h3>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+<a class="card-surface p-4 flex items-center gap-3 hover:border-primary transition-colors group" href="discovery_lab.html">
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors" data-icon="science">science</span>
+<span class="font-body-bold text-body-bold text-neutral group-hover:text-primary transition-colors">Discovery Lab</span>
+</a>
+<a class="card-surface p-4 flex items-center gap-3 hover:border-primary transition-colors group" href="search_and_library.html">
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors" data-icon="inventory_2">inventory_2</span>
+<span class="font-body-bold text-body-bold text-neutral group-hover:text-primary transition-colors">Search &amp; Library</span>
+</a>
+<a class="card-surface p-4 flex items-center gap-3 hover:border-primary transition-colors group" href="segments.html">
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors" data-icon="groups">groups</span>
+<span class="font-body-bold text-body-bold text-neutral group-hover:text-primary transition-colors">Segments</span>
+</a>
+<a class="card-surface p-4 flex items-center gap-3 hover:border-primary transition-colors group" href="raw_data.html">
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors" data-icon="database">database</span>
+<span class="font-body-bold text-body-bold text-neutral group-hover:text-primary transition-colors">Raw Data</span>
+</a>
+<a class="card-surface p-4 flex items-center gap-3 hover:border-primary transition-colors group" href="ai_roadmap.html">
+<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors" data-icon="psychology">psychology</span>
+<span class="font-body-bold text-body-bold text-neutral group-hover:text-primary transition-colors">AI Roadmap</span>
+</a>
+</div>
+</section>
+</div>
+</main>
+
+<script src="config.js"></script>
+<script>
+(function () {
+  var url = (window.STREAMLIT_BACKEND_URL || "").replace(/\/$/, "");
+  if (!url) return;
+  document.querySelectorAll("a[href='#']").forEach(function () {});
+  var link = document.getElementById("streamlit-backend-link");
+  if (link) link.href = url;
+})();
+</script>
+
+</body></html>

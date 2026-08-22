@@ -237,6 +237,22 @@ defensible, representative findings.
   (samples per blocker).
 - **Stage 4** (`discover.py`): `--quotes` (quotes per section), `--in`/`--outdir`.
 
+## Deploy
+
+**Frontend (Railway)** — Stitch UI in `frontend/`, served by nginx (`Dockerfile` + `railway.json`).
+1. Push this repo to GitHub (already `Somu639/Myntra`).
+2. In [Railway](https://railway.app/new) → **Deploy from GitHub** → select `Somu639/Myntra`.
+3. Railway uses the root `Dockerfile` (port **8080**). Generate a public URL in Settings → Networking.
+
+**Backend (Streamlit Community Cloud)** — live analyzer (`streamlit_app.py`) on the committed insights/report files.
+1. Open [Deploy this repo on Streamlit](https://share.streamlit.io/deploy?repository=Somu639/Myntra&branch=master&mainModule=streamlit_app.py).
+2. Main file: `streamlit_app.py`. Python: 3.12 (`runtime.txt`).
+3. After it is live, paste the `*.streamlit.app` URL into `frontend/config.js` as `window.STREAMLIT_BACKEND_URL` so the pink **Open Streamlit backend** button jumps there.
+
+Local Streamlit: `streamlit run streamlit_app.py`
+
+---
+
 ## Files
 
 | File | Role |

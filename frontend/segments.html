@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Segments - Myntra Discovery Engine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#271719",
+                        "background": "#fff8f7",
+                        "primary-fixed": "#ffd9dc",
+                        "secondary": "#5a5d73",
+                        "primary-container": "#df2457",
+                        "on-primary-fixed": "#400011",
+                        "tertiary-container": "#008644",
+                        "tertiary": "#006a34",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#42465a",
+                        "on-tertiary-container": "#f6fff3",
+                        "surface-container": "#ffe9ea",
+                        "surface-bright": "#fff8f7",
+                        "secondary-fixed-dim": "#c2c5de",
+                        "outline": "#8f6f72",
+                        "inverse-surface": "#3e2c2d",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#7dfca2",
+                        "on-primary-container": "#fffbff",
+                        "on-tertiary-fixed-variant": "#005227",
+                        "outline-variant": "#e3bdc0",
+                        "secondary-container": "#dbdef8",
+                        "on-secondary-container": "#5e6177",
+                        "secondary-fixed": "#dee1fa",
+                        "on-secondary-fixed": "#161b2d",
+                        "surface-container-high": "#ffe1e3",
+                        "tertiary-fixed-dim": "#5fde88",
+                        "surface": "#fff8f7",
+                        "on-primary-fixed-variant": "#910031",
+                        "surface-tint": "#bd0043",
+                        "surface-variant": "#f9dbdd",
+                        "primary": "#b90041",
+                        "on-error": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#00210c",
+                        "surface-container-highest": "#f9dbdd",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#271719",
+                        "surface-dim": "#f1d3d5",
+                        "surface-container-low": "#fff0f0",
+                        "on-surface-variant": "#5b4042",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#ffb2ba",
+                        "error-container": "#ffdad6",
+                        "inverse-on-surface": "#ffeced",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#ffb2ba"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack_gap": "16px",
+                        "card_padding": "24px",
+                        "sidebar_width": "260px",
+                        "container_padding": "32px",
+                        "grid_gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Assistant"],
+                        "wordmark": ["Assistant"],
+                        "button": ["Assistant"],
+                        "subtitle": ["Assistant"],
+                        "h1": ["Assistant"],
+                        "h3": ["Assistant"],
+                        "body": ["Assistant"],
+                        "body-bold": ["Assistant"],
+                        "label": ["Assistant"]
+                    },
+                    "fontSize": {
+                        "h2": ["24px", { "lineHeight": "32px", "fontWeight": "800" }],
+                        "wordmark": ["24px", { "lineHeight": "100%", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+                        "button": ["13px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+                        "subtitle": ["11px", { "lineHeight": "16px", "letterSpacing": "0.12em", "fontWeight": "700" }],
+                        "h1": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "800" }],
+                        "h3": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "body": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-bold": ["14px", { "lineHeight": "20px", "fontWeight": "700" }],
+                        "label": ["12px", { "lineHeight": "16px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #F5F5F6; } /* Main Canvas Grey */
+        .card-surface { background-color: #FFFFFF; } /* Surface Cards White */
+        .myntra-pink { color: #FF3F6C; }
+        .bg-myntra-pink { background-color: #FF3F6C; }
+        .border-myntra-divider { border-color: #EAEAEC; }
+        .text-myntra-dark { color: #282C3F; }
+        .text-myntra-muted { color: #535766; }
+        .bg-myntra-muted-bg { background-color: #F5F5F6; }
+    </style>
+</head>
+<body class="font-body text-body text-on-surface antialiased flex">
+<!-- SideNavBar -->
+<aside class="w-[260px] h-screen fixed left-0 top-0 bg-surface border-r border-outline-variant flex flex-col h-full py-stack_gap z-20">
+<div class="px-container_padding mb-8">
+<h1 class="font-wordmark text-wordmark text-primary tracking-tighter">Myntra</h1>
+<p class="font-subtitle text-subtitle text-secondary mt-1">DISCOVERY ENGINE</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1 px-4">
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-secondary font-body hover:bg-surface-container transition-colors cursor-pointer duration-200" href="index.html">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+                Home
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-secondary font-body hover:bg-surface-container transition-colors cursor-pointer duration-200" href="discovery_lab.html">
+<span class="material-symbols-outlined" data-icon="science">science</span>
+                Discovery Lab
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-secondary font-body hover:bg-surface-container transition-colors cursor-pointer duration-200" href="search_and_library.html">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                Search and Library
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-primary font-body-bold border-l-4 border-primary bg-primary-fixed/20 hover:bg-surface-container transition-colors cursor-pointer duration-200" href="segments.html">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+                Segments
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-secondary font-body hover:bg-surface-container transition-colors cursor-pointer duration-200" href="raw_data.html">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+                Raw Data
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-secondary font-body hover:bg-surface-container transition-colors cursor-pointer duration-200" href="ai_roadmap.html">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+                AI Roadmap
+            </a>
+</nav>
+<div class="px-container_padding mt-auto border-t border-outline-variant pt-4">
+<div class="font-label text-label text-secondary mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]" data-icon="settings_input_component">settings_input_component</span>
+                Backend: local files (collect -&gt; extract -&gt; discover)
+            </div>
+<div class="font-button text-button text-primary bg-primary-fixed/20 px-3 py-2 rounded-DEFAULT inline-block">
+                LLM: Groq key present
+            </div>
+</div>
+
+<a id="streamlit-backend-link" href="https://share.streamlit.io/deploy?repository=Somu639/Myntra&amp;branch=master&amp;mainModule=streamlit_app.py" target="_blank" rel="noopener"
+   class="mt-3 block w-full text-center py-2 rounded-DEFAULT font-button text-button"
+   style="background:#FF3F6C;color:#fff;text-decoration:none;">Open Streamlit backend</a>
+
+</aside>
+<!-- Main Content Area -->
+<div class="ml-[260px] flex-1 flex flex-col min-h-screen relative">
+<!-- TopAppBar -->
+<header class="h-16 sticky top-0 z-10 bg-surface border-b border-outline-variant flex items-center justify-between px-container_padding w-full">
+<div class="flex items-center">
+<h2 class="font-h3 text-h3 text-primary">Myntra Discovery Engine</h2>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<input class="border border-outline-variant rounded-DEFAULT px-3 py-1.5 font-body text-body focus:outline-none focus:border-on-surface transition-colors bg-transparent" placeholder="Search..." type="text"/>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-secondary pointer-events-none text-[20px]" data-icon="search">search</span>
+</div>
+<button class="text-secondary hover:text-primary transition-colors duration-200 p-2">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-secondary hover:text-primary transition-colors duration-200 p-2">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Page Content -->
+<main class="p-container_padding flex-1">
+<!-- Page Header -->
+<div class="mb-8">
+<h1 class="font-h1 text-h1 text-myntra-dark mb-2">Segments</h1>
+<p class="font-body text-body text-myntra-muted flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="info">info</span>
+<code>segment_signal</code> is model-inferred — directional, not verified personas.
+                </p>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-12 gap-grid_gutter">
+<!-- Main Table Section (Col Span 8) -->
+<div class="col-span-12 lg:col-span-8 flex flex-col gap-grid_gutter">
+<!-- Table Card -->
+<div class="card-surface rounded-DEFAULT border border-myntra-divider p-card_padding">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-h3 text-h3 text-myntra-dark">Top Inferred Segments by Blocker</h3>
+<button class="font-button text-button text-myntra-dark border border-myntra-divider px-4 py-2 rounded-DEFAULT hover:bg-myntra-muted-bg transition-colors">
+                                Export Data
+                            </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-myntra-muted-bg border-y border-myntra-divider">
+<th class="py-3 px-4 font-body-bold text-body-bold text-myntra-dark">Blocker Category</th>
+<th class="py-3 px-4 font-body-bold text-body-bold text-myntra-dark">Top Inferred Segment</th>
+<th class="py-3 px-4 font-body-bold text-body-bold text-myntra-dark text-right">Concentration %</th>
+<th class="py-3 px-4 font-body-bold text-body-bold text-myntra-dark">Signal Strength</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-myntra-divider hover:bg-myntra-muted-bg transition-colors group">
+<td class="py-4 px-4 font-body text-body text-myntra-dark">Returns &amp; Exchange</td>
+<td class="py-4 px-4">
+<span class="bg-primary-fixed/20 text-primary px-2 py-1 rounded-DEFAULT font-label text-label">Gen Z</span>
+</td>
+<td class="py-4 px-4 font-body-bold text-body-bold text-myntra-dark text-right">45%</td>
+<td class="py-4 px-4">
+<div class="w-full bg-myntra-divider h-1.5 rounded-full overflow-hidden">
+<div class="bg-myntra-pink h-full" style="width: 85%;"></div>
+</div>
+</td>
+</tr>
+<tr class="border-b border-myntra-divider hover:bg-myntra-muted-bg transition-colors group">
+<td class="py-4 px-4 font-body text-body text-myntra-dark">Price Sensitivity</td>
+<td class="py-4 px-4">
+<span class="bg-secondary-fixed/50 text-secondary px-2 py-1 rounded-DEFAULT font-label text-label">Budget Seekers</span>
+</td>
+<td class="py-4 px-4 font-body-bold text-body-bold text-myntra-dark text-right">60%</td>
+<td class="py-4 px-4">
+<div class="w-full bg-myntra-divider h-1.5 rounded-full overflow-hidden">
+<div class="bg-myntra-pink h-full" style="width: 92%;"></div>
+</div>
+</td>
+</tr>
+<tr class="border-b border-myntra-divider hover:bg-myntra-muted-bg transition-colors group">
+<td class="py-4 px-4 font-body text-body text-myntra-dark">Trust &amp; Authenticity</td>
+<td class="py-4 px-4">
+<span class="bg-tertiary-fixed/30 text-tertiary px-2 py-1 rounded-DEFAULT font-label text-label">New Users</span>
+</td>
+<td class="py-4 px-4 font-body-bold text-body-bold text-myntra-dark text-right">30%</td>
+<td class="py-4 px-4">
+<div class="w-full bg-myntra-divider h-1.5 rounded-full overflow-hidden">
+<div class="bg-myntra-pink h-full" style="width: 65%;"></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Empty State / Unknown Segments -->
+<div class="card-surface rounded-DEFAULT border border-myntra-divider p-card_padding border-dashed flex flex-col items-center justify-center py-12">
+<span class="material-symbols-outlined text-[48px] text-outline-variant mb-4" data-icon="policy">policy</span>
+<h4 class="font-body-bold text-body-bold text-myntra-dark mb-1">Unknown Segments</h4>
+<p class="font-body text-body text-myntra-muted text-center max-w-md">
+                            Approximately 12% of recent feedback lacks sufficient linguistic markers to infer a definitive segment persona. 
+                        </p>
+</div>
+</div>
+<!-- Right Sidebar / Charts Section (Col Span 4) -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-grid_gutter">
+<!-- Concentration Bar Chart Card -->
+<div class="card-surface rounded-DEFAULT border border-myntra-divider p-card_padding h-full">
+<h3 class="font-h3 text-h3 text-myntra-dark mb-6">Overall Segment Concentration</h3>
+<div class="flex flex-col gap-6">
+<!-- Bar 1 -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<span class="font-body-bold text-body-bold text-myntra-dark">Gen Z</span>
+<span class="font-label text-label text-myntra-muted">38%</span>
+</div>
+<div class="w-full bg-myntra-muted-bg h-3 rounded-sm overflow-hidden border border-myntra-divider">
+<div class="bg-myntra-pink h-full" style="width: 38%;"></div>
+</div>
+</div>
+<!-- Bar 2 -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<span class="font-body-bold text-body-bold text-myntra-dark">Millennials</span>
+<span class="font-label text-label text-myntra-muted">27%</span>
+</div>
+<div class="w-full bg-myntra-muted-bg h-3 rounded-sm overflow-hidden border border-myntra-divider">
+<div class="bg-myntra-dark h-full" style="width: 27%;"></div>
+</div>
+</div>
+<!-- Bar 3 -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<span class="font-body-bold text-body-bold text-myntra-dark">High-Value</span>
+<span class="font-label text-label text-myntra-muted">18%</span>
+</div>
+<div class="w-full bg-myntra-muted-bg h-3 rounded-sm overflow-hidden border border-myntra-divider">
+<div class="bg-myntra-dark h-full opacity-80" style="width: 18%;"></div>
+</div>
+</div>
+<!-- Bar 4 -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<span class="font-body-bold text-body-bold text-myntra-dark">New Users</span>
+<span class="font-label text-label text-myntra-muted">17%</span>
+</div>
+<div class="w-full bg-myntra-muted-bg h-3 rounded-sm overflow-hidden border border-myntra-divider">
+<div class="bg-myntra-dark h-full opacity-60" style="width: 17%;"></div>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-myntra-divider">
+<div class="flex items-start gap-3 bg-surface-container-low p-4 rounded-DEFAULT border border-surface-variant">
+<span class="material-symbols-outlined text-primary mt-0.5" data-icon="lightbulb">lightbulb</span>
+<div>
+<h5 class="font-body-bold text-body-bold text-myntra-dark mb-1">Inference Insight</h5>
+<p class="font-body text-body text-myntra-muted text-sm">
+                                        'Budget Seekers' segment shows a high correlation with 'Price Sensitivity' blockers in the last 14 days, indicating a potential macro-economic shift in user behavior.
+                                    </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+<script src="config.js"></script>
+<script>
+(function () {
+  var url = (window.STREAMLIT_BACKEND_URL || "").replace(/\/$/, "");
+  if (!url) return;
+  document.querySelectorAll("a[href='#']").forEach(function () {});
+  var link = document.getElementById("streamlit-backend-link");
+  if (link) link.href = url;
+})();
+</script>
+
+</body></html>

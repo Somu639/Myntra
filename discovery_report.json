@@ -1,0 +1,546 @@
+{
+  "coverage": {
+    "total_records": 1011,
+    "extracted": 1011,
+    "failed": 0,
+    "relevant": 359,
+    "not_relevant": 652
+  },
+  "opportunity_areas": [
+    {
+      "blocker_type": "return_hassle",
+      "dimension": "Returns & Exchange",
+      "mentions": 41,
+      "reach_pct_of_relevant": 11.4,
+      "frustration_rate_pct": 95.1,
+      "avg_confidence": 0.948,
+      "opportunity_score": 78.6
+    },
+    {
+      "blocker_type": "other",
+      "dimension": "Other",
+      "mentions": 47,
+      "reach_pct_of_relevant": 13.1,
+      "frustration_rate_pct": 83.0,
+      "avg_confidence": 0.913,
+      "opportunity_score": 77.1
+    },
+    {
+      "blocker_type": "price",
+      "dimension": "Price & Value",
+      "mentions": 66,
+      "reach_pct_of_relevant": 18.4,
+      "frustration_rate_pct": 19.7,
+      "avg_confidence": 0.916,
+      "opportunity_score": 59.9
+    },
+    {
+      "blocker_type": "trust_authenticity",
+      "dimension": "Trust & Reviews",
+      "mentions": 16,
+      "reach_pct_of_relevant": 4.5,
+      "frustration_rate_pct": 81.2,
+      "avg_confidence": 0.91,
+      "opportunity_score": 52.7
+    },
+    {
+      "blocker_type": "fit_sizing",
+      "dimension": "Fit & Size",
+      "mentions": 20,
+      "reach_pct_of_relevant": 5.6,
+      "frustration_rate_pct": 75.0,
+      "avg_confidence": 0.874,
+      "opportunity_score": 52.7
+    },
+    {
+      "blocker_type": "occasion_timing",
+      "dimension": "Occasion & Timing",
+      "mentions": 1,
+      "reach_pct_of_relevant": 0.3,
+      "frustration_rate_pct": 100.0,
+      "avg_confidence": 0.96,
+      "opportunity_score": 50.8
+    },
+    {
+      "blocker_type": "quality_doubt",
+      "dimension": "Quality",
+      "mentions": 18,
+      "reach_pct_of_relevant": 5.0,
+      "frustration_rate_pct": 72.2,
+      "avg_confidence": 0.893,
+      "opportunity_score": 49.7
+    },
+    {
+      "blocker_type": "payment_friction",
+      "dimension": "Payment",
+      "mentions": 5,
+      "reach_pct_of_relevant": 1.4,
+      "frustration_rate_pct": 80.0,
+      "avg_confidence": 0.958,
+      "opportunity_score": 43.8
+    },
+    {
+      "blocker_type": "decision_paralysis_too_many_options",
+      "dimension": "Choice / Comparison",
+      "mentions": 4,
+      "reach_pct_of_relevant": 1.1,
+      "frustration_rate_pct": 50.0,
+      "avg_confidence": 0.833,
+      "opportunity_score": 28.0
+    },
+    {
+      "blocker_type": "styling_uncertainty",
+      "dimension": "Styling",
+      "mentions": 5,
+      "reach_pct_of_relevant": 1.4,
+      "frustration_rate_pct": 20.0,
+      "avg_confidence": 0.828,
+      "opportunity_score": 13.8
+    }
+  ],
+  "q1_why_wishlist": {
+    "wishlist_mentions": 7,
+    "top_reasons": [
+      [
+        "wants link to purchase later",
+        4
+      ],
+      [
+        "interested in maxi dress seen in video",
+        1
+      ],
+      [
+        "to win contest voucher",
+        1
+      ],
+      [
+        "to secure low prices during sale",
+        1
+      ]
+    ],
+    "quotes": [
+      {
+        "text": "8:16 mango Red dress link plz❤",
+        "source": "youtube",
+        "rating": null,
+        "blocker_type": "other",
+        "confidence": 0.95
+      },
+      {
+        "text": "#MyntraEORSGameZone gets Bigger!\nWe've hidden a treasure on the Myntra app. Look out for it while wish-listing for #MyntraEORS2021  \nThe first to find it, screenshot it, &amp; post it here &amp; wins a Myntra Gift Voucher worth ₹1,00,000! \n#MyntraEORSTreasureHunt \n#ContestAlert #Contest https://t.co/Jg3d4KPyBM",
+        "source": "social_twitter",
+        "rating": 688,
+        "blocker_type": null,
+        "confidence": 0.95
+      },
+      {
+        "text": "Mango red dress link not given plz send",
+        "source": "youtube",
+        "rating": null,
+        "blocker_type": "other",
+        "confidence": 0.95
+      }
+    ]
+  },
+  "q2_purchase_blockers": [
+    {
+      "blocker_type": "return_hassle",
+      "dimension": "Returns & Exchange",
+      "mentions": 41,
+      "reach_pct_of_relevant": 11.4,
+      "frustration_rate_pct": 95.1,
+      "avg_confidence": 0.948,
+      "opportunity_score": 78.6
+    },
+    {
+      "blocker_type": "other",
+      "dimension": "Other",
+      "mentions": 47,
+      "reach_pct_of_relevant": 13.1,
+      "frustration_rate_pct": 83.0,
+      "avg_confidence": 0.913,
+      "opportunity_score": 77.1
+    },
+    {
+      "blocker_type": "price",
+      "dimension": "Price & Value",
+      "mentions": 66,
+      "reach_pct_of_relevant": 18.4,
+      "frustration_rate_pct": 19.7,
+      "avg_confidence": 0.916,
+      "opportunity_score": 59.9
+    },
+    {
+      "blocker_type": "trust_authenticity",
+      "dimension": "Trust & Reviews",
+      "mentions": 16,
+      "reach_pct_of_relevant": 4.5,
+      "frustration_rate_pct": 81.2,
+      "avg_confidence": 0.91,
+      "opportunity_score": 52.7
+    },
+    {
+      "blocker_type": "fit_sizing",
+      "dimension": "Fit & Size",
+      "mentions": 20,
+      "reach_pct_of_relevant": 5.6,
+      "frustration_rate_pct": 75.0,
+      "avg_confidence": 0.874,
+      "opportunity_score": 52.7
+    },
+    {
+      "blocker_type": "occasion_timing",
+      "dimension": "Occasion & Timing",
+      "mentions": 1,
+      "reach_pct_of_relevant": 0.3,
+      "frustration_rate_pct": 100.0,
+      "avg_confidence": 0.96,
+      "opportunity_score": 50.8
+    },
+    {
+      "blocker_type": "quality_doubt",
+      "dimension": "Quality",
+      "mentions": 18,
+      "reach_pct_of_relevant": 5.0,
+      "frustration_rate_pct": 72.2,
+      "avg_confidence": 0.893,
+      "opportunity_score": 49.7
+    },
+    {
+      "blocker_type": "payment_friction",
+      "dimension": "Payment",
+      "mentions": 5,
+      "reach_pct_of_relevant": 1.4,
+      "frustration_rate_pct": 80.0,
+      "avg_confidence": 0.958,
+      "opportunity_score": 43.8
+    },
+    {
+      "blocker_type": "decision_paralysis_too_many_options",
+      "dimension": "Choice / Comparison",
+      "mentions": 4,
+      "reach_pct_of_relevant": 1.1,
+      "frustration_rate_pct": 50.0,
+      "avg_confidence": 0.833,
+      "opportunity_score": 28.0
+    },
+    {
+      "blocker_type": "styling_uncertainty",
+      "dimension": "Styling",
+      "mentions": 5,
+      "reach_pct_of_relevant": 1.4,
+      "frustration_rate_pct": 20.0,
+      "avg_confidence": 0.828,
+      "opportunity_score": 13.8
+    }
+  ],
+  "q3_post_like_uncertainty": {
+    "label": "Uncertainty after liking a product",
+    "mentions": 59,
+    "share_of_blockers_pct": 26.5,
+    "breakdown": [
+      [
+        "fit_sizing",
+        20
+      ],
+      [
+        "quality_doubt",
+        18
+      ],
+      [
+        "trust_authenticity",
+        16
+      ],
+      [
+        "styling_uncertainty",
+        5
+      ]
+    ],
+    "quotes": [
+      {
+        "text": "Absolute fraud app They censor genuine reviews for some fake rejection reason and ensure they only publish good ones. the products received are always damaged, broken or pre-used. they seem to be the most unethical of ask e- commerce platform.",
+        "source": "google_play_myntra",
+        "rating": 1,
+        "blocker_type": "quality_doubt",
+        "confidence": 0.96
+      },
+      {
+        "text": "ನಿಜ ಬಟ್ಟೆ ಕ್ಟಾಲಿಟಿ ಇತ್ತೀಚೆಗೆ ಸರಿ ಇಲ್ಲ ಮೈಂತ್ರಾ....Viscose Rayan  cotton ಅಂತಾರೆ ಕಳಪೆ ಇರುತ್ತೆ ಬಟ್ಟೆ",
+        "source": "youtube",
+        "rating": null,
+        "blocker_type": "quality_doubt",
+        "confidence": 0.96
+      },
+      {
+        "text": "[Selling] ZARA Cargos size 0\nFor context, bought this from Myntra on a major sale, but I got the sizing all wrong and it is non-returnable 😭😭😭 for how much I wanna keep it because the quality and color is so good, it doesn't fit me. Size US 0. All original tags still in place, never used, hella good quality! Letting it go for Rs.1000/+ shipping (if you are from bangalore, can pick up) Let's find a home for these cute pants \n\nDetails: \nWaist - 26 inches\nMidrise\nLegs - 31 inches from crotch",
+        "source": "reddit",
+        "rating": 1,
+        "blocker_type": "fit_sizing",
+        "confidence": 0.96
+      }
+    ]
+  },
+  "q4_postponement": {
+    "label": "Causes of postponement",
+    "mentions": 71,
+    "share_of_blockers_pct": 31.8,
+    "breakdown": [
+      [
+        "price",
+        66
+      ],
+      [
+        "decision_paralysis_too_many_options",
+        4
+      ],
+      [
+        "occasion_timing",
+        1
+      ]
+    ],
+    "quotes": [
+      {
+        "text": "best but price high",
+        "source": "google_play_myntra",
+        "rating": 5,
+        "blocker_type": "price",
+        "confidence": 0.98
+      },
+      {
+        "text": "Price ku nhi mention karti ho ab",
+        "source": "youtube",
+        "rating": null,
+        "blocker_type": "price",
+        "confidence": 0.96
+      },
+      {
+        "text": "Myntra coupon codes pls",
+        "source": "reddit",
+        "rating": 1,
+        "blocker_type": "price",
+        "confidence": 0.96
+      }
+    ]
+  },
+  "q5_comparison": {
+    "label": "Comparing multiple shortlisted products",
+    "mentions": 4,
+    "share_of_blockers_pct": 1.8,
+    "breakdown": [
+      [
+        "decision_paralysis_too_many_options",
+        4
+      ]
+    ],
+    "quotes": [
+      {
+        "text": "Suggest which to buy\nI wanted to get new earphones as I put my previous ones in the washing machine🥲. \nI have an offer on myntra of around 3300 for Realme buds air 6 pro. Or should I go for the new buds air 7 or wait for the pro version to release.\nAlso let me know if there are any other earphones within the same range\nAny suggestions would be appreciated",
+        "source": "reddit",
+        "rating": 1,
+        "blocker_type": "decision_paralysis_too_many_options",
+        "confidence": 0.88
+      },
+      {
+        "text": "This all promotion Haul video \nHow come she can find simple dress in Myntra?",
+        "source": "youtube",
+        "rating": null,
+        "blocker_type": "decision_paralysis_too_many_options",
+        "confidence": 0.85
+      },
+      {
+        "text": "I think they are overvaluing brand loyalty here. I don&#x27;t even understand people who can shop using mobile apps, especially clothes. You cannot easily compare, read reviews, get a gist of product or compare with other websites before buying. If Myntra goes with this, it would just fall off my list of sites I go to for clothes.<p>Yes, I buy on Myntra app. That&#x27;s because they give discounts on it which are app-only. But I simply cannot put myself through horror of clothes browsing on a mobile phone. Thanks, but no thanks.",
+        "source": "other_public",
+        "rating": null,
+        "blocker_type": "decision_paralysis_too_many_options",
+        "confidence": 0.8
+      }
+    ]
+  },
+  "q6_off_platform_research": {
+    "captured": true,
+    "off_platform_total": 36,
+    "off_platform_pct_of_relevant": 10.0,
+    "by_channel": [
+      [
+        "none_mentioned",
+        129
+      ],
+      [
+        "in_app_reviews",
+        30
+      ],
+      [
+        "external_friends_family",
+        16
+      ],
+      [
+        "external_youtube",
+        12
+      ],
+      [
+        "external_google_search",
+        7
+      ],
+      [
+        "social_media_influencer",
+        1
+      ]
+    ],
+    "quotes": [
+      {
+        "text": "Price ku nhi mention karti ho ab",
+        "source": "youtube",
+        "rating": null,
+        "blocker_type": "price",
+        "confidence": 0.96
+      },
+      {
+        "text": "Myntra coupon please\nI'm buying shoes. If anyone have myntra coupon, please share. Thankyou",
+        "source": "reddit",
+        "rating": 1,
+        "blocker_type": "price",
+        "confidence": 0.95
+      },
+      {
+        "text": "Can I pull off a crop top + skirt + Gujarati dupatta for Dandiya, or should I just buy a set?\nHey everyone! I don’t really have a traditional festive wardrobe yet. I was thinking of pairing a simple crop top and skirt with a heavy Gujarati/mirror-work dupatta for Dandiya night.\n\nWould this combo look good, or should I just skip the hassle and buy a readymade set?",
+        "source": "fashion_community",
+        "rating": 1,
+        "blocker_type": "styling_uncertainty",
+        "confidence": 0.8
+      }
+    ]
+  },
+  "q7_dimension_roles": {
+    "total_with_blocker": 223,
+    "by_dimension": [
+      {
+        "dimension": "Price & Value",
+        "mentions": 66,
+        "share_pct": 29.6
+      },
+      {
+        "dimension": "Other",
+        "mentions": 47,
+        "share_pct": 21.1
+      },
+      {
+        "dimension": "Returns & Exchange",
+        "mentions": 41,
+        "share_pct": 18.4
+      },
+      {
+        "dimension": "Fit & Size",
+        "mentions": 20,
+        "share_pct": 9.0
+      },
+      {
+        "dimension": "Quality",
+        "mentions": 18,
+        "share_pct": 8.1
+      },
+      {
+        "dimension": "Trust & Reviews",
+        "mentions": 16,
+        "share_pct": 7.2
+      },
+      {
+        "dimension": "Payment",
+        "mentions": 5,
+        "share_pct": 2.2
+      },
+      {
+        "dimension": "Styling",
+        "mentions": 5,
+        "share_pct": 2.2
+      },
+      {
+        "dimension": "Choice / Comparison",
+        "mentions": 4,
+        "share_pct": 1.8
+      },
+      {
+        "dimension": "Occasion & Timing",
+        "mentions": 1,
+        "share_pct": 0.4
+      }
+    ]
+  },
+  "q8_intent_vs_bookmark": {
+    "wishlist_mentions": 7,
+    "genuine_intent": 5,
+    "bookmarking": 1,
+    "unclear": 1
+  },
+  "q9_by_segment": [
+    {
+      "blocker_type": "price",
+      "mentions": 66,
+      "known_segment_coverage_pct": 83.3,
+      "top_segment": "budget-conscious shopper",
+      "top_segment_concentration_pct": 78.2
+    },
+    {
+      "blocker_type": "other",
+      "mentions": 47,
+      "known_segment_coverage_pct": 40.4,
+      "top_segment": "time-sensitive shopper",
+      "top_segment_concentration_pct": 15.8
+    },
+    {
+      "blocker_type": "return_hassle",
+      "mentions": 41,
+      "known_segment_coverage_pct": 48.8,
+      "top_segment": "return-focused shopper",
+      "top_segment_concentration_pct": 30.0
+    },
+    {
+      "blocker_type": "fit_sizing",
+      "mentions": 20,
+      "known_segment_coverage_pct": 65.0,
+      "top_segment": "tall shopper",
+      "top_segment_concentration_pct": 15.4
+    },
+    {
+      "blocker_type": "quality_doubt",
+      "mentions": 18,
+      "known_segment_coverage_pct": 66.7,
+      "top_segment": "quality-conscious shopper",
+      "top_segment_concentration_pct": 25.0
+    },
+    {
+      "blocker_type": "trust_authenticity",
+      "mentions": 16,
+      "known_segment_coverage_pct": 50.0,
+      "top_segment": "skeptical shopper",
+      "top_segment_concentration_pct": 12.5
+    },
+    {
+      "blocker_type": "payment_friction",
+      "mentions": 5,
+      "known_segment_coverage_pct": 20.0,
+      "top_segment": "international shopper",
+      "top_segment_concentration_pct": 100.0
+    },
+    {
+      "blocker_type": "styling_uncertainty",
+      "mentions": 5,
+      "known_segment_coverage_pct": 40.0,
+      "top_segment": "style-conscious shopper",
+      "top_segment_concentration_pct": 50.0
+    },
+    {
+      "blocker_type": "decision_paralysis_too_many_options",
+      "mentions": 4,
+      "known_segment_coverage_pct": 50.0,
+      "top_segment": "first-time buyer",
+      "top_segment_concentration_pct": 50.0
+    },
+    {
+      "blocker_type": "occasion_timing",
+      "mentions": 1,
+      "known_segment_coverage_pct": 100.0,
+      "top_segment": "gift shopper",
+      "top_segment_concentration_pct": 100.0
+    }
+  ]
+}

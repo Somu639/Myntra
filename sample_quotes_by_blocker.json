@@ -1,0 +1,274 @@
+{
+  "return_hassle": [
+    {
+      "text": "Horrible service, I would happily give zero stars and won't recommend this app to anyone. The order arrives fast but the return process takes years. no one comes for return pick ups and when you use the \"call me\" option an automated annoying bloody voice gives you replies that are absolutely useless that too in Hindi when you specifically choose \"English\". Very frustrating service when it comes to returns and refunds. I'm uninstalling the app.",
+      "source": "google_play_myntra",
+      "rating": 1,
+      "date": "2026-08-19T11:27:31",
+      "sentiment": "frustrated",
+      "blocker_detail": "return pick-up never occurs, long delays, automated voice in wrong language",
+      "confidence": 0.99
+    },
+    {
+      "text": "At present, I no longer consider Myntra a trustworthy shopping platform based on my experience. Customers may receive incomplete, incorrect, or entirely different products from what they ordered, and even when valid return requests are raised with supporting evidence, they can face unnecessary rejection or delays.\nIn my experience, the situation becomes even more frustrating when the logistics partner allegedly makes no genuine attempt to collect the return, yet the return is marked as cancelled or failed based on the pickup agent’s own status update. What is even more concerning is the suspension or deactivation of a customer’s account while valid returns, refunds, and the customer’s money remain unresolved. This leaves customers feeling helpless and raises serious concerns about the transparency and accountability of the platform’s return, logistics, and account-management processes. Myntra should prioritize customer protection, transparent investigations, genuine pickup attempts, timely refunds, and fair treatment instead of leaving customers to struggle to recover money for products they did not receive correctly. New Income source of income for Myntra...😒",
+      "source": "app_store_myntra",
+      "rating": 1,
+      "date": "2026-08-19T12:53:48-07:00",
+      "sentiment": "frustrated",
+      "blocker_detail": "returns rejected or delayed, pickup not attempted, account suspended",
+      "confidence": 0.98
+    },
+    {
+      "text": "Myntra Issue\nI want to return a product on myntra and it's well within the return cycle. But there's some glitch and it always shows something went wrong,how to fix.",
+      "source": "reddit",
+      "rating": 0,
+      "date": "2025-05-17T16:12:12+00:00",
+      "sentiment": "frustrated",
+      "blocker_detail": "error message 'something went wrong' when trying to initiate return",
+      "confidence": 0.97
+    }
+  ],
+  "payment_friction": [
+    {
+      "text": "Recently had an issue the delivery guy has charged doubled the amount for the order,as we were not at home so transferred the amount as informed by him as it was a multiple order so that the other items would have also been delivered but nothing as such happened when checked. Raised multiple complaint but never received any resolution always issue closed saying no extra amount charged..I have submitted all proofs from my end and expect the same from your end but they say they can't share.-Fraud",
+      "source": "google_play_myntra",
+      "rating": 1,
+      "date": "2026-08-20T10:32:32",
+      "sentiment": "frustrated",
+      "blocker_detail": "delivery person demanded extra payment, user paid but items not delivered",
+      "confidence": 0.98
+    },
+    {
+      "text": "I’ve been shopping on Myntra for 12–13 years, since it first launched. The app, products, and customer support have been great.\n\nThe only reason I’m giving 4 stars instead of 5 is that international cards aren’t accepted for payment. It would be great if you could add support for international cards.",
+      "source": "app_store_myntra",
+      "rating": 4,
+      "date": "2026-08-18T07:29:21-07:00",
+      "sentiment": "mixed",
+      "blocker_detail": "international cards not accepted for payment",
+      "confidence": 0.96
+    },
+    {
+      "text": "Myntra is fooling\nMistakenly I have added wrong product in the cart and made payment. Then I had to cancel the order for particular product. Till now I don't get my refund. I have ordered on 8th October and cancelled it immediately. In my order section it's showing cancelled and money got credited in your same card which u have used to pay.  Still the money is not reflecting in my account. Even I have checked all credit statements.",
+      "source": "product_review",
+      "rating": null,
+      "date": "2023-10-16",
+      "sentiment": "frustrated",
+      "blocker_detail": "Refund not credited after order cancellation",
+      "confidence": 0.94
+    }
+  ],
+  "other": [
+    {
+      "text": "Extremely disappointing experience with Myntra. My order was confirmed and even shipped, but it was later cancelled automatically citing a “technical issue”. I contacted customer support for a proper resolution, but they refused to honour the original offer or provide any meaningful compensation. Instead, I was offered a ₹100 coupon as a goodwill gesture, which does not address the issue at all. This kind of arbitrary order cancellation and poor resolution is unacceptable.",
+      "source": "google_play_myntra",
+      "rating": 1,
+      "date": "2026-08-18T09:47:51",
+      "sentiment": "frustrated",
+      "blocker_detail": "order cancelled automatically due to a technical issue and no meaningful compensation offered",
+      "confidence": 0.97
+    },
+    {
+      "text": "&#62;&#62;<i>You need the product tomorrow?</i><p>If you are in a metro then you get the item shipped next day. I've shopped with Flipkart, Myntra etc and this has always been the norm and when usually it becomes 2-3 days it's because your stuff is being sent from a warehouse in another metro. As I live in B'lore Myntra has almost always done 1-day shipping or 2 at most.<p>You want your items to be shipped to a small town? There's a problem. You want to ship it to your parents in a very small town or rural area? Forget it!<p>There are other services like eBay India, which has recently, started 3-4 day shipping. Earlier for them it was 7-8 minimum as standard. Deal sites like SnapDeal etc follow the same minimum 7-8 days golden rule.<p>Sites like IndiaPlaza are plague. You get your stuff in months or fortnights and then you congratulate yourself.<p>The thing is there are so many options in India, even on smaller scales, for online shopping and people actively use them where they best deals. In USA when I try to buy sth, to get it via a friend who is coming form USA, I have more or less one option - Amazon!",
+      "source": "product_qa",
+      "rating": null,
+      "date": "2013-06-05T02:05:56Z",
+      "sentiment": "frustrated",
+      "blocker_detail": "shipping not available to small towns or rural areas causing delays",
+      "confidence": 0.97
+    },
+    {
+      "text": "Myntra is such a scam\nOrdered 2 shampoos because I was getting one free gift or else I could have ordered from another app\nBut they cancelled the free gift \nThis is the 2nd bad experience with them \nAnd also I am not able to connect with them \nSuch a shitty app",
+      "source": "reddit",
+      "rating": 0,
+      "date": "2025-05-18T17:15:01+00:00",
+      "sentiment": "frustrated",
+      "blocker_detail": "free gift cancelled and unable to contact support",
+      "confidence": 0.96
+    }
+  ],
+  "price": [
+    {
+      "text": "best but price high",
+      "source": "google_play_myntra",
+      "rating": 5,
+      "date": "2026-08-20T07:09:21",
+      "sentiment": "mixed",
+      "blocker_detail": "price is high",
+      "confidence": 0.98
+    },
+    {
+      "text": "Price ku nhi mention karti ho ab",
+      "source": "youtube",
+      "rating": null,
+      "date": "2026-06-21T07:59:23.363638+00:00",
+      "sentiment": "frustrated",
+      "blocker_detail": "price not mentioned in video",
+      "confidence": 0.96
+    },
+    {
+      "text": "Myntra coupon codes pls",
+      "source": "reddit",
+      "rating": 1,
+      "date": "2025-05-19T08:38:01+00:00",
+      "sentiment": "neutral",
+      "blocker_detail": "User asks for a coupon code to lower the purchase price",
+      "confidence": 0.96
+    }
+  ],
+  "quality_doubt": [
+    {
+      "text": "Absolute fraud app They censor genuine reviews for some fake rejection reason and ensure they only publish good ones. the products received are always damaged, broken or pre-used. they seem to be the most unethical of ask e- commerce platform.",
+      "source": "google_play_myntra",
+      "rating": 1,
+      "date": "2026-08-18T02:31:54",
+      "sentiment": "frustrated",
+      "blocker_detail": "received damaged, broken or pre‑used items",
+      "confidence": 0.96
+    },
+    {
+      "text": "ನಿಜ ಬಟ್ಟೆ ಕ್ಟಾಲಿಟಿ ಇತ್ತೀಚೆಗೆ ಸರಿ ಇಲ್ಲ ಮೈಂತ್ರಾ....Viscose Rayan  cotton ಅಂತಾರೆ ಕಳಪೆ ಇರುತ್ತೆ ಬಟ್ಟೆ",
+      "source": "youtube",
+      "rating": null,
+      "date": "2026-06-20T08:04:25.218603+00:00",
+      "sentiment": "frustrated",
+      "blocker_detail": "fabric feels low quality despite being labeled viscose rayon cotton",
+      "confidence": 0.96
+    },
+    {
+      "text": "I occasionally use myntra i don’t prefer it. Whenever i have used I have got cheap product or it get cancelled after waiting for more than expected delivery. After all these repeated experiences I uninstalled the app.",
+      "source": "app_store_myntra",
+      "rating": 1,
+      "date": "2026-08-19T10:30:31-07:00",
+      "sentiment": "frustrated",
+      "blocker_detail": "receives cheap-quality products and cancellations after long delivery wait",
+      "confidence": 0.95
+    }
+  ],
+  "trust_authenticity": [
+    {
+      "text": "Fake working in myntra case",
+      "source": "google_play_myntra",
+      "rating": 1,
+      "date": "2026-08-20T00:31:58",
+      "sentiment": "frustrated",
+      "blocker_detail": "suspects fake products on the platform",
+      "confidence": 0.96
+    },
+    {
+      "text": "Received Used product by MYNTRA\nTotally fraud and no resolution. Received used product of KOOK N KEECH RED COLOR SHOE. Never go with MYNTRA... The worst online shopping platform.",
+      "source": "product_review",
+      "rating": null,
+      "date": "2023-11-24",
+      "sentiment": "frustrated",
+      "blocker_detail": "Received used shoe, suspect fraud and no resolution",
+      "confidence": 0.96
+    },
+    {
+      "text": "Are these truecom retailers on myntra are real?",
+      "source": "reddit",
+      "rating": 1,
+      "date": "2025-05-17T00:22:13+00:00",
+      "sentiment": "neutral",
+      "blocker_detail": "questioning authenticity of retailers on Myntra",
+      "confidence": 0.94
+    }
+  ],
+  "occasion_timing": [
+    {
+      "text": "what happened with you Myntra! What's wrong with your customer support!!! I ordered on 9th August and it's supposed to delivered on 14th of August but it get delayed which I can understand but then I don't have any update that when it will be delivered!let me know if you would like to deliver the item or not!that was gift for someone you ruined that occasion",
+      "source": "google_play_myntra",
+      "rating": 1,
+      "date": "2026-08-19T10:39:11",
+      "sentiment": "frustrated",
+      "blocker_detail": "delivery delay missed gift occasion",
+      "confidence": 0.96
+    }
+  ],
+  "decision_paralysis_too_many_options": [
+    {
+      "text": "Suggest which to buy\nI wanted to get new earphones as I put my previous ones in the washing machine🥲. \nI have an offer on myntra of around 3300 for Realme buds air 6 pro. Or should I go for the new buds air 7 or wait for the pro version to release.\nAlso let me know if there are any other earphones within the same range\nAny suggestions would be appreciated",
+      "source": "reddit",
+      "rating": 1,
+      "date": "2025-05-16T07:46:38+00:00",
+      "sentiment": "neutral",
+      "blocker_detail": "uncertain which earphones to buy due to many options and price considerations",
+      "confidence": 0.88
+    },
+    {
+      "text": "This all promotion Haul video \nHow come she can find simple dress in Myntra?",
+      "source": "youtube",
+      "rating": null,
+      "date": "2026-06-20T08:04:24.768451+00:00",
+      "sentiment": "neutral",
+      "blocker_detail": "difficulty finding simple dresses due to overwhelming choices",
+      "confidence": 0.85
+    },
+    {
+      "text": "I think they are overvaluing brand loyalty here. I don&#x27;t even understand people who can shop using mobile apps, especially clothes. You cannot easily compare, read reviews, get a gist of product or compare with other websites before buying. If Myntra goes with this, it would just fall off my list of sites I go to for clothes.<p>Yes, I buy on Myntra app. That&#x27;s because they give discounts on it which are app-only. But I simply cannot put myself through horror of clothes browsing on a mobile phone. Thanks, but no thanks.",
+      "source": "other_public",
+      "rating": null,
+      "date": "2015-05-13T15:45:36Z",
+      "sentiment": "frustrated",
+      "blocker_detail": "Difficulty comparing products on mobile app, lack of reviews and cross-site comparison",
+      "confidence": 0.8
+    }
+  ],
+  "styling_uncertainty": [
+    {
+      "text": "Mm... something's missing. A white coat on top maybe would look good wait...\n\nMaybe I'm crazy but something like this (?):  \n[https://www.myntra.com/white-leather-jacket-women](https://www.myntra.com/white-leather-jacket-women)\n\n:)  \nHave a nice day!",
+      "source": "reddit",
+      "rating": 1,
+      "date": "2025-05-19T04:09:25+00:00",
+      "sentiment": "neutral",
+      "blocker_detail": "User unsure if adding a white coat would complete the look",
+      "confidence": 0.94
+    },
+    {
+      "text": "Can I pull off a crop top + skirt + Gujarati dupatta for Dandiya, or should I just buy a set?\nHey everyone! I don’t really have a traditional festive wardrobe yet. I was thinking of pairing a simple crop top and skirt with a heavy Gujarati/mirror-work dupatta for Dandiya night.\n\nWould this combo look good, or should I just skip the hassle and buy a readymade set?",
+      "source": "fashion_community",
+      "rating": 1,
+      "date": "2026-08-21T02:00:15+00:00",
+      "sentiment": "neutral",
+      "blocker_detail": "uncertain if crop top + skirt + dupatta combo will look good for Dandiya",
+      "confidence": 0.8
+    },
+    {
+      "text": "Last outfit cream clr not suitable your",
+      "source": "youtube",
+      "rating": null,
+      "date": "2026-06-20T08:04:25.944298+00:00",
+      "sentiment": "frustrated",
+      "blocker_detail": "User says the cream-colored outfit is not suitable",
+      "confidence": 0.75
+    }
+  ],
+  "fit_sizing": [
+    {
+      "text": "[Selling] ZARA Cargos size 0\nFor context, bought this from Myntra on a major sale, but I got the sizing all wrong and it is non-returnable 😭😭😭 for how much I wanna keep it because the quality and color is so good, it doesn't fit me. Size US 0. All original tags still in place, never used, hella good quality! Letting it go for Rs.1000/+ shipping (if you are from bangalore, can pick up) Let's find a home for these cute pants \n\nDetails: \nWaist - 26 inches\nMidrise\nLegs - 31 inches from crotch",
+      "source": "reddit",
+      "rating": 1,
+      "date": "2025-05-19T03:49:20+00:00",
+      "sentiment": "frustrated",
+      "blocker_detail": "Bought ZARA cargos during sale, size wrong, cannot return",
+      "confidence": 0.96
+    },
+    {
+      "text": "very bad experience with recent order received wrong product with poor fitting nobody responds on help center from app",
+      "source": "google_play_myntra",
+      "rating": 1,
+      "date": "2026-08-20T11:21:18",
+      "sentiment": "frustrated",
+      "blocker_detail": "Received wrong product that fits poorly and no response from help center",
+      "confidence": 0.95
+    },
+    {
+      "text": "Please tell your ht or length of maxi , accordingly to select",
+      "source": "youtube",
+      "rating": null,
+      "date": "2026-06-21T07:59:22.894533+00:00",
+      "sentiment": "neutral",
+      "blocker_detail": "missing length/height information for maxi",
+      "confidence": 0.95
+    }
+  ]
+}
