@@ -1,0 +1,16 @@
+.env
+raw_data.jsonl
+structured_insights.jsonl
+structured_insights.backup.jsonl
+extraction_run.log
+extract_*.log
+opportunity_summary.csv
+blocker_by_segment.csv
+resolution_channel_summary.csv
+sample_quotes_by_blocker.json
+discovery_report.md
+discovery_report.json
+__pycache__/
+*.pyc
+.venv/
+venv/

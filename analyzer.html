@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fashion review analyzer</title>
+  <style>
+    :root {
+      --bg: #111111;
+      --panel: #1a1a1a;
+      --text: #e8e8e8;
+      --muted: #9a9a9a;
+      --line: #2a2a2a;
+      --accent: #c96442;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: Georgia, "Times New Roman", serif;
+      background: var(--bg); color: var(--text); line-height: 1.5;
+    }
+    main { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
+    h1 { font-size: 28px; font-weight: 600; margin: 0 0 8px; }
+    h2 { font-size: 20px; margin: 36px 0 12px; font-weight: 600; }
+    p, li { font-size: 15px; }
+    .muted { color: var(--muted); }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 24px 0; }
+    .stat { background: var(--panel); border: 1px solid var(--line); padding: 16px; }
+    .stat .v { font-size: 26px; font-weight: 600; }
+    .stat .l { color: var(--muted); font-size: 13px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; }
+    td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .note { border: 1px solid var(--line); padding: 12px 16px; background: var(--panel); }
+    @media (max-width: 720px) { .stats { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Fashion review analyzer</h1>
+  <p class="muted">
+    Local render of discovery_report.json — Myntra / AJIO voice-of-customer.
+    Directional ranking, not a statistically representative sample.
+  </p>
+
+  <div class="stats">
+    <div class="stat"><div class="v">603/603</div><div class="l">Extracted</div></div>
+    <div class="stat"><div class="v">0</div><div class="l">Failed</div></div>
+    <div class="stat"><div class="v">210</div><div class="l">Relevant</div></div>
+    <div class="stat"><div class="v">98.9</div><div class="l">Top score (return_hassle)</div></div>
+  </div>
+
+  <div class="note">
+    Wishlist signals: 2.
+    Q8 intent vs bookmark: genuine 0,
+    bookmarking 0,
+    unclear 2.
+    People rarely review about wishlists — treat Q1/Q8 as under-sampled.
+  </div>
+
+  <h2>Opportunity areas (ranked)</h2>
+  <p class="muted">Score = 50% reach + 50% frustration. Mentions among 210 relevant items.</p>
+  <table>
+    <thead><tr><th>#</th><th>Blocker</th><th>Dimension</th><th>Mentions</th><th>Reach %</th><th>Frustration %</th><th>Score</th></tr></thead>
+    <tbody><tr><td>1</td><td>return_hassle</td><td>Returns &amp; Exchange</td><td class='num'>46</td><td class='num'>21.9</td><td class='num'>97.8</td><td class='num'><strong>98.9</strong></td></tr><tr><td>2</td><td>other</td><td>Other</td><td class='num'>40</td><td class='num'>19.0</td><td class='num'>95.0</td><td class='num'><strong>91.0</strong></td></tr><tr><td>3</td><td>quality_doubt</td><td>Quality</td><td class='num'>14</td><td class='num'>6.7</td><td class='num'>92.9</td><td class='num'><strong>61.7</strong></td></tr><tr><td>4</td><td>price</td><td>Price &amp; Value</td><td class='num'>26</td><td class='num'>12.4</td><td class='num'>65.4</td><td class='num'><strong>61.0</strong></td></tr><tr><td>5</td><td>trust_authenticity</td><td>Trust &amp; Reviews</td><td class='num'>6</td><td class='num'>2.9</td><td class='num'>100.0</td><td class='num'><strong>56.5</strong></td></tr><tr><td>6</td><td>fit_sizing</td><td>Fit &amp; Size</td><td class='num'>2</td><td class='num'>1.0</td><td class='num'>100.0</td><td class='num'><strong>52.2</strong></td></tr><tr><td>7</td><td>occasion_timing</td><td>Occasion &amp; Timing</td><td class='num'>1</td><td class='num'>0.5</td><td class='num'>100.0</td><td class='num'><strong>51.1</strong></td></tr><tr><td>8</td><td>styling_uncertainty</td><td>Styling</td><td class='num'>1</td><td class='num'>0.5</td><td class='num'>100.0</td><td class='num'><strong>51.1</strong></td></tr><tr><td>9</td><td>payment_friction</td><td>Payment</td><td class='num'>7</td><td class='num'>3.3</td><td class='num'>71.4</td><td class='num'><strong>43.3</strong></td></tr><tr><td>10</td><td>decision_paralysis_too_many_options</td><td>Choice / Comparison</td><td class='num'>1</td><td class='num'>0.5</td><td class='num'>0.0</td><td class='num'><strong>1.1</strong></td></tr></tbody>
+  </table>
+
+  <h2>Q1 — Why users wishlist</h2>
+  <ul><li>liked product at lower price (1)</li></ul>
+
+  <h2>Q3 — Uncertainty after liking a product</h2>
+  <p>23 mentions (16.0% of blockers).</p>
+
+  <h2>Q4 — What postpones a purchase</h2>
+  <p>28 mentions (19.4% of blockers).</p>
+
+  <h2>Q6 — Off-platform research</h2>
+  <p>Off-platform: 4 (1.9% of relevant).</p>
+  <table>
+    <thead><tr><th>Channel</th><th>Mentions</th></tr></thead>
+    <tbody><tr><td>none_mentioned</td><td class='num'>56</td></tr><tr><td>in_app_reviews</td><td class='num'>39</td></tr><tr><td>external_youtube</td><td class='num'>4</td></tr></tbody>
+  </table>
+
+  <h2>Q7 — Role of fit, price, returns, etc.</h2>
+  <table>
+    <thead><tr><th>Dimension</th><th>Mentions</th><th>Share of blockers</th></tr></thead>
+    <tbody><tr><td>Returns &amp; Exchange</td><td class='num'>46</td><td class='num'>31.9%</td></tr><tr><td>Other</td><td class='num'>40</td><td class='num'>27.8%</td></tr><tr><td>Price &amp; Value</td><td class='num'>26</td><td class='num'>18.1%</td></tr><tr><td>Quality</td><td class='num'>14</td><td class='num'>9.7%</td></tr><tr><td>Payment</td><td class='num'>7</td><td class='num'>4.9%</td></tr><tr><td>Trust &amp; Reviews</td><td class='num'>6</td><td class='num'>4.2%</td></tr><tr><td>Fit &amp; Size</td><td class='num'>2</td><td class='num'>1.4%</td></tr><tr><td>Occasion &amp; Timing</td><td class='num'>1</td><td class='num'>0.7%</td></tr><tr><td>Choice / Comparison</td><td class='num'>1</td><td class='num'>0.7%</td></tr><tr><td>Styling</td><td class='num'>1</td><td class='num'>0.7%</td></tr></tbody>
+  </table>
+
+  <h2>Q9 — Segment concentration</h2>
+  <p class="muted">Segment labels are model-inferred, not verified.</p>
+  <table>
+    <thead><tr><th>Blocker</th><th>Mentions</th><th>Coverage %</th><th>Top segment</th><th>Concentration %</th></tr></thead>
+    <tbody><tr><td>return_hassle</td><td class='num'>46</td><td class='num'>50.0</td><td>return-focused shopper</td><td class='num'>30.4</td></tr><tr><td>other</td><td class='num'>40</td><td class='num'>50.0</td><td>time-sensitive shopper</td><td class='num'>15.0</td></tr><tr><td>price</td><td class='num'>26</td><td class='num'>69.2</td><td>budget-conscious shopper</td><td class='num'>44.4</td></tr><tr><td>quality_doubt</td><td class='num'>14</td><td class='num'>71.4</td><td>quality-conscious shopper</td><td class='num'>40.0</td></tr><tr><td>payment_friction</td><td class='num'>7</td><td class='num'>57.1</td><td>budget-conscious shopper</td><td class='num'>50.0</td></tr><tr><td>trust_authenticity</td><td class='num'>6</td><td class='num'>33.3</td><td>skeptical shopper</td><td class='num'>50.0</td></tr><tr><td>fit_sizing</td><td class='num'>2</td><td class='num'>50.0</td><td>fit‑focused shopper</td><td class='num'>100.0</td></tr><tr><td>occasion_timing</td><td class='num'>1</td><td class='num'>100.0</td><td>gift shopper</td><td class='num'>100.0</td></tr><tr><td>decision_paralysis_too_many_options</td><td class='num'>1</td><td class='num'>100.0</td><td>first-time buyer</td><td class='num'>100.0</td></tr><tr><td>styling_uncertainty</td><td class='num'>1</td><td class='num'>0.0</td><td>(unknown)</td><td class='num'>0.0</td></tr></tbody>
+  </table>
+</main>
+</body>
+</html>
