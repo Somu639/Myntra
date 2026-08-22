@@ -243,7 +243,8 @@ defensible, representative findings.
 **Frontend (Railway)** — Stitch UI in `frontend/`, served by nginx (`Dockerfile` + `railway.json`).
 1. Push this repo to GitHub (already `Somu639/Myntra`).
 2. In [Railway](https://railway.app/new) → **Deploy from GitHub** → select `Somu639/Myntra`.
-3. Railpack start command is `python start_frontend.py` (serves `frontend/` on `$PORT`). Generate a public URL in Settings → Networking. If a deploy still says “No start command”, set that command in the service **Settings → Deploy**.
+3. Railpack uses the **staticfile** provider (`Staticfile` → `frontend/`) and Caddy. Generate a public URL in Settings → Networking.
+   If the service still tries to run `python`, clear any custom **Start Command** in Settings → Deploy.
 
 **Backend (Streamlit Community Cloud)** — live analyzer (`streamlit_app.py`) on the committed insights/report files.
 1. Open [Deploy this repo on Streamlit](https://share.streamlit.io/deploy?repository=Somu639/Myntra&branch=master&mainModule=streamlit_app.py).
