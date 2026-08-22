@@ -1,0 +1,66 @@
+{
+  "phase": 2,
+  "title": "Qualitative discovery (the why)",
+  "purpose": "Quant tells you where; only talking to people tells you why. Mix methods so you are not over-indexing on one bias.",
+  "north_star": "Wishlist / consideration → purchase conversion on Myntra",
+  "recruit_rule": "Recruit from Phase 1 cells (category × price × tenure × wishlist size), not a generic wishlist panel.",
+  "output": "Reason inventory (what exists) + frequency check (what is common): item-level clusters, off-platform PDP gaps, comparison criteria, large-N micro-survey shares.",
+  "status": "needs_research_ops",
+  "status_note": "Diaries, live wishlist sessions, and in-app surveys are not in the public-VOC pipeline. Public reviews can seed codes; they cannot replace in-the-moment logging.",
+  "survey_triggers": [
+    {
+      "trigger": "Remove from wishlist without purchase",
+      "question": "What changed your mind?",
+      "codes": "found cheaper elsewhere / not sure about fit / changed my mind on style / no longer needed / other"
+    },
+    {
+      "trigger": "Open a wishlist item after 14+ days inactive",
+      "question": "What's holding you back on this one?",
+      "codes": "same codebook + forgot / no occasion yet"
+    }
+  ],
+  "off_platform_listen_for": [
+    "same product on another retailer (price)",
+    "Google [brand] [product] reviews",
+    "sizing on a forum / Reddit",
+    "friend group chat",
+    "YouTube / Instagram try-on haul"
+  ],
+  "methods": [
+    {
+      "id": "diary",
+      "title": "Contextual / diary studies (highest value)",
+      "sample": "15–20 users who wishlisted in the last 7 days and have not bought.",
+      "job": "Log in the moment (not recall) what happens between I like this and I didn’t buy it: reviews elsewhere, ask someone, cheaper price, distraction, decide against.",
+      "bias_it_avoids": "Recall interviews sand down messy behavior (Instagram reels + WhatsApp opinion)."
+    },
+    {
+      "id": "live_wishlist",
+      "title": "Task-based usability (live wishlist)",
+      "sample": "Users walk their actual wishlist, item by item.",
+      "job": "Why is this still here? What’s stopping you? What would make you buy it right now?",
+      "bias_it_avoids": "Aggregate answers hide several distinct clusters inside one person’s list."
+    },
+    {
+      "id": "micro_surveys",
+      "title": "In-app micro-surveys",
+      "sample": "Large-N, single question, at high-signal moments.",
+      "job": "Remove-without-buy: What changed your mind? Open after 14+ days: What’s holding you back?",
+      "bias_it_avoids": "15–20 interviews mislead on relative frequency even when they are great at listing reasons."
+    },
+    {
+      "id": "off_platform",
+      "title": "Off-platform (ask; you cannot track competitors)",
+      "sample": "Interviews + short survey.",
+      "job": "Before buying this wishlisted item, did you check anywhere else? Where? What did you look for?",
+      "bias_it_avoids": "In-app logs miss other retailers, Google reviews, Reddit sizing, group chat, haul videos."
+    },
+    {
+      "id": "comparison_shadow",
+      "title": "Comparison-shopping shadowing",
+      "sample": "Users with 3+ near-duplicate wishlisted items (e.g. 4 similar kurtas).",
+      "job": "Think-aloud: which one would you actually buy, and on what criteria?",
+      "bias_it_avoids": "UI may not support the real criteria (fabric, returns, who else bought this)."
+    }
+  ]
+}

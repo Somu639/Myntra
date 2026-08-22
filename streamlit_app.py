@@ -28,6 +28,11 @@ REPORT_PATH = ROOT / "discovery_report.json"
 INSIGHTS_PATH = ROOT / "structured_insights.jsonl"
 QUOTES_PATH = ROOT / "sample_quotes_by_blocker.json"
 PROPOSAL_PATH = ROOT / "opportunity_proposal.md"
+PHASE1_PATH = ROOT / "phase1_metrics.json"
+PHASE2_PATH = ROOT / "phase2_methods.json"
+PHASE3_PATH = ROOT / "phase3_opportunity_map.json"
+PHASE4_PATH = ROOT / "phase4_solutions.json"
+PHASE5_PATH = ROOT / "phase5_experiments.json"
 
 DISCOVERY_QUESTIONS = [
     {
@@ -143,6 +148,11 @@ def source_label(src: str | None) -> str:
 
 NAV_PAGES = [
     "Home",
+    "Phase 1",
+    "Phase 2",
+    "Phase 3",
+    "Phase 4",
+    "Phase 5",
     "Discovery Lab",
     "Search and Library",
     "Segments",
@@ -151,6 +161,11 @@ NAV_PAGES = [
 ]
 NAV_ICONS = {
     "Home": "🏠",
+    "Phase 1": "📊",
+    "Phase 2": "🎙️",
+    "Phase 3": "🗺️",
+    "Phase 4": "💡",
+    "Phase 5": "🧪",
     "Discovery Lab": "🔬",
     "Search and Library": "📚",
     "Segments": "👥",
@@ -308,6 +323,41 @@ def load_quotes(stamp: tuple[float, int]) -> dict:
     return json.loads(QUOTES_PATH.read_text(encoding="utf-8"))
 
 
+@st.cache_data(show_spinner=False)
+def load_phase1(stamp: tuple[float, int]) -> dict:
+    if not PHASE1_PATH.exists():
+        return {}
+    return json.loads(PHASE1_PATH.read_text(encoding="utf-8"))
+
+
+@st.cache_data(show_spinner=False)
+def load_phase2(stamp: tuple[float, int]) -> dict:
+    if not PHASE2_PATH.exists():
+        return {}
+    return json.loads(PHASE2_PATH.read_text(encoding="utf-8"))
+
+
+@st.cache_data(show_spinner=False)
+def load_phase3(stamp: tuple[float, int]) -> dict:
+    if not PHASE3_PATH.exists():
+        return {}
+    return json.loads(PHASE3_PATH.read_text(encoding="utf-8"))
+
+
+@st.cache_data(show_spinner=False)
+def load_phase4(stamp: tuple[float, int]) -> dict:
+    if not PHASE4_PATH.exists():
+        return {}
+    return json.loads(PHASE4_PATH.read_text(encoding="utf-8"))
+
+
+@st.cache_data(show_spinner=False)
+def load_phase5(stamp: tuple[float, int]) -> dict:
+    if not PHASE5_PATH.exists():
+        return {}
+    return json.loads(PHASE5_PATH.read_text(encoding="utf-8"))
+
+
 def quote_block(text: str, source: str = "", rating=None) -> None:
     meta = source
     if rating is not None:
@@ -325,9 +375,10 @@ def page_home(report: dict, records: list[dict]) -> None:
         """
         <h1 class="home-main-heading">Myntra Discovery Engine</h1>
         <p class="home-hero-sub">
-          AI-powered review discovery for Myntra — collects public fashion-shopping
-          feedback, extracts structured purchase blockers, and ranks opportunity areas
-          that can move wishlist-to-purchase conversion.
+          Phased wishlist research for Myntra. <strong>Phase 1</strong> where,
+          <strong>2</strong> why, <strong>3</strong> ranked map,
+          <strong>4</strong> non-monetary sketches,
+          <strong>5</strong> scoped A/B — then scale.
         </p>
         """,
         unsafe_allow_html=True,
@@ -338,16 +389,21 @@ def page_home(report: dict, records: list[dict]) -> None:
     with left:
         st.markdown("#### What this analyzer is for")
         st.markdown(
-            "Shoppers talk about fit, returns, price, and quality in app reviews and haul videos. "
-            "This engine gathers that feedback, forces a **fixed blocker taxonomy** (not a word cloud), "
-            "and ranks **why considered items never get bought** — with quotes you can spot-check."
+            "**Phase 1** maps where. **Phase 2** is why. **Phase 3** sizes and ranks frictions. "
+            "**Phase 4** sketches non-monetary solutions (no coupons) on the ranked mix — including "
+            "splitting inspiration vs ready-to-buy so moodboarders do not dilute the metric. "
+            "**Phase 5** A/Bs the top 1–2 bets in the concentrating cell, with return-rate and "
+            "time-to-first-purchase guardrails. Public reviews cannot fill funnel rates. The collect → "
+            "extract pipeline is a **companion** that seeds codes, not this backlog."
         )
-        st.markdown("#### How analysis works")
+        st.markdown("#### Research structure")
         for title, body in (
-            ("1 · Collect", "Play Store, App Store, Reddit, fashion communities, social posts, YouTube comments, product reviews/Q&A."),
-            ("2 · Extract", "Groq / Claude / Ollama fills a structured schema: relevant, wishlist_signal, blocker_type, segment, resolution channel."),
-            ("3 · Aggregate", "Opportunity score = reach × frustration. Crosstabs by segment. Sample quotes per blocker."),
-            ("4 · Discover", "Ten research questions answered with counts, ranked opportunities, and a PM-facing proposal."),
+            ("Phase 1 · Quantitative discovery", "Wishlist funnel, time-to-purchase, OOS, price trajectory, wishlist size, revisits, category, search-before-drop, cart baseline. Output: where to spend interview budget."),
+            ("Phase 2 · Qualitative why", "Diaries (in the moment), live wishlist item-by-item, micro-surveys at remove / 14-day reopen, off-platform ask, comparison shadowing. Output: reason inventory + frequency check."),
+            ("Phase 3 · Opportunity map", "Affinity → directional % of non-converted items → segment by category / tenure / wishlist size → RICE-like rank. Quotes are evidence, not the deliverable."),
+            ("Phase 4 · Non-monetary solutions", "Illustrative directions per friction (fit, compare, trust, occasion, forgetting, bookmarking split). Not a build list until Phase 3 ranks. No discounts."),
+            ("Phase 5 · Validate before scale", "Top 1–2 bets, A/B in the concentrating cell. Primary: wishlist→purchase in 30 days. Guardrails: returns, time-to-first-purchase."),
+            ("Companion · Public VOC", "Play Store, App Store, Reddit, communities, social, YouTube, product Q&A → stated blockers. Seeds codes; does not replace diaries or this map."),
         ):
             st.markdown(
                 f'<div class="home-pipeline-step"><strong>{title}</strong><br/>{body}</div>',
@@ -372,7 +428,12 @@ def page_home(report: dict, records: list[dict]) -> None:
     st.markdown("---")
     st.markdown("#### Where to go in this dashboard")
     nav_guide = [
-        ("Discovery Lab", "Ten research questions with quantified answers and quotes."),
+        ("Phase 1", "Nine quantitative workstreams and the drop-off map this phase owes."),
+        ("Phase 2", "Diaries, live wishlist, micro-surveys, off-platform ask, comparison shadowing."),
+        ("Phase 3", "Friction types, directional sizing, segment hypotheses, RICE-like backlog (empty until fieldwork)."),
+        ("Phase 4", "Non-monetary sketches per friction — illustrative, not a roadmap until the map is filled."),
+        ("Phase 5", "Top 1–2 scoped A/Bs; 30-day conversion; return-rate and time-to-purchase guardrails."),
+        ("Discovery Lab", "Public-VOC companion: ten stated-blocker questions and quotes."),
         ("Search and Library", "Opportunity ranking, blocker mix, and corpus charts."),
         ("Segments", "Who feels which blocker — model-inferred concentration."),
         ("Raw Data", "Browse extracted reviews and filter by source / blocker / sentiment."),
@@ -567,6 +628,209 @@ def page_raw(records: list[dict]) -> None:
     st.dataframe(pd.DataFrame(preview), hide_index=True, use_container_width=True)
 
 
+def page_phase1(spec: dict) -> None:
+    st.markdown("### Phase 1 · Quantitative discovery")
+    st.caption(spec.get("purpose") or "")
+    st.info(
+        spec.get("status_note")
+        or "Needs first-party wishlist analytics. Public VOC cannot fill this table."
+    )
+    st.markdown(f"**North-star:** {spec.get('north_star', '')}")
+    st.markdown(f"**Output of this phase:** {spec.get('output', '')}")
+    cuts = spec.get("cuts") or []
+    if cuts:
+        st.markdown("**Cuts on every metric:** " + " · ".join(cuts))
+
+    for i, ws in enumerate(spec.get("workstreams") or [], start=1):
+        st.markdown(
+            f'<div class="home-pipeline-step"><strong>{i} · {ws.get("title", "")}</strong>'
+            f'<br/>{ws.get("job", "")}'
+            f'<br/><span style="color:#535766">{ws.get("grain", "")}</span></div>',
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("#### Drop-off map (schema — empty until warehouse data)")
+    st.dataframe(
+        pd.DataFrame(
+            columns=[
+                "category",
+                "price_band",
+                "user_tenure",
+                "wishlist_size_bucket",
+                "never_revisited_pct",
+                "revisited_not_purchased_pct",
+                "purchased_pct",
+                "removed_pct",
+                "p50_hours_to_purchase",
+                "oos_death_pct",
+            ]
+        ),
+        hide_index=True,
+        use_container_width=True,
+    )
+    st.caption(
+        "This table is the Phase 1 deliverable. Do not interview until the densest cells are filled."
+    )
+
+
+def page_phase2(spec: dict) -> None:
+    st.markdown("### Phase 2 · Qualitative discovery (the why)")
+    if not spec:
+        st.info("phase2_methods.json not found.")
+        return
+    st.caption(spec.get("purpose") or "")
+    st.info(spec.get("status_note") or "")
+    st.markdown(f"**North-star:** {spec.get('north_star', '')}")
+    st.markdown(f"**Recruit:** {spec.get('recruit_rule', '')}")
+    st.markdown(f"**Output of this phase:** {spec.get('output', '')}")
+
+    for i, m in enumerate(spec.get("methods") or [], start=1):
+        st.markdown(
+            f'<div class="home-pipeline-step"><strong>{i} · {m.get("title", "")}</strong>'
+            f'<br/>{m.get("job", "")}'
+            f'<br/><span style="color:#535766">{m.get("sample", "")}'
+            f' — {m.get("bias_it_avoids", "")}</span></div>',
+            unsafe_allow_html=True,
+        )
+
+    triggers = spec.get("survey_triggers") or []
+    if triggers:
+        st.markdown("#### Micro-surveys (frequency check — empty until in-app)")
+        st.dataframe(pd.DataFrame(triggers), hide_index=True, use_container_width=True)
+
+    listen = spec.get("off_platform_listen_for") or []
+    if listen:
+        st.markdown("**Off-platform — listen for:** " + " · ".join(listen))
+
+    st.caption(
+        "Interviews list reasons. Micro-surveys rank them. Do not treat 15–20 sessions as a frequency study."
+    )
+
+
+def page_phase3(spec: dict) -> None:
+    st.markdown("### Phase 3 · Synthesis (the opportunity map)")
+    if not spec:
+        st.info("phase3_opportunity_map.json not found.")
+        return
+    st.caption(spec.get("purpose") or "")
+    st.info(spec.get("status_note") or "")
+    st.markdown(f"**North-star:** {spec.get('north_star', '')}")
+    st.markdown(f"**Output of this phase:** {spec.get('output', '')}")
+    st.markdown(f"**Score:** `{spec.get('formula', '')}`")
+
+    for i, step in enumerate(spec.get("steps") or [], start=1):
+        st.markdown(
+            f'<div class="home-pipeline-step"><strong>{i} · {step.get("title", "")}</strong>'
+            f'<br/>{step.get("job", "")}</div>',
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("#### Starter friction codebook (freeze after Phase 2 affinity)")
+    types = spec.get("friction_types") or []
+    if types:
+        st.dataframe(
+            pd.DataFrame(
+                [{"id": t.get("id"), "friction_type": t.get("label"), "typical_signal": t.get("signal")} for t in types]
+            ),
+            hide_index=True,
+            use_container_width=True,
+        )
+
+    st.markdown("#### Segment the map (hypotheses — not findings)")
+    hyps = spec.get("segment_hypotheses") or []
+    if hyps:
+        st.dataframe(pd.DataFrame(hyps), hide_index=True, use_container_width=True)
+
+    cols = spec.get("map_columns") or [
+        "friction_type",
+        "reach_pct_nonconverted",
+        "frequency",
+        "conversion_lift",
+        "confidence",
+        "effort",
+        "rice_score",
+        "concentration_note",
+    ]
+    empty_rows = [{c: t.get("label") if c == "friction_type" else None for c in cols} for t in types]
+    st.markdown("#### Opportunity map (empty until Phase 1 + Phase 2 data)")
+    st.dataframe(pd.DataFrame(empty_rows or [{c: None for c in cols}]), hide_index=True, use_container_width=True)
+    example = spec.get("sizing_format_example") or ""
+    if example:
+        st.caption(example)
+    st.caption(
+        "Do not rank by quote vividness. Do not paste public-VOC opportunity_score into rice_score."
+    )
+
+
+def page_phase4(spec: dict) -> None:
+    st.markdown("### Phase 4 · Solution ideation (non-monetary)")
+    if not spec:
+        st.info("phase4_solutions.json not found.")
+        return
+    st.caption(spec.get("purpose") or "")
+    st.info(spec.get("status_note") or "")
+    st.markdown(f"**North-star:** {spec.get('north_star', '')}")
+    st.markdown(f"**Constraint:** {spec.get('constraint', '')}")
+    st.markdown(f"**Output of this phase:** {spec.get('output', '')}")
+    lever = spec.get("biggest_lever_hypothesis") or ""
+    if lever:
+        st.warning(lever)
+
+    for d in spec.get("directions") or []:
+        ideas = d.get("ideas") or []
+        body = "<br/>".join(f"· {idea}" for idea in ideas)
+        st.markdown(
+            f'<div class="home-pipeline-step"><strong>{d.get("friction", "")}</strong>'
+            f'<br/>{body}</div>',
+            unsafe_allow_html=True,
+        )
+    st.caption(
+        "Illustrative only. Ideate on top-ranked Phase 3 rows, bound to a cell. Phase 5 picks 1–2 bets."
+    )
+
+
+def page_phase5(spec: dict) -> None:
+    st.markdown("### Phase 5 · Validate before you scale")
+    if not spec:
+        st.info("phase5_experiments.json not found.")
+        return
+    st.caption(spec.get("purpose") or "")
+    st.info(spec.get("status_note") or "")
+    st.markdown(f"**North-star / primary:** {spec.get('north_star', '')}")
+    st.markdown(f"**Output of this phase:** {spec.get('output', '')}")
+    st.markdown(f"**Max bets:** {spec.get('max_bets', 2)}")
+
+    primary = spec.get("primary_metric") or {}
+    if primary:
+        st.markdown(
+            f"**{primary.get('name', '')}:** {primary.get('definition', '')} "
+            f"Grain: `{primary.get('grain', '')}`."
+        )
+
+    guards = spec.get("guardrails") or []
+    for g in guards:
+        st.markdown(
+            f'<div class="home-pipeline-step"><strong>Guardrail · {g.get("label", "")}</strong>'
+            f'<br/>{g.get("why", "")}</div>',
+            unsafe_allow_html=True,
+        )
+
+    rules = spec.get("rules") or []
+    if rules:
+        st.markdown("**Rules:**")
+        for r in rules:
+            st.markdown(f"- {r}")
+
+    cols = spec.get("brief_columns") or []
+    n = int(spec.get("max_bets") or 2)
+    empty = [{c: f"bet_{i}" if c == "bet_id" else None for c in cols} for i in range(1, n + 1)]
+    st.markdown("#### Experiment briefs (empty until Phase 3 ranks)")
+    st.dataframe(pd.DataFrame(empty or [{c: None for c in cols}]), hide_index=True, use_container_width=True)
+    st.caption(
+        "A/B in the concentrating cell. Do not measure success as widget clicks. Do not invent lift."
+    )
+
+
 def page_roadmap() -> None:
     st.markdown("### AI Roadmap")
     st.caption("Prioritized solutions from opportunity_proposal.md — evidence → solution, not a sized business case.")
@@ -606,6 +870,11 @@ def main() -> None:
     report = load_report(_file_stamp(REPORT_PATH))
     records = load_insights(_file_stamp(INSIGHTS_PATH))
     quotes = load_quotes(_file_stamp(QUOTES_PATH))
+    phase1 = load_phase1(_file_stamp(PHASE1_PATH))
+    phase2 = load_phase2(_file_stamp(PHASE2_PATH))
+    phase3 = load_phase3(_file_stamp(PHASE3_PATH))
+    phase4 = load_phase4(_file_stamp(PHASE4_PATH))
+    phase5 = load_phase5(_file_stamp(PHASE5_PATH))
 
     groq_ok = bool(os.getenv("GROQ_API_KEY"))
     st.sidebar.markdown("---")
@@ -613,10 +882,20 @@ def main() -> None:
         st.sidebar.success("LLM: Groq key present")
     else:
         st.sidebar.warning("No GROQ_API_KEY — viewing saved extraction only")
-    st.sidebar.caption("Backend: local files (collect → extract → discover)")
+    st.sidebar.caption("1 where · 2 why · 3 map · 4 bets · 5 A/B · VOC")
 
     if page == "Home":
         page_home(report, records)
+    elif page == "Phase 1":
+        page_phase1(phase1)
+    elif page == "Phase 2":
+        page_phase2(phase2)
+    elif page == "Phase 3":
+        page_phase3(phase3)
+    elif page == "Phase 4":
+        page_phase4(phase4)
+    elif page == "Phase 5":
+        page_phase5(phase5)
     elif page == "Discovery Lab":
         page_discovery_lab(report, quotes)
     elif page == "Search and Library":

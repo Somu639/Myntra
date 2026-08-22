@@ -1,0 +1,109 @@
+{
+  "phase": 3,
+  "title": "Synthesis — opportunity map",
+  "purpose": "Quotes are not insight. Affinity-map frictions, size them with Phase 1 + micro-surveys, segment the mix, score RICE-like. Ranked backlog, not a quote dump.",
+  "north_star": "Wishlist / consideration → purchase conversion on Myntra",
+  "output": "Segmented opportunity map: friction type × Reach × Frequency × Conversion lift × Confidence ÷ Effort, cut by category / tenure / wishlist size.",
+  "status": "needs_phase1_and_phase2",
+  "status_note": "Empty until Phase 1 warehouse rates and Phase 2 fieldwork (affinity + micro-surveys) exist. Public VOC opportunity_score is a different ranking — do not paste it here. Do not invent percentages.",
+  "formula": "(Reach × Frequency × Conversion lift × Confidence) ÷ Effort",
+  "formula_notes": {
+    "Reach": "% of non-converted wishlist volume this friction plausibly explains (Phase 1 denominator + survey share). Not unique attribution.",
+    "Frequency": "How often it shows up among those items (micro-survey share or incidence). 1–5 if units differ.",
+    "Conversion_lift": "Potential relative lift if addressed. Product judgment, triangulated — not a fake A/B.",
+    "Confidence": "Quant + qual + survey triangulation. Low if only 15–20 interviews.",
+    "Effort": "Build / ops / policy cost (1–5)."
+  },
+  "sizing_format_example": "~35% of removed items cite 'found cheaper elsewhere,' concentrated in footwear and elect-adjacent accessories. FORMAT ONLY — not a measured number.",
+  "steps": [
+    {
+      "id": "affinity",
+      "title": "Affinity-map into friction types",
+      "job": "Cluster every diary line, live-wishlist note, and survey 'other' into a discrete friction type. Quotes are evidence for a type, not the deliverable."
+    },
+    {
+      "id": "quantify",
+      "title": "Quantify (directional attribution)",
+      "job": "What % of non-converted wishlist items does each friction plausibly explain? Phase 1 volumes + micro-survey shares. Write the concentration (category / price), not a national average only."
+    },
+    {
+      "id": "segment",
+      "title": "Segment the map",
+      "job": "Mix differs by category, tenure, wishlist size. Rank inside cells. Heavy-wishlist conversion may be the wrong metric (bookmarking)."
+    },
+    {
+      "id": "score",
+      "title": "RICE-like score",
+      "job": "Reach × Frequency × Conversion lift × Confidence ÷ Effort. Rank by score, not by how vivid the quote was."
+    }
+  ],
+  "friction_types": [
+    {
+      "id": "fit_doubt",
+      "label": "Fit doubt",
+      "signal": "Size/fit risk; not sure it will look like the photo"
+    },
+    {
+      "id": "price_wait",
+      "label": "Price-wait",
+      "signal": "Waiting for a sale; found cheaper elsewhere"
+    },
+    {
+      "id": "comparison_paralysis",
+      "label": "Comparison paralysis",
+      "signal": "3+ near-duplicates; cannot pick"
+    },
+    {
+      "id": "occasion_timing",
+      "label": "Occasion timing",
+      "signal": "No event yet; saved for a known future occasion"
+    },
+    {
+      "id": "social_validation",
+      "label": "Social validation",
+      "signal": "Friend / haul / who else bought this"
+    },
+    {
+      "id": "forgetting",
+      "label": "Forgetting",
+      "signal": "Zero revisits; item aged out of mind"
+    },
+    {
+      "id": "style_regret",
+      "label": "Style regret",
+      "signal": "Changed mind on look; no longer needed"
+    },
+    {
+      "id": "trust_seller_returns",
+      "label": "Trust in seller / returns",
+      "signal": "Authenticity, return hassle, seller quality"
+    }
+  ],
+  "segment_hypotheses": [
+    {
+      "cut": "Category",
+      "hypothesis": "Occasion-wear → social validation + timing. Basics → price + forgetting. Footwear → fit risk."
+    },
+    {
+      "cut": "User tenure / purchase history",
+      "hypothesis": "New users → trust gap. Repeat buyers → price-timing habit."
+    },
+    {
+      "cut": "Wishlist size",
+      "hypothesis": "Light wishlisters → genuine intent. Heavy wishlisters → bookmarking; improving conversion there may be the wrong metric."
+    }
+  ],
+  "map_columns": [
+    "friction_type",
+    "reach_pct_nonconverted",
+    "frequency",
+    "conversion_lift",
+    "confidence",
+    "effort",
+    "rice_score",
+    "concentration_note",
+    "category_mix",
+    "tenure_mix",
+    "wishlist_size_mix"
+  ]
+}

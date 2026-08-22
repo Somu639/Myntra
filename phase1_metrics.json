@@ -1,0 +1,66 @@
+{
+  "phase": 1,
+  "title": "Quantitative discovery",
+  "purpose": "Cheap and fast. Sharpen where qualitative research should go. This phase maps WHERE drop-off concentrates — not WHY.",
+  "north_star": "Wishlist / consideration → purchase conversion on Myntra",
+  "output": "Segmented drop-off map: category × price band × user tenure × wishlist-size bucket, with funnel and diagnostic metrics. Spend interview budget on the densest cells.",
+  "status": "needs_first_party",
+  "status_note": "Requires Myntra product analytics (wishlist lifecycle, price/stock snapshots, search, cart). Public reviews cannot compute these rates.",
+  "cuts": ["category", "price_band", "user_tenure", "wishlist_size_bucket"],
+  "workstreams": [
+    {
+      "id": "funnel",
+      "title": "Wishlist funnel decomposition",
+      "job": "% of wishlisted items that are never revisited / revisited but not purchased / purchased on Myntra / removed without purchase.",
+      "grain": "Item (user × style × size × color), windows 7 / 30 / 90 days from add."
+    },
+    {
+      "id": "time_to_purchase",
+      "title": "Time-to-purchase distribution",
+      "job": "For converters: is time-to-purchase front-loaded (decisive) or long-tail (deliberators)? Report p50 / p90 + histogram.",
+      "grain": "Converted items only; cut by category."
+    },
+    {
+      "id": "availability",
+      "title": "Size / color / stock at add vs later",
+      "job": "How many would-be conversions die because the saved size/color went OOS or the style delisted.",
+      "grain": "Non-converters who revisit or open PDP from wishlist."
+    },
+    {
+      "id": "price_trajectory",
+      "title": "Price trajectory (sale-wait test)",
+      "job": "Did price drop, rise, or stay flat for converters vs non-converters? Tests waiting-for-a-sale directly.",
+      "grain": "Price at add vs convert or last revisit / window end."
+    },
+    {
+      "id": "wishlist_size",
+      "title": "Wishlist size vs conversion",
+      "job": "Do power-wishlisters (100+ items) convert worse than light wishlisters (5–10)? Tests bookmarking vs genuine intent.",
+      "grain": "User-level conversion of their wishlisted items."
+    },
+    {
+      "id": "revisits",
+      "title": "Revisit pattern",
+      "job": "How many wishlist page/item opens before buy or give-up. Zero revisits = forgetting. Many revisits + no buy = active deliberation.",
+      "grain": "Item-level reopen count between add and outcome."
+    },
+    {
+      "id": "category",
+      "title": "Category cuts",
+      "job": "Occasion-wear (ethnic, party) vs basics (tees, innerwear). Occasion is hypothesized as event-driven; basics as habitual/low-risk.",
+      "grain": "Same metrics as funnel, split by category family."
+    },
+    {
+      "id": "search_browse",
+      "title": "Search / browse before drop-off",
+      "job": "Right before dropping a wishlisted item: same-item reviews, competing products, or neither?",
+      "grain": "Session or 24h before remove / last-seen-without-purchase."
+    },
+    {
+      "id": "cart_baseline",
+      "title": "Cart vs wishlist abandonment",
+      "job": "Is wishlist worse than cart, or comparable? Wishlist-specific problem vs general purchase hesitation.",
+      "grain": "Same users, same window, carted vs wishlisted items."
+    }
+  ]
+}

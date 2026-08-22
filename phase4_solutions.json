@@ -1,0 +1,83 @@
+{
+  "phase": 4,
+  "title": "Solution ideation (non-monetary constraint)",
+  "purpose": "Once you know the real mix, solutions map onto friction types. Illustrative directions only — not a build list without Phase 3 data. No coupons, cashback, or markdown.",
+  "north_star": "Wishlist / consideration → purchase conversion on Myntra — only where conversion is the right metric (not moodboarders).",
+  "constraint": "Non-monetary: reassurance, information, comparison, timing, list architecture. No ₹ off.",
+  "output": "2–4 non-monetary sketches per ranked friction, bound to the Phase 3 cell. Plus the inspiration vs ready-to-buy split.",
+  "status": "illustrative_until_phase3",
+  "status_note": "These are directions that show what non-monetary solutioning looks like. Do not treat them as a roadmap until Phase 3 ranks the mix. Do not A/B a coupon.",
+  "biggest_lever_hypothesis": "Separating inspiration board from ready-to-buy may be the single biggest lever: mixing bookmarking and genuine-intent cohorts dilutes the headline metric.",
+  "directions": [
+    {
+      "friction_id": "fit_doubt",
+      "friction": "Fit / size doubt",
+      "ideas": [
+        "Fit-prediction from purchase and return history",
+        "Richer size-specific reviews (runs small) and body-type filters",
+        "AR / virtual try-on",
+        "Size-exchange guarantee messaging (reassurance, not a discount)"
+      ]
+    },
+    {
+      "friction_id": "comparison_paralysis",
+      "friction": "Comparison paralysis",
+      "ideas": [
+        "In-wishlist comparison view (side-by-side across saved similar items)",
+        "Most saved by people who also saved this",
+        "Editorial styling picks that collapse near-duplicates"
+      ]
+    },
+    {
+      "friction_id": "trust_seller_returns",
+      "friction": "Trust / validation gap",
+      "ideas": [
+        "Shareable wishlist for friend feedback",
+        "Review summarization focused on fit / quality (not just star ratings)",
+        "UGC / try-on video surfacing"
+      ]
+    },
+    {
+      "friction_id": "occasion_timing",
+      "friction": "Occasion timing",
+      "ideas": [
+        "Tag wishlist items with an event / date",
+        "Remind as the date approaches (timing-based, not price-based)"
+      ]
+    },
+    {
+      "friction_id": "forgetting",
+      "friction": "Forgetting / decay",
+      "ideas": [
+        "Smart resurfacing of high-intent items (revisit frequency), not every SKU equally",
+        "Wishlist decluttering nudges for aged, never-reopened items"
+      ]
+    },
+    {
+      "friction_id": "bookmarking_cohort",
+      "friction": "Bookmarking-only users",
+      "ideas": [
+        "Do not force conversion",
+        "Separate inspiration board from ready-to-buy list",
+        "Point the headline metric at genuine-intent users, not moodboarders"
+      ]
+    },
+    {
+      "friction_id": "price_wait",
+      "friction": "Price-wait (if it ranks)",
+      "ideas": [
+        "Constraint forbids markdown",
+        "Information / timing only (price since save, restock waitlist)",
+        "If the only lever is a coupon, leave it out of this backlog"
+      ]
+    },
+    {
+      "friction_id": "style_regret",
+      "friction": "Style regret",
+      "ideas": [
+        "Usually remove / declutter, not a conversion play",
+        "Do not win back items the user has decided against"
+      ]
+    }
+  ]
+}

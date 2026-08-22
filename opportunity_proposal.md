@@ -1,7 +1,12 @@
 # Opportunity & Solution Proposal — Wishlist → Purchase Conversion
 
-**Source:** `discovery_report.md` / `discovery_report.json` (Stage 4 of the
-discovery engine).
+**Research frame:** Phase 1 maps *where*; Phase 2 is *why*; Phase 3 ranks
+the mix; Phase 4 sketches **non-monetary** solutions; Phase 5 A/Bs the
+top 1–2 bets in the concentrating cell. This document is the
+**public-VOC companion** — stated blockers, not a substitute for that
+backlog. See `phase1_quantitative_discovery.md` through `phase5_validate.md`.
+
+**Source:** `discovery_report.md` / `discovery_report.json` (VOC pipeline).
 **Backing data:** 445 public reviews/comments collected (Play Store Myntra,
 App Store Myntra, YouTube Myntra hauls). **100% extracted (445/445, 0 failed)**
 → **134 relevant** to fashion purchase/wishlist behavior, of which **79 carry an
