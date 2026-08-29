@@ -124,6 +124,7 @@ SOURCE_LABELS = {
     "product_review": "Product reviews and Q&A where relevant",
     "product_qa": "Product reviews and Q&A where relevant",
     "other_public": "Other publicly available conversations about online fashion shopping",
+    "chatgpt_research": "ChatGPT research",
 }
 SOURCE_FILTER_OPTIONS = [
     "App Store reviews",
@@ -149,6 +150,7 @@ NAV_PAGES = [
     "Search and Library",
     "Segments",
     "Raw Data",
+    "Reviewer",
     "AI Roadmap",
 ]
 NAV_ICONS = {
@@ -158,6 +160,7 @@ NAV_ICONS = {
     "Search and Library": "📚",
     "Segments": "👥",
     "Raw Data": "📋",
+    "Reviewer": "🔎",
     "AI Roadmap": "🤖",
 }
 
@@ -177,6 +180,12 @@ def inject_myntra_css() -> None:
             border-right: 1px solid #EAEAEC;
           }
           section[data-testid="stSidebar"] .stRadio > label { display: none; }
+          div[data-testid="stRadio"] label,
+          div[data-testid="stRadio"] [role="radiogroup"] label,
+          div[data-testid="stPills"] button {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+          }
           h1.aura-brand-title,
           [data-testid="stMarkdownContainer"] h1.aura-brand-title {
             font-family: 'Assistant', sans-serif !important;
@@ -223,6 +232,10 @@ def inject_myntra_css() -> None:
             background: #FF3F6C;
             color: #ffffff;
             border: none;
+            pointer-events: auto !important;
+            cursor: pointer !important;
+            position: relative;
+            z-index: 2;
           }
           .stButton>button:hover { background: #E3365B; color: #ffffff; }
           .home-hero-sub {
@@ -383,6 +396,7 @@ def page_home(report: dict, records: list[dict]) -> None:
     nav_guide = [
         ("Phase 1", "Nine quantitative workstreams and the drop-off map this phase owes."),
         ("Discovery Lab", "Public-VOC companion: ten stated-blocker questions and quotes."),
+        ("Reviewer", "RAG over VOC quotes plus the ChatGPT wishlist-conversion research."),
         ("Search and Library", "Opportunity ranking, blocker mix, and corpus charts."),
         ("Segments", "Who feels which blocker — model-inferred concentration."),
         ("Raw Data", "Browse extracted reviews and filter by source / blocker / sentiment."),
@@ -408,9 +422,25 @@ def page_home(report: dict, records: list[dict]) -> None:
 
 def page_discovery_lab(report: dict, quotes: dict) -> None:
     st.markdown("### Discovery Lab")
-    st.caption("Ten product-discovery questions. Answers are counted from structured extraction, not summaries.")
+    st.caption("Ten product-discovery questions. Click a question — answers are counted from structured extraction, not summaries.")
     labels = [f"{q['icon']} {q['short_title']}" for q in DISCOVERY_QUESTIONS]
-    picked = st.radio("Question", labels, horizontal=True, label_visibility="collapsed")
+    if "lab_q" not in st.session_state:
+        st.session_state["lab_q"] = labels[1]
+    def _pick_lab(lab: str) -> None:
+        st.session_state["lab_q"] = lab
+    for row_start in range(0, len(labels), 5):
+        cols = st.columns(5)
+        for i, lab in enumerate(labels[row_start:row_start + 5]):
+            active = st.session_state["lab_q"] == lab
+            cols[i].button(
+                lab,
+                key=f"lab_btn_{lab}",
+                use_container_width=True,
+                type="primary" if active else "secondary",
+                on_click=_pick_lab,
+                args=(lab,),
+            )
+    picked = st.session_state["lab_q"]
     spec = DISCOVERY_QUESTIONS[labels.index(picked)]
     payload = report.get(spec["key"], {})
 
@@ -622,6 +652,71 @@ def page_phase1(spec: dict) -> None:
     )
 
 
+def page_reviewer() -> None:
+    from rag import load_chatgpt, load_voc, retrieve, build_review_file
+
+    st.markdown("### Reviewer · RAG")
+    st.caption(
+        "Retrieve public-VOC quotes and ChatGPT wishlist-conversion research, then ground an answer. "
+        "The ChatGPT share is a PM case study — its example funnel rates are not Myntra measurements."
+    )
+    review_path = ROOT / "rag_review.json"
+    review = json.loads(review_path.read_text(encoding="utf-8")) if review_path.exists() else build_review_file()
+    research = load_chatgpt()
+    st.markdown(f"**Research:** [{research.get('title', 'ChatGPT share')}]({research.get('url', '')})")
+    st.info(research.get("problem_statement") or "")
+    st.markdown(f"**North-star (from research):** {research.get('north_star', '')}")
+
+    st.markdown("#### ChatGPT hypotheses vs this corpus")
+    tri = review.get("triangulation") or []
+    if tri:
+        st.dataframe(pd.DataFrame(tri), hide_index=True, use_container_width=True)
+        st.caption("sized_in_voc = that blocker exists in public reviews. not_in_public_voc = ChatGPT hypothesis with no matching VOC row (e.g. OOS).")
+
+    q = st.text_input("Ask the corpus", placeholder="Why don't people buy from the wishlist?")
+    if q:
+        hits = retrieve(q, load_voc(), research.get("chunks") or [])
+        left, right = st.columns(2)
+        with left:
+            st.markdown("**Retrieved VOC**")
+            if not hits["voc"]:
+                st.write("No overlapping quotes.")
+            for h in hits["voc"]:
+                quote_block(h.get("text", ""), source_label(h.get("source")), None)
+                st.caption(f"{h.get('blocker_type') or '—'} · score {h.get('score')}")
+        with right:
+            st.markdown("**Retrieved ChatGPT research**")
+            for h in hits["chatgpt"]:
+                st.markdown(f"**{h.get('title')}** — {h.get('kind')}")
+                st.write(h.get("text"))
+        groq_key = os.getenv("GROQ_API_KEY")
+        if groq_key and (hits["voc"] or hits["chatgpt"]):
+            if st.button("Synthesize with Groq"):
+                try:
+                    import requests
+                    ctx = json.dumps({"voc": hits["voc"], "chatgpt": hits["chatgpt"]}, ensure_ascii=False)[:8000]
+                    prompt = (
+                        "You are reviewing Myntra wishlist→purchase research. "
+                        "Use ONLY the retrieved VOC quotes and ChatGPT chunks. "
+                        "Do not invent funnel percentages. Cite which side each claim comes from.\n\n"
+                        f"Question: {q}\n\nEvidence:\n{ctx}"
+                    )
+                    resp = requests.post(
+                        "https://api.groq.com/openai/v1/chat/completions",
+                        headers={"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"},
+                        json={
+                            "model": "openai/gpt-oss-120b",
+                            "messages": [{"role": "user", "content": prompt}],
+                            "temperature": 0.2,
+                        },
+                        timeout=60,
+                    )
+                    resp.raise_for_status()
+                    st.markdown(resp.json()["choices"][0]["message"]["content"])
+                except Exception as exc:
+                    st.error(f"Groq synthesize failed: {exc}")
+
+
 def page_roadmap() -> None:
     st.markdown("### AI Roadmap")
     st.caption("Prioritized solutions from opportunity_proposal.md — evidence → solution, not a sized business case.")
@@ -683,6 +778,8 @@ def main() -> None:
         page_segments(report)
     elif page == "Raw Data":
         page_raw(records)
+    elif page == "Reviewer":
+        page_reviewer()
     else:
         page_roadmap()
 

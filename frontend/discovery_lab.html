@@ -117,6 +117,8 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #EAEAEC; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #c2c5de; }
+        .q-card { cursor: pointer; pointer-events: auto; position: relative; z-index: 2; user-select: none; }
+        .q-card.is-active { border-width: 2px; border-color: #FF3F6C; background: #FEE8ED; box-shadow: 0 0 0 4px rgba(255,63,108,0.15); }
     </style>
 </head>
 <body class="font-body text-body text-on-background flex min-h-screen antialiased overflow-x-hidden">
@@ -147,6 +149,10 @@
 <a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-secondary dark:text-secondary-fixed-dim font-body hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors cursor-pointer duration-200" href="raw_data.html">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">database</span>
 <span>Raw Data</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-secondary dark:text-secondary-fixed-dim font-body hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors cursor-pointer duration-200" href="reviewer.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">rate_review</span>
+<span>Reviewer</span>
 </a>
 <a class="flex items-center gap-3 px-3 py-2 rounded-DEFAULT text-secondary dark:text-secondary-fixed-dim font-body hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors cursor-pointer duration-200" href="ai_roadmap.html">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">psychology</span>
@@ -194,213 +200,22 @@
 <h1 class="font-h1 text-h1 text-on-background mb-2">Discovery Lab</h1>
 <p class="font-body text-body text-secondary">10 research questions with quantified answers and spot-check quotes.</p>
 </div>
-<!-- Left Column: Grid of Questions (Bento Style) -->
-<div class="lg:col-span-5 xl:col-span-6 grid grid-cols-1 md:grid-cols-2 gap-4 h-fit">
-<!-- Q1 -->
-<div class="bg-white-card border border-neutral rounded-DEFAULT p-4 hover:border-primary/50 transition-colors cursor-pointer flex flex-col gap-3 group relative overflow-hidden">
-<div class="flex items-start justify-between">
-<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors">favorite</span>
-<span class="font-label text-label text-neutral-light bg-neutral-light px-2 py-0.5 rounded-sm">Q1</span>
-</div>
-<div class="mt-auto">
-<h3 class="font-h3 text-h3 text-on-background mb-1">Why wishlist</h3>
-<p class="font-body text-body text-secondary text-sm line-clamp-2">What is the primary motivation for users to add items to their wishlist rather than purchasing immediately?</p>
-<p class="font-subtitle text-subtitle text-primary mt-3 opacity-0 group-hover:opacity-100 transition-opacity">LENS: INTENT DELAY</p>
-</div>
-</div>
-<!-- Q2 (Active State - Detail Panel Open) -->
-<div class="bg-primary-fixed/10 border-2 border-primary rounded-DEFAULT p-4 cursor-pointer flex flex-col gap-3 group relative overflow-hidden ring-4 ring-primary-fixed/30">
-<div class="flex items-start justify-between">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">block</span>
-<span class="font-label text-label text-primary bg-primary-fixed px-2 py-0.5 rounded-sm">Q2</span>
-</div>
-<div class="mt-auto">
-<h3 class="font-h3 text-h3 text-on-background mb-1">Purchase blockers</h3>
-<p class="font-body text-body text-secondary text-sm line-clamp-2">What are the most frequent reasons users abandon their cart during the final checkout step?</p>
-<p class="font-subtitle text-subtitle text-primary mt-3">LENS: FRICTION POINTS</p>
-</div>
-</div>
-<!-- Q3 -->
-<div class="bg-white-card border border-neutral rounded-DEFAULT p-4 hover:border-primary/50 transition-colors cursor-pointer flex flex-col gap-3 group relative overflow-hidden">
-<div class="flex items-start justify-between">
-<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors">help</span>
-<span class="font-label text-label text-neutral-light bg-neutral-light px-2 py-0.5 rounded-sm">Q3</span>
-</div>
-<div class="mt-auto">
-<h3 class="font-h3 text-h3 text-on-background mb-1">Uncertainty</h3>
-<p class="font-body text-body text-secondary text-sm line-clamp-2">How does sizing uncertainty impact the conversion rate of new users?</p>
-<p class="font-subtitle text-subtitle text-primary mt-3 opacity-0 group-hover:opacity-100 transition-opacity">LENS: CONFIDENCE</p>
-</div>
-</div>
-<!-- Q4 -->
-<div class="bg-white-card border border-neutral rounded-DEFAULT p-4 hover:border-primary/50 transition-colors cursor-pointer flex flex-col gap-3 group relative overflow-hidden">
-<div class="flex items-start justify-between">
-<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors">schedule</span>
-<span class="font-label text-label text-neutral-light bg-neutral-light px-2 py-0.5 rounded-sm">Q4</span>
-</div>
-<div class="mt-auto">
-<h3 class="font-h3 text-h3 text-on-background mb-1">Postpone</h3>
-<p class="font-body text-body text-secondary text-sm line-clamp-2">What seasonal or external factors cause users to delay a planned purchase?</p>
-<p class="font-subtitle text-subtitle text-primary mt-3 opacity-0 group-hover:opacity-100 transition-opacity">LENS: TIMING</p>
-</div>
-</div>
-<!-- Q5 -->
-<div class="bg-white-card border border-neutral rounded-DEFAULT p-4 hover:border-primary/50 transition-colors cursor-pointer flex flex-col gap-3 group relative overflow-hidden">
-<div class="flex items-start justify-between">
-<span class="material-symbols-outlined text-secondary group-hover:text-primary transition-colors">compare_arrows</span>
-<span class="font-label text-label text-neutral-light bg-neutral-light px-2 py-0.5 rounded-sm">Q5</span>
-</div>
-<div class="mt-auto">
-<h3 class="font-h3 text-h3 text-on-background mb-1">Compare</h3>
-<p class="font-body text-body text-secondary text-sm line-clamp-2">How often do users compare prices across platforms before finalizing an order here?</p>
-<p class="font-subtitle text-subtitle text-primary mt-3 opacity-0 group-hover:opacity-100 transition-opacity">LENS: COMPETITION</p>
-</div>
-</div>
-</div>
-<!-- Right Column: Detail Panel (Expanded for Q2) -->
+<div id="q-grid" class="lg:col-span-5 xl:col-span-6 grid grid-cols-1 md:grid-cols-2 gap-4 h-fit"></div>
 <div class="lg:col-span-7 xl:col-span-6 flex flex-col gap-6">
-<!-- Main Detail Card -->
 <div class="bg-white-card border border-neutral rounded-lg flex flex-col overflow-hidden shadow-sm">
-<!-- Detail Header -->
 <div class="p-card_padding border-b border-neutral bg-surface-bright flex flex-col gap-4">
-<div class="flex items-start justify-between">
-<div>
-<span class="font-subtitle text-subtitle text-primary tracking-widest uppercase mb-2 block">LENS: FRICTION POINTS</span>
-<h2 class="font-h2 text-h2 text-on-background">Purchase blockers</h2>
+<span id="d-lens" class="font-subtitle text-subtitle text-primary tracking-widest uppercase">LENS</span>
+<h2 id="d-title" class="font-h2 text-h2 text-on-background">Select a question</h2>
+<p id="d-question" class="font-body text-body text-neutral-dark text-lg border-l-4 border-primary pl-4 py-1"></p>
+<div id="d-kpis" class="flex flex-wrap gap-3 mt-2"></div>
 </div>
-<span class="material-symbols-outlined text-secondary cursor-pointer hover:text-on-background">close</span>
-</div>
-<p class="font-body text-body text-neutral-dark text-lg border-l-4 border-primary pl-4 py-1">What are the most frequent reasons users abandon their cart during the final checkout step?</p>
-<!-- KPI Chips -->
-<div class="flex flex-wrap gap-3 mt-2">
-<div class="flex flex-col px-4 py-2 border border-neutral rounded-DEFAULT bg-neutral-light min-w-[100px]">
-<span class="font-label text-label text-secondary uppercase">Mentions</span>
-<span class="font-h2 text-h2 text-on-background">41</span>
-</div>
-<div class="flex flex-col px-4 py-2 border border-neutral rounded-DEFAULT bg-neutral-light min-w-[100px]">
-<span class="font-label text-label text-secondary uppercase">Reach</span>
-<span class="font-h2 text-h2 text-on-background">11.4%</span>
-</div>
-<div class="flex flex-col px-4 py-2 border border-error/20 rounded-DEFAULT chip-frustrated min-w-[100px]">
-<span class="font-label text-label uppercase opacity-80">Frustration</span>
-<span class="font-h2 text-h2">95.1%</span>
-</div>
-<div class="flex flex-col px-4 py-2 border border-neutral rounded-DEFAULT bg-neutral-light min-w-[100px]">
-<span class="font-label text-label text-secondary uppercase">Score</span>
-<span class="font-h2 text-h2 text-on-background">78.6</span>
-</div>
-</div>
-</div>
-<!-- Ranked Opportunity Table -->
 <div class="p-card_padding border-b border-neutral">
-<h3 class="font-h3 text-h3 text-on-background mb-4 flex items-center gap-2">
-<span class="material-symbols-outlined text-primary text-[20px]">format_list_numbered</span>
-                            Ranked Opportunity
-                        </h3>
-<div class="w-full border border-neutral rounded-DEFAULT overflow-hidden">
-<table class="w-full text-left border-collapse">
-<thead>
-<tr class="bg-neutral-light font-body-bold text-body-bold text-neutral-dark border-b border-neutral">
-<th class="py-3 px-4 w-12 text-center">#</th>
-<th class="py-3 px-4">Theme / Blocker</th>
-<th class="py-3 px-4 text-right">Impact Score</th>
-<th class="py-3 px-4 w-1/3">Visual Indicator</th>
-</tr>
-</thead>
-<tbody class="font-body text-body">
-<tr class="border-b border-neutral hover:bg-neutral-light transition-colors">
-<td class="py-3 px-4 text-center font-body-bold text-secondary">1</td>
-<td class="py-3 px-4 text-on-background font-body-bold">Returns &amp; Exchange</td>
-<td class="py-3 px-4 text-right font-body-bold">78.6</td>
-<td class="py-3 px-4">
-<div class="w-full bg-surface-container rounded-full h-2">
-<div class="bg-primary h-2 rounded-full" style="width: 78.6%"></div>
+<h3 class="font-h3 text-h3 text-on-background mb-4">Answer</h3>
+<div id="d-body" class="overflow-x-auto"></div>
 </div>
-</td>
-</tr>
-<tr class="border-b border-neutral hover:bg-neutral-light transition-colors">
-<td class="py-3 px-4 text-center font-body-bold text-secondary">2</td>
-<td class="py-3 px-4 text-on-background">Other Technical</td>
-<td class="py-3 px-4 text-right">77.1</td>
-<td class="py-3 px-4">
-<div class="w-full bg-surface-container rounded-full h-2">
-<div class="bg-secondary h-2 rounded-full" style="width: 77.1%"></div>
-</div>
-</td>
-</tr>
-<tr class="border-b border-neutral hover:bg-neutral-light transition-colors">
-<td class="py-3 px-4 text-center font-body-bold text-secondary">3</td>
-<td class="py-3 px-4 text-on-background">Price / Hidden Fees</td>
-<td class="py-3 px-4 text-right">59.9</td>
-<td class="py-3 px-4">
-<div class="w-full bg-surface-container rounded-full h-2">
-<div class="bg-secondary h-2 rounded-full" style="width: 59.9%"></div>
-</div>
-</td>
-</tr>
-<tr class="border-b border-neutral hover:bg-neutral-light transition-colors">
-<td class="py-3 px-4 text-center font-body-bold text-secondary">4</td>
-<td class="py-3 px-4 text-on-background">Trust / Authenticity</td>
-<td class="py-3 px-4 text-right">52.7</td>
-<td class="py-3 px-4">
-<div class="w-full bg-surface-container rounded-full h-2">
-<div class="bg-secondary h-2 rounded-full" style="width: 52.7%"></div>
-</div>
-</td>
-</tr>
-<tr class="hover:bg-neutral-light transition-colors">
-<td class="py-3 px-4 text-center font-body-bold text-secondary">5</td>
-<td class="py-3 px-4 text-on-background">Fit &amp; Size Confidence</td>
-<td class="py-3 px-4 text-right">52.7</td>
-<td class="py-3 px-4">
-<div class="w-full bg-surface-container rounded-full h-2">
-<div class="bg-secondary h-2 rounded-full" style="width: 52.7%"></div>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<!-- Spot-Check Quotes -->
 <div class="p-card_padding bg-surface-bright">
-<div class="flex items-center justify-between mb-4">
-<h3 class="font-h3 text-h3 text-on-background flex items-center gap-2">
-<span class="material-symbols-outlined text-primary text-[20px]">format_quote</span>
-                                Verbatim Evidence
-                            </h3>
-<button class="font-button text-button text-secondary border border-neutral px-3 py-1.5 rounded-DEFAULT hover:bg-neutral-light transition-colors">View All 41</button>
-</div>
-<div class="flex flex-col gap-4">
-<!-- Quote 1 -->
-<div class="border-l-4 border-primary bg-primary-fixed/5 p-4 rounded-r-DEFAULT relative group">
-<span class="material-symbols-outlined absolute top-2 right-4 text-primary/20 text-4xl group-hover:text-primary/40 transition-colors">format_quote</span>
-<p class="font-body text-body text-on-background italic mb-4 relative z-10 pr-8">
-                                    “The order arrives fast but the return process takes years… no one comes for return pickups. It's frustrating to hold onto items for weeks waiting for someone to show up.”
-                                </p>
-<div class="flex items-center gap-3 font-label text-label text-secondary">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">shop</span> Play Store reviews</span>
-<span>·</span>
-<span class="flex items-center gap-1 text-error"><span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span> Rating 1</span>
-<span>·</span>
-<span class="chip-frustrated px-2 py-0.5 rounded-sm">Returns &amp; Exchange</span>
-</div>
-</div>
-<!-- Quote 2 -->
-<div class="border-l-4 border-primary bg-primary-fixed/5 p-4 rounded-r-DEFAULT relative group">
-<span class="material-symbols-outlined absolute top-2 right-4 text-primary/20 text-4xl group-hover:text-primary/40 transition-colors">format_quote</span>
-<p class="font-body text-body text-on-background italic mb-4 relative z-10 pr-8">
-                                    “I reached the payment page and suddenly there was an extra convenience fee added that wasn't shown before. I immediately closed the app. Transparency is key.”
-                                </p>
-<div class="flex items-center gap-3 font-label text-label text-secondary">
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">support_agent</span> CS Ticket</span>
-<span>·</span>
-<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">calendar_today</span> Oct 12</span>
-<span>·</span>
-<span class="bg-neutral-light px-2 py-0.5 rounded-sm text-neutral-dark">Price / Hidden Fees</span>
-</div>
-</div>
-</div>
+<h3 class="font-h3 text-h3 text-on-background mb-4">Verbatim evidence</h3>
+<div id="d-quotes" class="flex flex-col gap-4"></div>
 </div>
 </div>
 </div>
@@ -408,13 +223,114 @@
 </div>
 
 <script src="config.js"></script>
+<script src="lab_data.js"></script>
 <script>
 (function () {
   var url = (window.STREAMLIT_BACKEND_URL || "").replace(/\/$/, "");
-  if (!url) return;
-  document.querySelectorAll("a[href='#']").forEach(function () {});
   var link = document.getElementById("streamlit-backend-link");
-  if (link) link.href = url;
+  if (url && link) link.href = url;
+
+  var lab = window.LAB_DATA || { questions: [] };
+  if (!lab.questions || !lab.questions.length) {
+    document.getElementById("d-body").innerHTML = "<p class='font-body text-secondary'>Lab data failed to load (lab_data.js). Rebuild with <code>python build_frontend_data.py</code>.</p>";
+  }
+  var grid = document.getElementById("q-grid");
+  var current = "q2";
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c];
+    });
+  }
+  function kpi(label, value) {
+    return '<div class="flex flex-col px-4 py-2 border border-neutral rounded-DEFAULT bg-neutral-light min-w-[100px]">'
+      + '<span class="font-label text-label text-secondary uppercase">' + esc(label) + "</span>"
+      + '<span class="font-h2 text-h2 text-on-background">' + esc(value) + "</span></div>";
+  }
+  function table(headers, rows) {
+    var h = headers.map(function (x) { return "<th class='py-2 px-3 text-left'>" + esc(x) + "</th>"; }).join("");
+    var b = rows.map(function (r) {
+      return "<tr class='border-t border-neutral'>" + r.map(function (c) {
+        return "<td class='py-2 px-3'>" + esc(c) + "</td>";
+      }).join("") + "</tr>";
+    }).join("");
+    return "<table class='w-full text-sm'><thead class='bg-neutral-light'><tr>" + h + "</tr></thead><tbody>" + b + "</tbody></table>";
+  }
+  function renderQuotes(list) {
+    var el = document.getElementById("d-quotes");
+    if (!list || !list.length) { el.innerHTML = "<p class='font-body text-secondary'>No spot-check quotes for this cut.</p>"; return; }
+    el.innerHTML = list.map(function (q) {
+      return '<div class="border-l-4 border-primary bg-primary-fixed/5 p-4 rounded-r-DEFAULT">'
+        + '<p class="font-body italic mb-2">' + esc((q.text || "").slice(0, 360)) + "</p>"
+        + '<div class="font-label text-secondary">' + esc(q.source || "")
+        + (q.rating != null ? " · rating " + esc(q.rating) : "")
+        + (q.blocker ? " · " + esc(q.blocker) : "") + "</div></div>";
+    }).join("");
+  }
+  function findQ(id) {
+    return (lab.questions || []).filter(function (q) { return q.id === id; })[0];
+  }
+  function renderDetail(id) {
+    current = id;
+    document.querySelectorAll(".q-card").forEach(function (c) {
+      c.classList.toggle("is-active", c.getAttribute("data-qid") === id);
+    });
+    var q = findQ(id);
+    if (!q) return;
+    document.getElementById("d-lens").textContent = "LENS: " + q.lens;
+    document.getElementById("d-title").textContent = q.short;
+    document.getElementById("d-question").textContent = q.question;
+    var p = q.payload;
+    var kpis = "";
+    var body = "";
+    if (id === "q1" && p) {
+      kpis += kpi("Wishlist signals", p.wishlist_mentions || 0);
+      var reasons = p.top_reasons || [];
+      body = table(["Reason", "Count"], reasons.map(function (r) { return [r[0], r[1]]; }));
+    } else if ((id === "q2" || id === "q10") && Array.isArray(p)) {
+      var top = p[0] || {};
+      kpis += kpi("Top mentions", top.mentions);
+      kpis += kpi("Reach", (top.reach_pct_of_relevant != null ? top.reach_pct_of_relevant + "%" : "—"));
+      kpis += kpi("Frustration", (top.frustration_rate_pct != null ? top.frustration_rate_pct + "%" : "—"));
+      kpis += kpi("Score", top.opportunity_score);
+      body = table(["#", "Blocker", "Mentions", "Score"], p.slice(0, 8).map(function (r, i) {
+        return [i + 1, r.dimension || r.blocker_type, r.mentions, r.opportunity_score];
+      }));
+    } else if (p && typeof p === "object" && !Array.isArray(p)) {
+      if (p.mentions != null) kpis += kpi("Mentions", p.mentions);
+      if (p.share_of_blockers_pct != null) kpis += kpi("Share of blockers", p.share_of_blockers_pct + "%");
+      if (p.off_platform_total != null) kpis += kpi("Off-platform", p.off_platform_total);
+      if (p.wishlist_mentions != null) kpis += kpi("Wishlist mentions", p.wishlist_mentions);
+      if (p.genuine_intent != null) kpis += kpi("Genuine", p.genuine_intent);
+      if (p.bookmarking != null) kpis += kpi("Bookmarking", p.bookmarking);
+      var br = p.breakdown || p.by_channel || [];
+      if (br.length) body = table(["Item", "Count"], br.map(function (r) { return [r[0] || r.channel, r[1] != null ? r[1] : r.mentions]; }));
+      var dims = p.by_dimension || [];
+      if (dims.length) body = table(["Dimension", "Mentions", "Share %"], dims.map(function (r) {
+        return [r.dimension, r.mentions, r.share_pct];
+      }));
+    } else if (Array.isArray(p)) {
+      body = table(Object.keys(p[0] || {}), p.slice(0, 12).map(function (r) {
+        return Object.keys(p[0]).map(function (k) { return r[k]; });
+      }));
+    }
+    document.getElementById("d-kpis").innerHTML = kpis || kpi("Records", (lab.coverage && lab.coverage.relevant) || "—");
+    document.getElementById("d-body").innerHTML = body || "<p class='font-body text-secondary'>No structured cut for this question.</p>";
+    renderQuotes(q.spot_quotes);
+  }
+  grid.innerHTML = (lab.questions || []).map(function (q, i) {
+    return '<button type="button" data-qid="' + esc(q.id) + '" class="q-card bg-white-card border border-neutral rounded-DEFAULT p-4 hover:border-primary/50 transition-colors flex flex-col gap-3 text-left w-full">'
+      + '<div class="flex items-start justify-between"><span class="material-symbols-outlined text-secondary">' + esc(q.icon) + "</span>"
+      + '<span class="font-label text-label text-neutral-light bg-neutral-light px-2 py-0.5 rounded-sm">Q' + (i + 1) + "</span></div>"
+      + '<div class="mt-auto"><h3 class="font-h3 text-h3 text-on-background mb-1">' + esc(q.short) + "</h3>"
+      + '<p class="font-body text-body text-secondary text-sm line-clamp-2">' + esc(q.question) + "</p>"
+      + '<p class="font-subtitle text-subtitle text-primary mt-3">LENS: ' + esc(q.lens) + "</p></div></button>";
+  }).join("");
+  grid.addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-qid]");
+    if (btn) renderDetail(btn.getAttribute("data-qid"));
+  });
+  renderDetail(current);
 })();
 </script>
 

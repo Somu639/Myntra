@@ -1,0 +1,115 @@
+{
+  "source": "chatgpt_share",
+  "url": "https://chatgpt.com/share/6a92fd04-47c4-83e8-942a-4d34aad1ce3b",
+  "title": "Myntra Wishlist Conversion Strategy",
+  "note": "External PM research, not first-party Myntra data. Example funnel rates in the share (e.g. 12% WPC) are illustrative — do not treat as measured.",
+  "north_star": "30-day wishlist purchase conversion: users who add ≥1 item who purchase ≥1 wishlisted item within 30 days. Do not optimize wishlist additions.",
+  "problem_statement": "High-intent users lack decision support between I like this and I am confident enough to buy this. Do not assume they forgot the list.",
+  "chunks": [
+    {
+      "id": "h1",
+      "kind": "hypothesis",
+      "title": "H1 Decision uncertainty",
+      "text": "User thought: I like it, but I am not sure. Barrier: size, fit, color, quality. Segment: Ready but Hesitating — 1–3 products, frequent revisits, views size chart/reviews, has purchased similar before, still does not buy. Opportunity: remove friction.",
+      "voc_blocker": "fit_sizing"
+    },
+    {
+      "id": "h2",
+      "kind": "hypothesis",
+      "title": "H2 Timing",
+      "text": "User thought: I want it, but not right now. Barrier: no immediate need. Segment: Wait and Watch — adds, does not revisit immediately, returns after several days, checks price/availability. Opportunity: useful product-change information, not a coupon.",
+      "voc_blocker": "occasion_timing"
+    },
+    {
+      "id": "h3",
+      "kind": "hypothesis",
+      "title": "H3 Price or value uncertainty",
+      "text": "User thought: I will wait and see. Barrier: waiting for price movement. Constraint: no coupons, discounts, cashback, coins, or price-based rewards.",
+      "voc_blocker": "price"
+    },
+    {
+      "id": "h4",
+      "kind": "hypothesis",
+      "title": "H4 Choice overload",
+      "text": "User thought: I will decide later. Barrier: too many wishlist items. Segment: Comparison Shopper — 10–30 similar products, same category/brand, rarely purchases from wishlist. Opportunity: help them narrow choices with in-list comparison.",
+      "voc_blocker": "decision_paralysis_too_many_options"
+    },
+    {
+      "id": "h5",
+      "kind": "hypothesis",
+      "title": "H5 Product availability",
+      "text": "User thought: I will buy it when I need it. Barrier: stock or size unavailable. Segment: Availability Blocked. Opportunity: recovery — size back in stock, genuine inventory signals.",
+      "voc_blocker": null
+    },
+    {
+      "id": "seg_e",
+      "kind": "segment",
+      "title": "Passive saver",
+      "text": "Hundreds of wishlist items, rarely opens wishlist, low purchase intent. The list is a storage bucket. Opportunity: re-engagement and organization — do not force conversion of moodboarders.",
+      "voc_blocker": null
+    },
+    {
+      "id": "sol_smart",
+      "kind": "solution",
+      "title": "Smart Wishlist MVP",
+      "text": "Turn the wishlist from storage into a decision assistant. Surface genuine signals only: people bought this recently, price changed since save, limited sizes, ratings, similar saved items. Constraint: no fake urgency, no monetary incentive.",
+      "voc_blocker": null
+    },
+    {
+      "id": "sol_compare",
+      "kind": "solution",
+      "title": "In-wishlist comparison",
+      "text": "Compare 2–4 saved products in the same category on rating, reviews, fit, material, delivery, returns. Attacks choice paralysis. Priority: medium-high impact, high confidence, medium effort.",
+      "voc_blocker": "decision_paralysis_too_many_options"
+    },
+    {
+      "id": "sol_fit",
+      "kind": "solution",
+      "title": "Fit and decision support",
+      "text": "If path is wishlist → size chart → reviews → exit: surface based on previous purchases you usually buy M in this brand. Size-exchange reassurance, not a discount. Priority: high impact, medium confidence, medium effort.",
+      "voc_blocker": "fit_sizing"
+    },
+    {
+      "id": "sol_remind",
+      "kind": "solution",
+      "title": "Information-value reminders",
+      "text": "Not you have items in your wishlist. Trigger only on meaningful change: your size is back, almost out of stock in your size, you viewed this 3 times — compare with other saved jackets.",
+      "voc_blocker": null
+    },
+    {
+      "id": "exp",
+      "kind": "experiment",
+      "title": "A/B Smart Wishlist",
+      "text": "Control: existing wishlist. Treatment: decision-support signals. Primary: 30-day wishlist purchase conversion. Secondary: revisit rate, wishlist-to-cart, wishlist-to-PDP, purchase frequency. Guardrails: notification opt-out, uninstall, returns/cancellations, incrementality (not pull-forward of people who would have bought anyway).",
+      "voc_blocker": null
+    },
+    {
+      "id": "insight",
+      "kind": "insight",
+      "title": "Core PM insight",
+      "text": "Do not optimize the wishlist. Optimize the user's decision. Capture intent → understand hesitation → remove uncertainty → trigger action. Do not start with an AI chatbot.",
+      "voc_blocker": null
+    },
+    {
+      "id": "constraint",
+      "kind": "constraint",
+      "title": "No monetary incentives",
+      "text": "Cannot use coupons, discounts, cashback, coins, extra Myntra points, or price-based rewards. Strategy: reduce uncertainty + reduce decision effort + create useful (genuine) urgency only.",
+      "voc_blocker": null
+    },
+    {
+      "id": "discovery_method",
+      "kind": "method",
+      "title": "How to find the real leakage",
+      "text": "Quant: wishlist funnel (view → add → revisit → PDP → cart → checkout → purchase) cut by category, price, tenure, list size. Qual: interview purchased vs never-purchased vs repeat-revisit vs OOS. In-app survey after repeat visits: still deciding / waiting / fit / compare / quality / size unavailable. Example funnel rates in the share are illustrative, not measured.",
+      "voc_blocker": null
+    },
+    {
+      "id": "sol_why_now",
+      "kind": "solution",
+      "title": "Why buy now decision card",
+      "text": "On a wishlisted PDP, surface only genuine signals: your size is available, rating and review count, easy returns, delivery date. No fake urgency. Goal: confidence, not a coupon.",
+      "voc_blocker": "fit_sizing"
+    }
+  ]
+}

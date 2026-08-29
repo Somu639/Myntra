@@ -251,6 +251,8 @@ defensible, representative findings.
 
 Local Streamlit: `streamlit run streamlit_app.py`
 
+**Reviewer (RAG):** `Reviewer` in Streamlit and `frontend/reviewer.html` retrieve public-VOC quotes against the ChatGPT wishlist-conversion share ([source](https://chatgpt.com/share/6a92fd04-47c4-83e8-942a-4d34aad1ce3b)). Chunks live in `chatgpt_research.json`. Example funnel rates in that share are **illustrative** — not warehouse measurements. Rebuild the static pack with `python build_frontend_data.py`.
+
 ---
 
 ## Files
@@ -271,3 +273,8 @@ Local Streamlit: `streamlit run streamlit_app.py`
 | `sample_quotes_by_blocker.json` | Stage 3 — spot-check quotes |
 | `discovery_report.md` | Stage 4 — PM-facing discovery narrative (headline) |
 | `discovery_report.json` | Stage 4 — machine-readable findings |
+| `chatgpt_research.json` | ChatGPT share chunked for the Reviewer (external PM research) |
+| `rag.py` | Token-overlap retrieve + ChatGPT↔VOC triangulation |
+| `rag_review.json` | Reviewer pack (hypotheses vs this corpus) |
+| `frontend/lab_data.js` | Discovery Lab question payloads (generated) |
+| `frontend/reviewer.html` | Static Reviewer · RAG |

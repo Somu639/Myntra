@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reviewer · RAG — Myntra Discovery Engine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+  body { background:#F5F5F6; font-family: Assistant, sans-serif; color:#282C3F; }
+  .card { background:#fff; border:1px solid #EAEAEC; border-radius:4px; }
+  .pink { color:#FF3F6C; }
+</style>
+</head>
+<body class="flex min-h-screen">
+<aside class="w-[260px] h-screen fixed left-0 top-0 bg-white border-r border-[#EAEAEC] flex flex-col py-4 z-20">
+  <div class="px-8 mb-8">
+    <h1 class="text-2xl font-extrabold pink tracking-tight">Myntra</h1>
+    <p class="text-[11px] uppercase tracking-[0.12em] text-[#5a5d73]">Discovery Engine</p>
+  </div>
+  <nav class="flex-1 px-4 flex flex-col gap-1">
+    <a class="px-4 py-3 text-[#5a5d73] hover:bg-[#fff0f0]" href="index.html">Home</a>
+    <a class="px-4 py-3 text-[#5a5d73] hover:bg-[#fff0f0]" href="discovery_lab.html">Discovery Lab</a>
+    <a class="px-4 py-3 text-[#5a5d73] hover:bg-[#fff0f0]" href="search_and_library.html">Search and Library</a>
+    <a class="px-4 py-3 font-bold pink border-l-4 border-[#FF3F6C] bg-[#ffd9dc]/30" href="reviewer.html">Reviewer</a>
+    <a class="px-4 py-3 text-[#5a5d73] hover:bg-[#fff0f0]" href="segments.html">Segments</a>
+    <a class="px-4 py-3 text-[#5a5d73] hover:bg-[#fff0f0]" href="raw_data.html">Raw Data</a>
+    <a class="px-4 py-3 text-[#5a5d73] hover:bg-[#fff0f0]" href="ai_roadmap.html">AI Roadmap</a>
+  </nav>
+</aside>
+<main class="ml-[260px] flex-1 p-8 max-w-6xl">
+  <h1 class="text-3xl font-extrabold pink mb-2">Reviewer · RAG</h1>
+  <p class="text-[#535766] mb-6 max-w-3xl">Retrieve ChatGPT wishlist-conversion research against this corpus. The share is a PM case study — example funnel rates in it are not Myntra measurements. Source: <a class="pink underline" href="https://chatgpt.com/share/6a92fd04-47c4-83e8-942a-4d34aad1ce3b" target="_blank" rel="noopener">ChatGPT share</a>.</p>
+
+  <section class="card p-6 mb-6">
+    <p class="text-xs uppercase tracking-widest pink font-semibold mb-2">Problem (research)</p>
+    <p id="problem" class="text-lg font-bold mb-3"></p>
+    <p id="north" class="text-[#535766]"></p>
+  </section>
+
+  <section class="card p-6 mb-6">
+    <h2 class="font-bold text-lg mb-3">Ask the research + VOC table</h2>
+    <form id="ask" class="flex gap-3 mb-4">
+      <input id="q" class="flex-1 border border-[#EAEAEC] rounded px-3 py-2" placeholder="e.g. comparison paralysis, fit doubt, 30-day conversion"/>
+      <button class="bg-[#FF3F6C] text-white font-bold px-4 py-2 rounded" type="submit">Retrieve</button>
+    </form>
+    <div id="hits" class="grid md:grid-cols-2 gap-4"></div>
+  </section>
+
+  <section class="card p-6 overflow-x-auto">
+    <h2 class="font-bold text-lg mb-3">ChatGPT hypotheses vs this corpus</h2>
+    <table class="w-full text-sm">
+      <thead class="bg-[#F5F5F6] text-left"><tr>
+        <th class="p-2">ChatGPT</th><th class="p-2">VOC blocker</th><th class="p-2">Mentions</th><th class="p-2">Score</th><th class="p-2">Status</th>
+      </tr></thead>
+      <tbody id="tri"></tbody>
+    </table>
+    <p class="text-xs text-[#94969F] mt-3">sized_in_voc = that friction exists in public reviews. not_in_public_voc = no matching VOC row (often availability / OOS).</p>
+  </section>
+</main>
+<script>
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
+function tok(s){return (s||"").toLowerCase().match(/[a-z0-9]+/g)||[];}
+function score(q, doc){
+  var Q=new Set(tok(q).filter(w=>w.length>2));
+  var D=new Set(tok(doc));
+  var n=0; Q.forEach(w=>{if(D.has(w))n++;});
+  return Q.size? n/Math.sqrt(Q.size):0;
+}
+fetch("rag_review.json").then(r=>r.json()).then(function(data){
+  document.getElementById("problem").textContent = data.problem_statement||"";
+  document.getElementById("north").textContent = data.north_star||"";
+  document.getElementById("tri").innerHTML = (data.triangulation||[]).map(function(row){
+    return "<tr class='border-t border-[#EAEAEC]'><td class='p-2'>"+esc(row.chatgpt)+"</td><td class='p-2'>"+esc(row.voc_blocker)+"</td><td class='p-2'>"+esc(row.voc_mentions)+"</td><td class='p-2'>"+esc(row.voc_score)+"</td><td class='p-2'>"+esc(row.status)+"</td></tr>";
+  }).join("");
+  var chunks = data.chunks||[];
+  var vocTop = data.voc_top||[];
+  var vocQuotes = data.voc_quotes||[];
+  document.getElementById("ask").addEventListener("submit", function(e){
+    e.preventDefault();
+    var q = document.getElementById("q").value.trim();
+    if (!q) return;
+    var gpt = chunks.map(c=>({s:score(q, (c.title||"")+" "+(c.text||"")), c:c})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,4);
+    var opp = vocTop.map(c=>({s:score(q, (c.blocker_type||"")+" "+(c.dimension||"")), c:c})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,3);
+    var quotes = vocQuotes.map(c=>({s:score(q, (c.blocker_type||"")+" "+(c.text||"")), c:c})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,4);
+    var left = "<div><h3 class='font-bold pink mb-2'>VOC</h3>"
+      +(opp.map(x=>"<div class='mb-3 p-3 bg-[#F5F5F6] rounded'><strong>"+esc(x.c.dimension)+"</strong> · score "+esc(x.c.opportunity_score)+"<br/>"+esc(x.c.mentions)+" mentions</div>").join(""))
+      +(quotes.map(x=>"<div class='mb-3 p-3 bg-[#F5F5F6] rounded'><p class='italic text-sm'>"+esc(x.c.text)+"</p><p class='text-xs mt-1'>"+esc(x.c.blocker_type)+" · "+esc(x.c.source)+"</p></div>").join("")||(!opp.length?"<p>No overlap.</p>":""))
+      +"</div>";
+    var right = "<div><h3 class='font-bold pink mb-2'>ChatGPT research</h3>"+(gpt.map(x=>"<div class='mb-3 p-3 bg-[#FEE8ED] rounded'><strong>"+esc(x.c.title)+"</strong><p class='text-sm mt-1'>"+esc(x.c.text)+"</p></div>").join("")||"<p>No overlap.</p>")+"</div>";
+    document.getElementById("hits").innerHTML = left+right;
+  });
+  document.getElementById("q").value = "fit size uncertainty wishlist";
+  document.getElementById("ask").dispatchEvent(new Event("submit", { cancelable: true }));
+});
+</script>
+</body></html>
