@@ -1,19 +1,14 @@
 # Wishlist → purchase research (Myntra)
 
-Phased discovery. **Phase 1 is quantitative** — cheap, fast, and run first so
-qualitative work is pointed at *where* drop-off concentrates, not at a generic
-wishlist problem.
+**Phase 1 is quantitative** — cheap, fast, and run first so later work is
+pointed at *where* drop-off concentrates, not at a generic wishlist problem.
 
 | Phase | Job | Output |
 | ----- | --- | ------ |
-| **1. Quantitative discovery** | Funnel, time-to-purchase, stock, price, wishlist size, revisits, category, search-before-drop, cart baseline | Segmented drop-off map — **where** to spend interview budget |
-| **2. Qualitative why** | Diaries (in the moment), live wishlist walkthroughs, micro-surveys, off-platform ask, comparison shadowing | Reason inventory + large-N frequency check |
-| **3. Synthesis** | Affinity-map frictions, size with Phase 1 + surveys, segment, RICE-like score | Ranked opportunity map — not a quote dump |
-| **4. Solution ideation** | Non-monetary sketches per ranked friction (fit, compare, trust, occasion, forgetting, inspiration vs ready-to-buy) | Menu of bets — not a build list until the map is filled |
-| **5. Validate** | Top 1–2 scoped A/Bs in the concentrating cell; 30-day conversion; return + TTF-purchase guardrails | Kill / scale rule before platform rollout |
-| Companion: public VOC | Stated blockers in reviews/social (`collect` → `extract` → `discover`) | Seeds codes; does not replace diaries or this map |
+| **1. Quantitative discovery** | Funnel, time-to-purchase, stock, price, wishlist size, revisits, category, search-before-drop, cart baseline | Segmented drop-off map — **where** conversion dies |
+| Companion: public VOC | Stated blockers in reviews/social (`collect` → `extract` → `discover`) | Ranked *why* hypotheses inside those cells |
 
-Phase 1 needs **first-party** events. Phase 2 needs research ops. Phase 3 needs both before any % is filled. Phase 4 is illustrative until Phase 3 ranks. Phase 5 does not invent lift. Specs: [`phase1_quantitative_discovery.md`](phase1_quantitative_discovery.md), [`phase2_qualitative_discovery.md`](phase2_qualitative_discovery.md), [`phase3_synthesis.md`](phase3_synthesis.md), [`phase4_solutions.md`](phase4_solutions.md), [`phase5_validate.md`](phase5_validate.md).
+Phase 1 needs **first-party** events. Public reviews cannot compute funnel rates. Spec: [`phase1_quantitative_discovery.md`](phase1_quantitative_discovery.md).
 
 The rest of this README is the **VOC companion** pipeline (flat files, fixed blocker taxonomy).
 
@@ -264,14 +259,6 @@ Local Streamlit: `streamlit run streamlit_app.py`
 | ---- | ---- |
 | `phase1_quantitative_discovery.md` | Phase 1 spec — funnel metrics and drop-off map |
 | `phase1_metrics.json` | Same spec, machine-readable for the dashboard |
-| `phase2_qualitative_discovery.md` | Phase 2 spec — diaries, live wishlist, surveys |
-| `phase2_methods.json` | Same spec, machine-readable for the dashboard |
-| `phase3_synthesis.md` | Phase 3 spec — affinity, sizing, segments, RICE-like map |
-| `phase3_opportunity_map.json` | Same spec, machine-readable for the dashboard |
-| `phase4_solutions.md` | Phase 4 spec — non-monetary solution directions |
-| `phase4_solutions.json` | Same spec, machine-readable for the dashboard |
-| `phase5_validate.md` | Phase 5 spec — scoped A/B, primary + guardrails |
-| `phase5_experiments.json` | Same spec, machine-readable for the dashboard |
 | `extract.py` | Stage 2 — LLM structured extraction (Claude / Groq / Ollama / mock) |
 | `aggregate.py` | Stage 3 — CSV cuts |
 | `discover.py` | Stage 4 — discovery report + opportunity ranking |

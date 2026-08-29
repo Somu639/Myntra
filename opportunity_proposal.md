@@ -1,10 +1,8 @@
 # Opportunity & Solution Proposal — Wishlist → Purchase Conversion
 
-**Research frame:** Phase 1 maps *where*; Phase 2 is *why*; Phase 3 ranks
-the mix; Phase 4 sketches **non-monetary** solutions; Phase 5 A/Bs the
-top 1–2 bets in the concentrating cell. This document is the
-**public-VOC companion** — stated blockers, not a substitute for that
-backlog. See `phase1_quantitative_discovery.md` through `phase5_validate.md`.
+**Research frame:** Phase 1 maps *where* drop-off concentrates. This document
+is the **public-VOC companion** — stated blockers, not a substitute for the
+Phase 1 drop-off map. See `phase1_quantitative_discovery.md`.
 
 **Source:** `discovery_report.md` / `discovery_report.json` (VOC pipeline).
 **Backing data:** 445 public reviews/comments collected (Play Store Myntra,

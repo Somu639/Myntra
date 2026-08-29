@@ -3,7 +3,7 @@
 Cheap and fast. Run this **before** qualitative research so interviews are pointed at where drop-off actually concentrates — not at a generic “wishlist problem.”
 
 **Job of this phase:** describe **where** conversion dies (which categories, price bands, tenure, wishlist-size bands).  
-**Not the job of this phase:** explain **why**. That is [Phase 2](phase2_qualitative_discovery.md). Ranking those reasons is [Phase 3](phase3_synthesis.md).
+**Not the job of this phase:** explain **why**. Public VOC (collect → extract) seeds stated-blocker hypotheses only.
 
 **North-star:** wishlist / consideration → purchase conversion on Myntra.
 
