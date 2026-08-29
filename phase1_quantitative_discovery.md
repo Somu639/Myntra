@@ -27,7 +27,7 @@ Share of wishlisted items that are:
 | --- | --- |
 | Never revisited | Added, never opened again, not purchased, still on list or expired |
 | Revisited but not purchased | ≥1 item/page reopen, no order containing that SKU/size |
-| Purchased on Myntra | Converted on Myntra (AJIO is out of scope for this engine) |
+| Purchased on Myntra | Converted on Myntra |
 | Removed without purchase | Explicit remove / move, no subsequent purchase of same SKU |
 
 Grain: wishlisted **item** (user × style × size × color), not user. Window: e.g. 7 / 30 / 90 days from add.

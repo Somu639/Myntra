@@ -5,11 +5,9 @@ is the **public-VOC companion** — stated blockers, not a substitute for the
 Phase 1 drop-off map. See `phase1_quantitative_discovery.md`.
 
 **Source:** `discovery_report.md` / `discovery_report.json` (VOC pipeline).
-**Backing data:** 445 public reviews/comments collected (Play Store Myntra,
-App Store Myntra, YouTube Myntra hauls). **100% extracted (445/445, 0 failed)**
-→ **134 relevant** to fashion purchase/wishlist behavior, of which **79 carry an
-identified blocker**. AJIO sources were removed so this is a Myntra-only corpus.
-(Reddit is wired but was run without credentials.)
+**Backing data:** 1,422 public reviews/comments (Play Store, App Store, Reddit,
+communities, YouTube, social, product Q&A). **100% extracted (1,422/1,422, 0 failed)**
+→ **483 relevant** to fashion purchase/wishlist behavior. Myntra-only corpus.
 **Extraction backend:** Groq `openai/gpt-oss-120b` (cloud, fast). This replaced an
 earlier partial local-model run — sentiment and blocker attribution are now far
 more reliable (e.g. returns frustration reads 97% here vs a badly under-counted 9%
@@ -219,10 +217,9 @@ universal fix.
 - **Self-selected sample.** Reviews skew to the delighted and the angry, not the
   population. Treat frequencies as *severity/priority signals for interview
   recruiting*, not market sizing.
-- **Wishlist behavior is under-sampled (0 explicit signals in this Myntra-only
-  cut).** The previous wishlist quotes were AJIO reviews and were removed.
-  *Why users wishlist* and *intent vs bookmarking* need **behavioral/event data
-  + user interviews**, not app reviews. This is the biggest remaining gap.
+- **Wishlist behavior is under-sampled in public reviews.** *Why users wishlist*
+  and *intent vs bookmarking* need **behavioral/event data + user interviews**.
+  This is the biggest remaining gap.
 - **The `other` bucket is large (21) and needs decomposition** into delivery vs
   auto-cancellation vs support before it gets an owner.
 - **Segment signal is model-inferred**, not verified — directional only.
