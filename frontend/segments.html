@@ -186,158 +186,55 @@
 </header>
 <!-- Page Content -->
 <main class="p-container_padding flex-1">
-<!-- Page Header -->
 <div class="mb-8">
 <h1 class="font-h1 text-h1 text-myntra-dark mb-2">Segments</h1>
-<p class="font-body text-body text-myntra-muted flex items-center gap-2">
-<span class="material-symbols-outlined text-[18px]" data-icon="info">info</span>
-<code>segment_signal</code> is model-inferred — directional, not verified personas.
-                </p>
+<p id="seg-note" class="font-body text-body text-myntra-muted">Age-band personas. Public VOC has no verified age — VOC mentions size the hypothesized barrier, not the age group.</p>
 </div>
-<!-- Dashboard Grid -->
-<div class="grid grid-cols-12 gap-grid_gutter">
-<!-- Main Table Section (Col Span 8) -->
-<div class="col-span-12 lg:col-span-8 flex flex-col gap-grid_gutter">
-<!-- Table Card -->
-<div class="card-surface rounded-DEFAULT border border-myntra-divider p-card_padding">
-<div class="flex justify-between items-center mb-6">
-<h3 class="font-h3 text-h3 text-myntra-dark">Top Inferred Segments by Blocker</h3>
-<button class="font-button text-button text-myntra-dark border border-myntra-divider px-4 py-2 rounded-DEFAULT hover:bg-myntra-muted-bg transition-colors">
-                                Export Data
-                            </button>
-</div>
-<div class="overflow-x-auto">
-<table class="w-full text-left border-collapse">
+<div class="overflow-x-auto card-surface rounded-DEFAULT border border-myntra-divider mb-8">
+<table class="w-full text-left border-collapse text-sm">
 <thead>
 <tr class="bg-myntra-muted-bg border-y border-myntra-divider">
-<th class="py-3 px-4 font-body-bold text-body-bold text-myntra-dark">Blocker Category</th>
-<th class="py-3 px-4 font-body-bold text-body-bold text-myntra-dark">Top Inferred Segment</th>
-<th class="py-3 px-4 font-body-bold text-body-bold text-myntra-dark text-right">Concentration %</th>
-<th class="py-3 px-4 font-body-bold text-body-bold text-myntra-dark">Signal Strength</th>
+<th class="py-3 px-4">Segment</th>
+<th class="py-3 px-4">Age</th>
+<th class="py-3 px-4">Wishlist behavior</th>
+<th class="py-3 px-4">Primary need</th>
+<th class="py-3 px-4">Main conversion barrier</th>
+<th class="py-3 px-4 text-right">VOC mentions</th>
 </tr>
 </thead>
-<tbody>
-<tr class="border-b border-myntra-divider hover:bg-myntra-muted-bg transition-colors group">
-<td class="py-4 px-4 font-body text-body text-myntra-dark">Returns &amp; Exchange</td>
-<td class="py-4 px-4">
-<span class="bg-primary-fixed/20 text-primary px-2 py-1 rounded-DEFAULT font-label text-label">Gen Z</span>
-</td>
-<td class="py-4 px-4 font-body-bold text-body-bold text-myntra-dark text-right">45%</td>
-<td class="py-4 px-4">
-<div class="w-full bg-myntra-divider h-1.5 rounded-full overflow-hidden">
-<div class="bg-myntra-pink h-full" style="width: 85%;"></div>
-</div>
-</td>
-</tr>
-<tr class="border-b border-myntra-divider hover:bg-myntra-muted-bg transition-colors group">
-<td class="py-4 px-4 font-body text-body text-myntra-dark">Price Sensitivity</td>
-<td class="py-4 px-4">
-<span class="bg-secondary-fixed/50 text-secondary px-2 py-1 rounded-DEFAULT font-label text-label">Budget Seekers</span>
-</td>
-<td class="py-4 px-4 font-body-bold text-body-bold text-myntra-dark text-right">60%</td>
-<td class="py-4 px-4">
-<div class="w-full bg-myntra-divider h-1.5 rounded-full overflow-hidden">
-<div class="bg-myntra-pink h-full" style="width: 92%;"></div>
-</div>
-</td>
-</tr>
-<tr class="border-b border-myntra-divider hover:bg-myntra-muted-bg transition-colors group">
-<td class="py-4 px-4 font-body text-body text-myntra-dark">Trust &amp; Authenticity</td>
-<td class="py-4 px-4">
-<span class="bg-tertiary-fixed/30 text-tertiary px-2 py-1 rounded-DEFAULT font-label text-label">New Users</span>
-</td>
-<td class="py-4 px-4 font-body-bold text-body-bold text-myntra-dark text-right">30%</td>
-<td class="py-4 px-4">
-<div class="w-full bg-myntra-divider h-1.5 rounded-full overflow-hidden">
-<div class="bg-myntra-pink h-full" style="width: 65%;"></div>
-</div>
-</td>
-</tr>
-</tbody>
+<tbody id="seg-rows"></tbody>
 </table>
 </div>
-</div>
-<!-- Empty State / Unknown Segments -->
-<div class="card-surface rounded-DEFAULT border border-myntra-divider p-card_padding border-dashed flex flex-col items-center justify-center py-12">
-<span class="material-symbols-outlined text-[48px] text-outline-variant mb-4" data-icon="policy">policy</span>
-<h4 class="font-body-bold text-body-bold text-myntra-dark mb-1">Unknown Segments</h4>
-<p class="font-body text-body text-myntra-muted text-center max-w-md">
-                            Approximately 12% of recent feedback lacks sufficient linguistic markers to infer a definitive segment persona. 
-                        </p>
-</div>
-</div>
-<!-- Right Sidebar / Charts Section (Col Span 4) -->
-<div class="col-span-12 lg:col-span-4 flex flex-col gap-grid_gutter">
-<!-- Concentration Bar Chart Card -->
-<div class="card-surface rounded-DEFAULT border border-myntra-divider p-card_padding h-full">
-<h3 class="font-h3 text-h3 text-myntra-dark mb-6">Overall Segment Concentration</h3>
-<div class="flex flex-col gap-6">
-<!-- Bar 1 -->
-<div>
-<div class="flex justify-between items-end mb-2">
-<span class="font-body-bold text-body-bold text-myntra-dark">Gen Z</span>
-<span class="font-label text-label text-myntra-muted">38%</span>
-</div>
-<div class="w-full bg-myntra-muted-bg h-3 rounded-sm overflow-hidden border border-myntra-divider">
-<div class="bg-myntra-pink h-full" style="width: 38%;"></div>
-</div>
-</div>
-<!-- Bar 2 -->
-<div>
-<div class="flex justify-between items-end mb-2">
-<span class="font-body-bold text-body-bold text-myntra-dark">Millennials</span>
-<span class="font-label text-label text-myntra-muted">27%</span>
-</div>
-<div class="w-full bg-myntra-muted-bg h-3 rounded-sm overflow-hidden border border-myntra-divider">
-<div class="bg-myntra-dark h-full" style="width: 27%;"></div>
-</div>
-</div>
-<!-- Bar 3 -->
-<div>
-<div class="flex justify-between items-end mb-2">
-<span class="font-body-bold text-body-bold text-myntra-dark">High-Value</span>
-<span class="font-label text-label text-myntra-muted">18%</span>
-</div>
-<div class="w-full bg-myntra-muted-bg h-3 rounded-sm overflow-hidden border border-myntra-divider">
-<div class="bg-myntra-dark h-full opacity-80" style="width: 18%;"></div>
-</div>
-</div>
-<!-- Bar 4 -->
-<div>
-<div class="flex justify-between items-end mb-2">
-<span class="font-body-bold text-body-bold text-myntra-dark">New Users</span>
-<span class="font-label text-label text-myntra-muted">17%</span>
-</div>
-<div class="w-full bg-myntra-muted-bg h-3 rounded-sm overflow-hidden border border-myntra-divider">
-<div class="bg-myntra-dark h-full opacity-60" style="width: 17%;"></div>
-</div>
-</div>
-</div>
-<div class="mt-8 pt-6 border-t border-myntra-divider">
-<div class="flex items-start gap-3 bg-surface-container-low p-4 rounded-DEFAULT border border-surface-variant">
-<span class="material-symbols-outlined text-primary mt-0.5" data-icon="lightbulb">lightbulb</span>
-<div>
-<h5 class="font-body-bold text-body-bold text-myntra-dark mb-1">Inference Insight</h5>
-<p class="font-body text-body text-myntra-muted text-sm">
-                                        'Budget Seekers' segment shows a high correlation with 'Price Sensitivity' blockers in the last 14 days, indicating a potential macro-economic shift in user behavior.
-                                    </p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+<h3 class="font-h3 text-h3 mb-4">Barrier size in this corpus</h3>
+<div id="seg-bars" class="space-y-4 mb-8"></div>
+<div id="seg-cards" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
 </main>
 </div>
 
 <script src="config.js"></script>
+<script src="segments_data.js"></script>
 <script>
 (function () {
   var url = (window.STREAMLIT_BACKEND_URL || "").replace(/\/$/, "");
-  if (!url) return;
-  document.querySelectorAll("a[href='#']").forEach(function () {});
   var link = document.getElementById("streamlit-backend-link");
-  if (link) link.href = url;
+  if (url && link) link.href = url;
+  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
+  var d = window.SEGMENTS_DATA || {};
+  var note = document.getElementById("seg-note");
+  if (note && d.note) note.textContent = d.note;
+  var rows = d.personas || [];
+  var max = Math.max.apply(null, rows.map(function(r){return r.voc_mentions||0;}).concat([1]));
+  document.getElementById("seg-rows").innerHTML = rows.map(function(p){
+    return "<tr class='border-b border-myntra-divider'><td class='py-3 px-4 font-body-bold'>"+esc(p.name)+"</td><td class='py-3 px-4'>"+esc(p.age)+"</td><td class='py-3 px-4'>"+esc(p.wishlist_behavior)+"</td><td class='py-3 px-4'>"+esc(p.primary_need)+"</td><td class='py-3 px-4'>"+esc(p.main_barrier)+"</td><td class='py-3 px-4 text-right font-body-bold myntra-pink'>"+esc(p.voc_mentions)+"</td></tr>";
+  }).join("");
+  document.getElementById("seg-bars").innerHTML = rows.map(function(p){
+    var w = Math.round(100*(p.voc_mentions||0)/max);
+    return "<div><div class='flex justify-between text-sm mb-1'><span>"+esc(p.name)+" · "+esc(p.age)+"</span><span class='text-myntra-muted'>"+esc(p.voc_mentions)+" mentions</span></div><div class='h-3 bg-myntra-muted-bg rounded-sm overflow-hidden'><div class='bg-myntra-pink h-3' style='width:"+w+"%'></div></div></div>";
+  }).join("");
+  document.getElementById("seg-cards").innerHTML = rows.map(function(p){
+    var match = (p.voc_match||[]).map(function(m){ return esc(m.blocker_type)+" ("+esc(m.mentions||0)+")"; }).join(" · ");
+    return "<div class='card-surface border border-myntra-divider rounded p-4'><p class='font-label text-primary uppercase'>"+esc(p.age)+"</p><h3 class='font-h3 mb-2'>"+esc(p.name)+"</h3><p class='text-sm mb-1'><strong>Wishlist:</strong> "+esc(p.wishlist_behavior)+"</p><p class='text-sm mb-1'><strong>Need:</strong> "+esc(p.primary_need)+"</p><p class='text-sm mb-2'><strong>Barrier:</strong> "+esc(p.main_barrier)+"</p><p class='text-xs text-myntra-muted'>VOC: "+match+"</p></div>";
+  }).join("");
 })();
 </script>
 

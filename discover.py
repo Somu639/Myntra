@@ -497,6 +497,50 @@ def q_off_platform(relevant):
     }
 
 
+def load_age_segments() -> dict:
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "age_segments.json")
+    if not os.path.exists(path):
+        return {"note": "", "segments": []}
+    with open(path, "r", encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def q_age_segments(areas: list[dict]) -> dict:
+    """Size each age-band persona's hypothesized barrier from VOC. Not a census."""
+    spec = load_age_segments()
+    by_bt = {r.get("blocker_type"): r for r in areas}
+    personas = []
+    for seg in spec.get("segments") or []:
+        matched = []
+        mentions = 0
+        best_score = 0.0
+        for bt in seg.get("voc_blockers") or []:
+            row = by_bt.get(bt)
+            if not row:
+                matched.append({"blocker_type": bt, "mentions": 0, "opportunity_score": None})
+                continue
+            matched.append({
+                "blocker_type": bt,
+                "dimension": row.get("dimension"),
+                "mentions": row.get("mentions"),
+                "opportunity_score": row.get("opportunity_score"),
+                "wpc_weighted_score": row.get("wpc_weighted_score"),
+            })
+            mentions += row.get("mentions") or 0
+            best_score = max(best_score, row.get("opportunity_score") or 0)
+        personas.append({
+            **seg,
+            "voc_mentions": mentions,
+            "top_voc_score": best_score or None,
+            "voc_match": matched,
+        })
+    personas.sort(key=lambda r: r.get("voc_mentions") or 0, reverse=True)
+    return {
+        "note": spec.get("note") or "",
+        "personas": personas,
+    }
+
+
 def q_segments(relevant):
     # Concentration per blocker: is a blocker focused in one segment (sharp
     # signal) or spread out (broad)? segment_signal is model-inferred free text.
@@ -538,6 +582,7 @@ def build_report(records: list[dict]) -> dict:
                  if r.get("extraction_error") or r.get("relevant") is None)
     relevant = [r for r in records if r.get("relevant") is True]
     areas = opportunity_areas(relevant)
+    age_seg = q_age_segments(areas)
 
     return {
         "north_star": "Wishlist / consideration → purchase conversion on Myntra",
@@ -572,7 +617,16 @@ def build_report(records: list[dict]) -> dict:
         "q6_off_platform_research": q_off_platform(relevant),
         "q7_dimension_roles": q_dimension_roles(relevant),
         "q8_intent_vs_bookmark": q_intent_vs_bookmark(relevant),
-        "q9_by_segment": q_segments(relevant),
+        "q9_by_segment": {
+            "note": (
+                "Primary cut is age-band personas (intended profiles). "
+                "Public VOC has no verified age — voc_mentions size the hypothesized barrier. "
+                "inferred_blockers is the older free-text segment_signal table."
+            ),
+            **age_seg,
+            "inferred_blockers": q_segments(relevant),
+        },
+        "age_segments": age_seg,
     }
 
 
@@ -715,17 +769,18 @@ def render_markdown(rep: dict) -> str:
     L.append("")
 
     # Q9
+    q9 = rep.get("q9_by_segment") or {}
     L.append("## Q9 — How do behaviors differ across user segments?")
-    L.append("Concentration = share of the top segment among mentions that have "
-             "an inferred segment. High concentration = sharper, more targetable "
-             "signal. _segment_signal is model-inferred and often sparse._\n")
-    L.append("| Blocker | Mentions | Known-segment coverage % | Top segment | "
-             "Concentration % |")
-    L.append("| --- | --- | --- | --- | --- |")
-    for s in rep["q9_by_segment"]:
-        L.append(f"| {s['blocker_type']} | {s['mentions']} | "
-                 f"{s['known_segment_coverage_pct']} | {s['top_segment']} | "
-                 f"{s['top_segment_concentration_pct']} |")
+    L.append(q9.get("note") or "")
+    L.append("")
+    L.append("| Segment | Age | Wishlist behavior | Primary need | Barrier | VOC mentions |")
+    L.append("| --- | --- | --- | --- | --- | --- |")
+    for s in q9.get("personas") or []:
+        L.append(
+            f"| {s.get('name')} | {s.get('age')} | {s.get('wishlist_behavior')} | "
+            f"{s.get('primary_need')} | {s.get('main_barrier')} | "
+            f"{s.get('voc_mentions')} |"
+        )
     L.append("")
 
     L.append("---")

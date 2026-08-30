@@ -345,6 +345,12 @@
           return [i + 1, r.dimension || r.blocker_type, r.wpc_stage, r.wpc_leverage, r.mentions, r.source_count, r.opportunity_score, r.wpc_weighted_score];
         })
       );
+    } else if (id === "q9" && p && p.personas) {
+      kpis += kpi("Personas", (p.personas || []).length);
+      body = "<p class='font-body text-secondary mb-3'>" + esc(p.note || "Age bands are intended profiles. VOC mentions size the hypothesized barrier, not the age group.") + "</p>"
+        + table(["Segment", "Age", "Need", "Barrier", "VOC mentions"], (p.personas || []).map(function (s) {
+          return [s.name, s.age, s.primary_need, s.main_barrier, s.voc_mentions];
+        }));
     } else if (p && typeof p === "object" && !Array.isArray(p)) {
       if (p.mentions != null) kpis += kpi("Mentions", p.mentions);
       if (p.share_of_blockers_pct != null) kpis += kpi("Share of blockers", p.share_of_blockers_pct + "%");

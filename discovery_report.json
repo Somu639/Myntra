@@ -1682,76 +1682,486 @@
     "bookmarking": 1,
     "unclear": 3
   },
-  "q9_by_segment": [
-    {
-      "blocker_type": "price",
-      "mentions": 75,
-      "known_segment_coverage_pct": 85.3,
-      "top_segment": "budget-conscious shopper",
-      "top_segment_concentration_pct": 71.9
-    },
-    {
-      "blocker_type": "return_hassle",
-      "mentions": 53,
-      "known_segment_coverage_pct": 52.8,
-      "top_segment": "return-focused shopper",
-      "top_segment_concentration_pct": 21.4
-    },
-    {
-      "blocker_type": "other",
-      "mentions": 52,
-      "known_segment_coverage_pct": 42.3,
-      "top_segment": "time-sensitive shopper",
-      "top_segment_concentration_pct": 13.6
-    },
-    {
-      "blocker_type": "fit_sizing",
-      "mentions": 27,
-      "known_segment_coverage_pct": 66.7,
-      "top_segment": "tall shopper",
-      "top_segment_concentration_pct": 11.1
-    },
-    {
-      "blocker_type": "quality_doubt",
-      "mentions": 24,
-      "known_segment_coverage_pct": 75.0,
-      "top_segment": "quality-conscious shopper",
-      "top_segment_concentration_pct": 22.2
-    },
-    {
-      "blocker_type": "trust_authenticity",
-      "mentions": 23,
-      "known_segment_coverage_pct": 60.9,
-      "top_segment": "gift buyer",
-      "top_segment_concentration_pct": 14.3
-    },
-    {
-      "blocker_type": "styling_uncertainty",
-      "mentions": 11,
-      "known_segment_coverage_pct": 72.7,
-      "top_segment": "style-conscious shopper",
-      "top_segment_concentration_pct": 12.5
-    },
-    {
-      "blocker_type": "decision_paralysis_too_many_options",
-      "mentions": 10,
-      "known_segment_coverage_pct": 80.0,
-      "top_segment": "first-time buyer",
-      "top_segment_concentration_pct": 12.5
-    },
-    {
-      "blocker_type": "payment_friction",
-      "mentions": 6,
-      "known_segment_coverage_pct": 33.3,
-      "top_segment": "international shopper",
-      "top_segment_concentration_pct": 50.0
-    },
-    {
-      "blocker_type": "occasion_timing",
-      "mentions": 3,
-      "known_segment_coverage_pct": 100.0,
-      "top_segment": "gift shopper",
-      "top_segment_concentration_pct": 33.3
-    }
-  ]
+  "q9_by_segment": {
+    "note": "Age bands are intended profiles. Public VOC has no verified age. voc_mentions size the hypothesized conversion barrier, not the size of that age group.",
+    "personas": [
+      {
+        "id": "young_millennials",
+        "name": "Young Millennials",
+        "age": "25–34",
+        "wishlist_behavior": "Save fewer, more considered products",
+        "primary_need": "Quality + versatility",
+        "main_barrier": "Fit, quality & value",
+        "voc_blockers": [
+          "fit_sizing",
+          "quality_doubt",
+          "price"
+        ],
+        "voc_mentions": 126,
+        "top_voc_score": 60.0,
+        "voc_match": [
+          {
+            "blocker_type": "fit_sizing",
+            "dimension": "Fit & Size",
+            "mentions": 27,
+            "opportunity_score": 53.2,
+            "wpc_weighted_score": 53.2
+          },
+          {
+            "blocker_type": "quality_doubt",
+            "dimension": "Quality",
+            "mentions": 24,
+            "opportunity_score": 51.4,
+            "wpc_weighted_score": 51.4
+          },
+          {
+            "blocker_type": "price",
+            "dimension": "Price & Value",
+            "mentions": 75,
+            "opportunity_score": 60.0,
+            "wpc_weighted_score": 60.0
+          }
+        ]
+      },
+      {
+        "id": "value_conscious",
+        "name": "Value-Conscious Shoppers",
+        "age": "18–35",
+        "wishlist_behavior": "Save and monitor products",
+        "primary_need": "Best value",
+        "main_barrier": "Price/timing",
+        "voc_blockers": [
+          "price"
+        ],
+        "voc_mentions": 75,
+        "top_voc_score": 60.0,
+        "voc_match": [
+          {
+            "blocker_type": "price",
+            "dimension": "Price & Value",
+            "mentions": 75,
+            "opportunity_score": 60.0,
+            "wpc_weighted_score": 60.0
+          }
+        ]
+      },
+      {
+        "id": "practical_shoppers",
+        "name": "Practical Shoppers",
+        "age": "30–45+",
+        "wishlist_behavior": "Small wishlist, highly intentional",
+        "primary_need": "Functionality + reliability",
+        "main_barrier": "Trust + fit",
+        "voc_blockers": [
+          "trust_authenticity",
+          "fit_sizing"
+        ],
+        "voc_mentions": 50,
+        "top_voc_score": 54.5,
+        "voc_match": [
+          {
+            "blocker_type": "trust_authenticity",
+            "dimension": "Trust & Reviews",
+            "mentions": 23,
+            "opportunity_score": 54.5,
+            "wpc_weighted_score": 54.5
+          },
+          {
+            "blocker_type": "fit_sizing",
+            "dimension": "Fit & Size",
+            "mentions": 27,
+            "opportunity_score": 53.2,
+            "wpc_weighted_score": 53.2
+          }
+        ]
+      },
+      {
+        "id": "occasion_shoppers",
+        "name": "Occasion Shoppers",
+        "age": "20–40",
+        "wishlist_behavior": "Wishlist around weddings/events",
+        "primary_need": "Complete look",
+        "main_barrier": "Styling + suitability",
+        "voc_blockers": [
+          "occasion_timing",
+          "styling_uncertainty"
+        ],
+        "voc_mentions": 14,
+        "top_voc_score": 52.0,
+        "voc_match": [
+          {
+            "blocker_type": "occasion_timing",
+            "dimension": "Occasion & Timing",
+            "mentions": 3,
+            "opportunity_score": 52.0,
+            "wpc_weighted_score": 33.8
+          },
+          {
+            "blocker_type": "styling_uncertainty",
+            "dimension": "Styling",
+            "mentions": 11,
+            "opportunity_score": 11.9,
+            "wpc_weighted_score": 11.9
+          }
+        ]
+      },
+      {
+        "id": "working_professionals",
+        "name": "Working Professionals",
+        "age": "25–40",
+        "wishlist_behavior": "Wishlist around work/occasion needs",
+        "primary_need": "Convenience + confidence",
+        "main_barrier": "Time + decision effort",
+        "voc_blockers": [
+          "decision_paralysis_too_many_options",
+          "occasion_timing"
+        ],
+        "voc_mentions": 13,
+        "top_voc_score": 52.0,
+        "voc_match": [
+          {
+            "blocker_type": "decision_paralysis_too_many_options",
+            "dimension": "Choice / Comparison",
+            "mentions": 10,
+            "opportunity_score": 21.7,
+            "wpc_weighted_score": 21.7
+          },
+          {
+            "blocker_type": "occasion_timing",
+            "dimension": "Occasion & Timing",
+            "mentions": 3,
+            "opportunity_score": 52.0,
+            "wpc_weighted_score": 33.8
+          }
+        ]
+      },
+      {
+        "id": "gen_z_trend_seekers",
+        "name": "Gen Z Trend Seekers",
+        "age": "18–24",
+        "wishlist_behavior": "Save many trending/socially discovered items",
+        "primary_need": "Trend + social validation",
+        "main_barrier": "Will it actually look good on me?",
+        "voc_blockers": [
+          "styling_uncertainty",
+          "social_validation"
+        ],
+        "voc_mentions": 11,
+        "top_voc_score": 11.9,
+        "voc_match": [
+          {
+            "blocker_type": "styling_uncertainty",
+            "dimension": "Styling",
+            "mentions": 11,
+            "opportunity_score": 11.9,
+            "wpc_weighted_score": 11.9
+          },
+          {
+            "blocker_type": "social_validation",
+            "mentions": 0,
+            "opportunity_score": null
+          }
+        ]
+      },
+      {
+        "id": "fashion_enthusiasts",
+        "name": "Fashion Enthusiasts",
+        "age": "18–35",
+        "wishlist_behavior": "Large, highly curated wishlist",
+        "primary_need": "Discovery + experimentation",
+        "main_barrier": "Choice overload",
+        "voc_blockers": [
+          "decision_paralysis_too_many_options"
+        ],
+        "voc_mentions": 10,
+        "top_voc_score": 21.7,
+        "voc_match": [
+          {
+            "blocker_type": "decision_paralysis_too_many_options",
+            "dimension": "Choice / Comparison",
+            "mentions": 10,
+            "opportunity_score": 21.7,
+            "wpc_weighted_score": 21.7
+          }
+        ]
+      }
+    ],
+    "inferred_blockers": [
+      {
+        "blocker_type": "price",
+        "mentions": 75,
+        "known_segment_coverage_pct": 85.3,
+        "top_segment": "budget-conscious shopper",
+        "top_segment_concentration_pct": 71.9
+      },
+      {
+        "blocker_type": "return_hassle",
+        "mentions": 53,
+        "known_segment_coverage_pct": 52.8,
+        "top_segment": "return-focused shopper",
+        "top_segment_concentration_pct": 21.4
+      },
+      {
+        "blocker_type": "other",
+        "mentions": 52,
+        "known_segment_coverage_pct": 42.3,
+        "top_segment": "time-sensitive shopper",
+        "top_segment_concentration_pct": 13.6
+      },
+      {
+        "blocker_type": "fit_sizing",
+        "mentions": 27,
+        "known_segment_coverage_pct": 66.7,
+        "top_segment": "tall shopper",
+        "top_segment_concentration_pct": 11.1
+      },
+      {
+        "blocker_type": "quality_doubt",
+        "mentions": 24,
+        "known_segment_coverage_pct": 75.0,
+        "top_segment": "quality-conscious shopper",
+        "top_segment_concentration_pct": 22.2
+      },
+      {
+        "blocker_type": "trust_authenticity",
+        "mentions": 23,
+        "known_segment_coverage_pct": 60.9,
+        "top_segment": "gift buyer",
+        "top_segment_concentration_pct": 14.3
+      },
+      {
+        "blocker_type": "styling_uncertainty",
+        "mentions": 11,
+        "known_segment_coverage_pct": 72.7,
+        "top_segment": "style-conscious shopper",
+        "top_segment_concentration_pct": 12.5
+      },
+      {
+        "blocker_type": "decision_paralysis_too_many_options",
+        "mentions": 10,
+        "known_segment_coverage_pct": 80.0,
+        "top_segment": "first-time buyer",
+        "top_segment_concentration_pct": 12.5
+      },
+      {
+        "blocker_type": "payment_friction",
+        "mentions": 6,
+        "known_segment_coverage_pct": 33.3,
+        "top_segment": "international shopper",
+        "top_segment_concentration_pct": 50.0
+      },
+      {
+        "blocker_type": "occasion_timing",
+        "mentions": 3,
+        "known_segment_coverage_pct": 100.0,
+        "top_segment": "gift shopper",
+        "top_segment_concentration_pct": 33.3
+      }
+    ]
+  },
+  "age_segments": {
+    "note": "Age bands are intended profiles. Public VOC has no verified age. voc_mentions size the hypothesized conversion barrier, not the size of that age group.",
+    "personas": [
+      {
+        "id": "young_millennials",
+        "name": "Young Millennials",
+        "age": "25–34",
+        "wishlist_behavior": "Save fewer, more considered products",
+        "primary_need": "Quality + versatility",
+        "main_barrier": "Fit, quality & value",
+        "voc_blockers": [
+          "fit_sizing",
+          "quality_doubt",
+          "price"
+        ],
+        "voc_mentions": 126,
+        "top_voc_score": 60.0,
+        "voc_match": [
+          {
+            "blocker_type": "fit_sizing",
+            "dimension": "Fit & Size",
+            "mentions": 27,
+            "opportunity_score": 53.2,
+            "wpc_weighted_score": 53.2
+          },
+          {
+            "blocker_type": "quality_doubt",
+            "dimension": "Quality",
+            "mentions": 24,
+            "opportunity_score": 51.4,
+            "wpc_weighted_score": 51.4
+          },
+          {
+            "blocker_type": "price",
+            "dimension": "Price & Value",
+            "mentions": 75,
+            "opportunity_score": 60.0,
+            "wpc_weighted_score": 60.0
+          }
+        ]
+      },
+      {
+        "id": "value_conscious",
+        "name": "Value-Conscious Shoppers",
+        "age": "18–35",
+        "wishlist_behavior": "Save and monitor products",
+        "primary_need": "Best value",
+        "main_barrier": "Price/timing",
+        "voc_blockers": [
+          "price"
+        ],
+        "voc_mentions": 75,
+        "top_voc_score": 60.0,
+        "voc_match": [
+          {
+            "blocker_type": "price",
+            "dimension": "Price & Value",
+            "mentions": 75,
+            "opportunity_score": 60.0,
+            "wpc_weighted_score": 60.0
+          }
+        ]
+      },
+      {
+        "id": "practical_shoppers",
+        "name": "Practical Shoppers",
+        "age": "30–45+",
+        "wishlist_behavior": "Small wishlist, highly intentional",
+        "primary_need": "Functionality + reliability",
+        "main_barrier": "Trust + fit",
+        "voc_blockers": [
+          "trust_authenticity",
+          "fit_sizing"
+        ],
+        "voc_mentions": 50,
+        "top_voc_score": 54.5,
+        "voc_match": [
+          {
+            "blocker_type": "trust_authenticity",
+            "dimension": "Trust & Reviews",
+            "mentions": 23,
+            "opportunity_score": 54.5,
+            "wpc_weighted_score": 54.5
+          },
+          {
+            "blocker_type": "fit_sizing",
+            "dimension": "Fit & Size",
+            "mentions": 27,
+            "opportunity_score": 53.2,
+            "wpc_weighted_score": 53.2
+          }
+        ]
+      },
+      {
+        "id": "occasion_shoppers",
+        "name": "Occasion Shoppers",
+        "age": "20–40",
+        "wishlist_behavior": "Wishlist around weddings/events",
+        "primary_need": "Complete look",
+        "main_barrier": "Styling + suitability",
+        "voc_blockers": [
+          "occasion_timing",
+          "styling_uncertainty"
+        ],
+        "voc_mentions": 14,
+        "top_voc_score": 52.0,
+        "voc_match": [
+          {
+            "blocker_type": "occasion_timing",
+            "dimension": "Occasion & Timing",
+            "mentions": 3,
+            "opportunity_score": 52.0,
+            "wpc_weighted_score": 33.8
+          },
+          {
+            "blocker_type": "styling_uncertainty",
+            "dimension": "Styling",
+            "mentions": 11,
+            "opportunity_score": 11.9,
+            "wpc_weighted_score": 11.9
+          }
+        ]
+      },
+      {
+        "id": "working_professionals",
+        "name": "Working Professionals",
+        "age": "25–40",
+        "wishlist_behavior": "Wishlist around work/occasion needs",
+        "primary_need": "Convenience + confidence",
+        "main_barrier": "Time + decision effort",
+        "voc_blockers": [
+          "decision_paralysis_too_many_options",
+          "occasion_timing"
+        ],
+        "voc_mentions": 13,
+        "top_voc_score": 52.0,
+        "voc_match": [
+          {
+            "blocker_type": "decision_paralysis_too_many_options",
+            "dimension": "Choice / Comparison",
+            "mentions": 10,
+            "opportunity_score": 21.7,
+            "wpc_weighted_score": 21.7
+          },
+          {
+            "blocker_type": "occasion_timing",
+            "dimension": "Occasion & Timing",
+            "mentions": 3,
+            "opportunity_score": 52.0,
+            "wpc_weighted_score": 33.8
+          }
+        ]
+      },
+      {
+        "id": "gen_z_trend_seekers",
+        "name": "Gen Z Trend Seekers",
+        "age": "18–24",
+        "wishlist_behavior": "Save many trending/socially discovered items",
+        "primary_need": "Trend + social validation",
+        "main_barrier": "Will it actually look good on me?",
+        "voc_blockers": [
+          "styling_uncertainty",
+          "social_validation"
+        ],
+        "voc_mentions": 11,
+        "top_voc_score": 11.9,
+        "voc_match": [
+          {
+            "blocker_type": "styling_uncertainty",
+            "dimension": "Styling",
+            "mentions": 11,
+            "opportunity_score": 11.9,
+            "wpc_weighted_score": 11.9
+          },
+          {
+            "blocker_type": "social_validation",
+            "mentions": 0,
+            "opportunity_score": null
+          }
+        ]
+      },
+      {
+        "id": "fashion_enthusiasts",
+        "name": "Fashion Enthusiasts",
+        "age": "18–35",
+        "wishlist_behavior": "Large, highly curated wishlist",
+        "primary_need": "Discovery + experimentation",
+        "main_barrier": "Choice overload",
+        "voc_blockers": [
+          "decision_paralysis_too_many_options"
+        ],
+        "voc_mentions": 10,
+        "top_voc_score": 21.7,
+        "voc_match": [
+          {
+            "blocker_type": "decision_paralysis_too_many_options",
+            "dimension": "Choice / Comparison",
+            "mentions": 10,
+            "opportunity_score": 21.7,
+            "wpc_weighted_score": 21.7
+          }
+        ]
+      }
+    ]
+  }
 }

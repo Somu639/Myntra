@@ -101,7 +101,7 @@ DISCOVERY_QUESTIONS = [
         "short_title": "Segments",
         "question": "How do these behaviors differ across user segments?",
         "key": "q9_by_segment",
-        "lens": "Model-inferred segment_signal concentration per blocker",
+        "lens": "Age-band personas (intended profiles) sized by hypothesized VOC barriers",
     },
     {
         "id": "q10",
@@ -613,9 +613,27 @@ def page_discovery_lab(report: dict, quotes: dict, records: list[dict]) -> None:
         st.info("Wishlist talk is rare in app reviews. Treat this cut as under-sampled; recruit interviews.")
 
     elif spec["id"] == "q9":
-        rows = payload if isinstance(payload, list) else []
-        if rows:
-            st.dataframe(pd.DataFrame(rows), hide_index=True, use_container_width=True)
+        if isinstance(payload, dict):
+            st.caption(payload.get("note") or "")
+            personas = payload.get("personas") or []
+            if personas:
+                st.dataframe(
+                    pd.DataFrame([{
+                        "segment": p.get("name"),
+                        "age": p.get("age"),
+                        "wishlist behavior": p.get("wishlist_behavior"),
+                        "primary need": p.get("primary_need"),
+                        "main barrier": p.get("main_barrier"),
+                        "VOC mentions": p.get("voc_mentions"),
+                        "top VOC score": p.get("top_voc_score"),
+                    } for p in personas]),
+                    hide_index=True,
+                    use_container_width=True,
+                )
+        else:
+            rows = payload if isinstance(payload, list) else []
+            if rows:
+                st.dataframe(pd.DataFrame(rows), hide_index=True, use_container_width=True)
 
     # Spot-check quotes for the top blocker when looking at opportunities
     if spec["id"] in ("q2", "q10") and quotes:
@@ -695,19 +713,46 @@ def page_library(report: dict, records: list[dict]) -> None:
 
 def page_segments(report: dict) -> None:
     st.markdown("### Segments")
-    st.caption("segment_signal is model-inferred free text — directional, not verified personas.")
-    rows = report.get("q9_by_segment") or []
-    if not rows:
-        st.info("No segment table. Re-run `python discover.py`.")
+    age = report.get("age_segments") or report.get("q9_by_segment") or {}
+    st.caption(
+        age.get("note")
+        or "Age bands are intended profiles. Public VOC has no verified age."
+    )
+    personas = age.get("personas") or []
+    if not personas:
+        st.info("No age-segment table. Re-run `python discover.py`.")
         return
-    df = pd.DataFrame(rows)
-    st.dataframe(df, hide_index=True, use_container_width=True)
-    known = df[df["top_segment"] != "(unknown)"]
-    if not known.empty:
-        st.bar_chart(
-            known.set_index("blocker_type")["top_segment_concentration_pct"],
-            color="#FF3F6C",
-        )
+    st.markdown("#### Age-band personas")
+    st.dataframe(
+        pd.DataFrame([{
+            "segment": p.get("name"),
+            "age": p.get("age"),
+            "wishlist behavior": p.get("wishlist_behavior"),
+            "primary need": p.get("primary_need"),
+            "main conversion barrier": p.get("main_barrier"),
+            "VOC mentions (barrier)": p.get("voc_mentions"),
+            "top VOC score": p.get("top_voc_score"),
+        } for p in personas]),
+        hide_index=True,
+        use_container_width=True,
+    )
+    chart = pd.DataFrame(personas).set_index("name")["voc_mentions"]
+    st.bar_chart(chart, color="#FF3F6C")
+    st.caption("VOC mentions size the hypothesized barrier in this corpus — not how many shoppers are that age.")
+
+    for p in personas:
+        with st.expander(f"{p.get('name')} · {p.get('age')}"):
+            st.markdown(f"**Wishlist behavior:** {p.get('wishlist_behavior')}")
+            st.markdown(f"**Primary need:** {p.get('primary_need')}")
+            st.markdown(f"**Main conversion barrier:** {p.get('main_barrier')}")
+            match = p.get("voc_match") or []
+            if match:
+                st.dataframe(pd.DataFrame(match), hide_index=True, use_container_width=True)
+
+    inferred = (report.get("q9_by_segment") or {}).get("inferred_blockers") or []
+    if inferred:
+        st.markdown("#### Older cut — free-text `segment_signal` (directional)")
+        st.dataframe(pd.DataFrame(inferred), hide_index=True, use_container_width=True)
 
 
 def page_raw(records: list[dict]) -> None:

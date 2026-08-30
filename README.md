@@ -273,6 +273,7 @@ Local Streamlit: `streamlit run streamlit_app.py`
 | `sample_quotes_by_blocker.json` | Stage 3 — spot-check quotes |
 | `discovery_report.md` | Stage 4 — PM-facing discovery narrative (headline) |
 | `discovery_report.json` | Stage 4 — machine-readable findings |
+| `age_segments.json` | Age-band personas (intended profiles, not measured ages) |
 | `chatgpt_research.json` | ChatGPT share chunked for the Reviewer (external PM research) |
 | `rag.py` | Token-overlap retrieve + ChatGPT↔VOC triangulation |
 | `rag_review.json` | Reviewer pack (hypotheses vs this corpus) |

@@ -161,6 +161,10 @@ def main() -> None:
         "window.LAB_DATA = " + json.dumps(lab, ensure_ascii=False) + ";\n",
         encoding="utf-8",
     )
+    (FRONT / "segments_data.js").write_text(
+        "window.SEGMENTS_DATA = " + json.dumps(report.get("age_segments") or report.get("q9_by_segment") or {}, ensure_ascii=False) + ";\n",
+        encoding="utf-8",
+    )
     home = {
         "north_star": report.get("north_star"),
         "workflow": report.get("workflow") or {},
@@ -185,7 +189,7 @@ def main() -> None:
     (FRONT / "rag_review.json").write_text(
         json.dumps(review, ensure_ascii=False), encoding="utf-8"
     )
-    print("wrote frontend/lab_data.js, home_data.js, library_data.js, rag_review.json")
+    print("wrote frontend/lab_data.js, home_data.js, library_data.js, segments_data.js, rag_review.json")
 
 
 if __name__ == "__main__":
