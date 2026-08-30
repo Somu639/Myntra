@@ -45,7 +45,7 @@ DISCOVERY_QUESTIONS = [
         "short_title": "Purchase blockers",
         "question": "What prevents wishlisted products from eventually being purchased?",
         "key": "q2_purchase_blockers",
-        "lens": "Ranked blocker types by opportunity score (reach × frustration)",
+        "lens": "Identify blockers, quantify reach × frustration, split by wishlist→buy stage",
     },
     {
         "id": "q3",
@@ -109,7 +109,7 @@ DISCOVERY_QUESTIONS = [
         "short_title": "Unmet needs",
         "question": "What unmet needs emerge consistently across user conversations?",
         "key": "opportunity_areas",
-        "lens": "Prioritized opportunity areas — the headline ranking",
+        "lens": "Compare unmet needs: volume vs pain vs WPC leverage vs source spread",
     },
 ]
 
@@ -331,6 +331,14 @@ def load_phase1(stamp: tuple[float, int]) -> dict:
     return json.loads(PHASE1_PATH.read_text(encoding="utf-8"))
 
 
+def blocker_rows(payload) -> list[dict]:
+    if isinstance(payload, list):
+        return payload
+    if isinstance(payload, dict):
+        return payload.get("blockers") or payload.get("rows") or []
+    return []
+
+
 def quote_block(text: str, source: str = "", rating=None) -> None:
     meta = source
     if rating is not None:
@@ -348,58 +356,80 @@ def page_home(report: dict, records: list[dict]) -> None:
         """
         <h1 class="home-main-heading">Myntra Discovery Engine</h1>
         <p class="home-hero-sub">
-          Wishlist research for Myntra. <strong>Phase 1</strong> maps
-          <em>where</em> drop-off concentrates. Public reviews are a
-          <em>companion</em> for stated blockers — they cannot fill funnel rates.
+          Analyze public conversations across eight sources, answer ten
+          wishlist→purchase questions, then <strong>identify, quantify, and
+          compare</strong> opportunity areas that could move conversion.
+          This is not a review summary or a sentiment dashboard.
+          Public VOC cannot compute funnel rates — do not treat scores as lifts.
         </p>
         """,
         unsafe_allow_html=True,
     )
     st.markdown("")
 
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Records analyzed", cov.get("total_records") or len(records) or "—")
+    c2.metric("Relevant to WPC", cov.get("relevant") or "—")
+    c3.metric("Sources in scope", "8")
+    c4.metric("Discovery questions", "10")
+
     left, right = st.columns([3, 2], gap="large")
     with left:
-        st.markdown("#### What this analyzer is for")
-        st.markdown(
-            "**Phase 1** uses first-party funnel metrics to produce a segmented drop-off map. "
-            "Public reviews cannot compute those rates. The collect → extract pipeline is a "
-            "**companion**: it ranks *stated* blockers (returns, price, fit) to seed *why* "
-            "hypotheses inside the cells Phase 1 highlights."
-        )
-        st.markdown("#### Research structure")
+        st.markdown("#### Workflow")
         for title, body in (
-            ("Phase 1 · Quantitative discovery", "Wishlist funnel, time-to-purchase, OOS, price trajectory, wishlist size, revisits, category, search-before-drop, cart baseline. Output: where to spend interview budget."),
-            ("Companion · Public VOC", "Play Store, App Store, Reddit, communities, social, YouTube, product Q&A → stated blockers. Seeds codes; does not replace the funnel map."),
+            ("1 · Collect eight public sources", "App Store, Play Store, Reddit, fashion communities, social, YouTube, product Q&A, other public fashion-shopping talk."),
+            ("2 · Extract structured codes", "Wishlist signal, reason for saving, blocker type, resolution channel, segment — not star-rating averages."),
+            ("3 · Answer ten discovery questions", "Why save, what blocks the buy, leftover uncertainty, postpone, compare, off-platform research, dimension mix, intent vs bookmark, segments, unmet needs."),
+            ("4 · Compare opportunity areas", "Volume × frustration × source spread × whether the friction sits on the wishlist→buy path. Sentiment is an input, not the deliverable."),
         ):
             st.markdown(
                 f'<div class="home-pipeline-step"><strong>{title}</strong><br/>{body}</div>',
                 unsafe_allow_html=True,
             )
+        st.markdown("#### Ten questions this engine answers")
+        for q in DISCOVERY_QUESTIONS:
+            st.markdown(f"**{q['id'].upper()}.** {q['question']}")
     with right:
-        st.markdown("#### Where reviews are fetched from")
-        for label, note in (
-            ("Google Play — Myntra", "Public Android reviews. No API key."),
-            ("Apple App Store — Myntra", "iTunes RSS fallback when the scraper is empty."),
-            ("YouTube hauls", "Comments on Myntra try-on / honest-review videos."),
-            ("Reddit discussions", "Public archive + Arctic Shift. PRAW comments if credentials exist."),
-            ("Fashion & shopping communities", "IndianFashionAddicts, FFA, MFA, onlineshopping, and related subs."),
-            ("Social + other public", "Public Twitter syndication and Hacker News threads."),
-            ("Product reviews & Q&A", "Sitejabber reviews and HN comments about Myntra."),
-        ):
-            st.markdown(
-                f'<div class="home-card"><h4>{label}</h4><p>{note}</p></div>',
-                unsafe_allow_html=True,
+        st.markdown("#### Sources analyzed")
+        src_rows = cov.get("by_source") or []
+        if src_rows:
+            st.dataframe(
+                pd.DataFrame(src_rows).rename(columns={
+                    "source": "source",
+                    "records": "records",
+                    "relevant": "relevant",
+                    "relevant_pct": "relevant %",
+                }),
+                hide_index=True,
+                use_container_width=True,
             )
+        else:
+            for label in SOURCE_FILTER_OPTIONS:
+                st.markdown(f'<div class="home-card"><h4>{label}</h4></div>', unsafe_allow_html=True)
+
+    cmp = report.get("opportunity_comparison") or {}
+    rows = cmp.get("rows") or report.get("opportunity_areas") or []
+    if rows:
+        st.markdown("#### Opportunity areas compared (north-star: wishlist → purchase)")
+        st.caption(cmp.get("note") or "Compare volume, pain, and WPC leverage. Scores are not conversion lifts.")
+        show = pd.DataFrame(rows)
+        cols = [c for c in (
+            "blocker_type", "dimension", "wpc_stage", "wpc_leverage",
+            "mentions", "reach_pct_of_relevant", "frustration_rate_pct",
+            "source_count", "opportunity_score", "wpc_weighted_score",
+            "volume_rank", "frustration_rank", "wpc_weighted_rank",
+        ) if c in show.columns]
+        st.dataframe(show[cols], hide_index=True, use_container_width=True)
 
     st.markdown("---")
     st.markdown("#### Where to go in this dashboard")
     nav_guide = [
-        ("Phase 1", "Nine quantitative workstreams and the drop-off map this phase owes."),
-        ("Discovery Lab", "Public-VOC companion: ten stated-blocker questions and quotes."),
+        ("Discovery Lab", "The ten questions with quantified cuts and verbatim quotes."),
+        ("Search and Library", "Compare opportunity areas across volume, pain, and WPC leverage."),
         ("Reviewer", "RAG over VOC quotes plus the ChatGPT wishlist-conversion research."),
-        ("Search and Library", "Opportunity ranking, blocker mix, and corpus charts."),
         ("Segments", "Who feels which blocker — model-inferred concentration."),
-        ("Raw Data", "Browse extracted reviews and filter by source / blocker / sentiment."),
+        ("Raw Data", "Browse extracted conversations by the eight sources."),
+        ("Phase 1", "First-party funnel map — empty until warehouse data."),
         ("AI Roadmap", "Prioritized solutions from opportunity_proposal.md."),
     ]
     cols = st.columns(2)
@@ -410,19 +440,13 @@ def page_home(report: dict, records: list[dict]) -> None:
                 unsafe_allow_html=True,
             )
 
-    st.markdown("---")
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Records in session", cov.get("total_records") or len(records) or "—")
-    c2.metric("Extracted", cov.get("extracted") or "—")
-    c3.metric("Relevant", cov.get("relevant") or "—")
-    c4.metric("Research questions", "10 structured")
-    if not cov.get("relevant"):
-        st.info("No discovery report yet. Run `python discover.py` after Stage 2 extraction.")
-
 
 def page_discovery_lab(report: dict, quotes: dict) -> None:
     st.markdown("### Discovery Lab")
-    st.caption("Ten product-discovery questions. Click a question — answers are counted from structured extraction, not summaries.")
+    st.caption(
+        "Ten product-discovery questions across the eight public sources. "
+        "Answers are counted from structured extraction — not review summaries or sentiment scores."
+    )
     labels = [f"{q['icon']} {q['short_title']}" for q in DISCOVERY_QUESTIONS]
     if "lab_q" not in st.session_state:
         st.session_state["lab_q"] = labels[1]
@@ -459,19 +483,31 @@ def page_discovery_lab(report: dict, quotes: dict) -> None:
             quote_block(q.get("text", ""), q.get("source", ""), q.get("rating"))
 
     elif spec["id"] in ("q2", "q10"):
-        rows = payload if isinstance(payload, list) else []
+        if spec["id"] == "q2" and isinstance(payload, dict):
+            st.caption(payload.get("method") or "")
+            stages = payload.get("by_stage") or []
+            if stages:
+                st.dataframe(pd.DataFrame(stages), hide_index=True, use_container_width=True)
+        rows = blocker_rows(payload)
         if rows:
             df = pd.DataFrame(rows)
-            show = df[["blocker_type", "dimension", "mentions",
-                       "reach_pct_of_relevant", "frustration_rate_pct",
-                       "opportunity_score"]].rename(columns={
+            want = [
+                "blocker_type", "dimension", "wpc_stage", "wpc_leverage",
+                "mentions", "reach_pct_of_relevant", "frustration_rate_pct",
+                "source_count", "opportunity_score", "wpc_weighted_score",
+            ]
+            show = df[[c for c in want if c in df.columns]].rename(columns={
                 "blocker_type": "blocker",
                 "reach_pct_of_relevant": "reach %",
                 "frustration_rate_pct": "frustration %",
-                "opportunity_score": "score",
+                "opportunity_score": "VOC score",
+                "wpc_weighted_score": "WPC-weighted",
+                "source_count": "sources",
             })
             st.dataframe(show, hide_index=True, use_container_width=True)
-            st.bar_chart(show.set_index("dimension")["score"], color="#FF3F6C")
+            if "VOC score" in show.columns:
+                st.bar_chart(show.set_index("dimension")["VOC score"], color="#FF3F6C")
+            st.caption("WPC-weighted = VOC score × journey leverage. Not a measured conversion lift.")
 
     elif spec["id"] in ("q3", "q4", "q5"):
         st.metric("Mentions", payload.get("mentions", 0))
@@ -516,38 +552,64 @@ def page_discovery_lab(report: dict, quotes: dict) -> None:
     # Spot-check quotes for the top blocker when looking at opportunities
     if spec["id"] in ("q2", "q10") and quotes:
         st.markdown("##### Sample quotes (spot-check categorization)")
-        top_bt = (payload[0].get("blocker_type") if payload else None)
+        rows = blocker_rows(payload)
+        top_bt = (rows[0].get("blocker_type") if rows else None)
         for item in (quotes.get(top_bt) or [])[:3]:
             quote_block(item.get("text", ""), item.get("source", ""), item.get("rating"))
 
 
 def page_library(report: dict, records: list[dict]) -> None:
     st.markdown("### Search and Library")
+    st.caption(
+        "Compare opportunity areas that could influence wishlist→purchase conversion. "
+        "Sentiment is an input to frustration rate, not the product."
+    )
     cov = report.get("coverage", {})
     c1, c2, c3 = st.columns(3)
     c1.metric("Corpus", cov.get("total_records", 0))
     c2.metric("Relevant", cov.get("relevant", 0))
     c3.metric("Failed extraction", cov.get("failed", 0))
 
-    tab_opp, tab_sent, tab_src = st.tabs(["Opportunities", "Sentiment", "Sources"])
+    tab_opp, tab_src, tab_sent = st.tabs(["Opportunity comparison", "Sources", "Sentiment (input)"])
     with tab_opp:
-        rows = report.get("opportunity_areas") or []
+        cmp = report.get("opportunity_comparison") or {}
+        st.caption(cmp.get("note") or "")
+        tops = st.columns(3)
+        for col, key, label in (
+            (tops[0], "top_by_volume", "Highest volume"),
+            (tops[1], "top_by_frustration", "Highest frustration"),
+            (tops[2], "top_by_wpc_weighted", "Highest WPC-weighted"),
+        ):
+            hit = cmp.get(key) or {}
+            col.metric(label, hit.get("blocker_type") or "—", str(hit.get("value") or ""))
+        rows = cmp.get("rows") or report.get("opportunity_areas") or []
         if rows:
             df = pd.DataFrame(rows)
-            st.bar_chart(
-                df.set_index("dimension")[["mentions", "frustration_rate_pct"]],
-                color=["#FF3F6C", "#282C3F"],
-            )
+            chart_cols = [c for c in ("mentions", "wpc_weighted_score") if c in df.columns]
+            if chart_cols:
+                st.bar_chart(df.set_index("dimension")[chart_cols], color=["#FF3F6C", "#282C3F"])
+            show_cols = [c for c in (
+                "blocker_type", "wpc_stage", "wpc_leverage", "mentions",
+                "frustration_rate_pct", "source_count", "opportunity_score",
+                "wpc_weighted_score", "volume_rank", "frustration_rank", "wpc_weighted_rank",
+            ) if c in df.columns]
+            st.dataframe(df[show_cols], hide_index=True, use_container_width=True)
+    with tab_src:
+        src_rows = cov.get("by_source") or []
+        if src_rows:
+            df = pd.DataFrame(src_rows)
+            st.bar_chart(df.set_index("source")["relevant"], color="#E3365B")
             st.dataframe(df, hide_index=True, use_container_width=True)
+        else:
+            counts = Counter(source_label(r.get("source")) for r in records)
+            if counts:
+                st.bar_chart(pd.Series(counts), color="#E3365B")
     with tab_sent:
         relevant = [r for r in records if r.get("relevant") is True]
         counts = Counter(r.get("sentiment") or "unknown" for r in relevant)
         if counts:
+            st.caption("Used only to compute frustration rate inside opportunity score.")
             st.bar_chart(pd.Series(counts), color="#FF3F6C")
-    with tab_src:
-        counts = Counter(source_label(r.get("source")) for r in records)
-        if counts:
-            st.bar_chart(pd.Series(counts), color="#E3365B")
 
 
 def page_segments(report: dict) -> None:
@@ -764,7 +826,7 @@ def main() -> None:
         st.sidebar.success("LLM: Groq key present")
     else:
         st.sidebar.warning("No GROQ_API_KEY — viewing saved extraction only")
-    st.sidebar.caption("Phase 1: where · VOC companion")
+    st.sidebar.caption("Eight sources · ten questions · compare opportunities")
 
     if page == "Home":
         page_home(report, records)

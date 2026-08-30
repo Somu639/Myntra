@@ -69,6 +69,29 @@ BLOCKER_DIMENSION = {
     "other": "Other",
 }
 
+# Brief source labels (the eight public-VOC channels this engine analyzes).
+SOURCE_BRIEF = {
+    "app_store_myntra": "App Store reviews",
+    "google_play_myntra": "Play Store reviews",
+    "reddit": "Reddit discussions",
+    "fashion_community": "Fashion and shopping communities",
+    "social_twitter": "Social media conversations",
+    "youtube": "YouTube comments",
+    "product_review": "Product reviews and Q&A where relevant",
+    "product_qa": "Product reviews and Q&A where relevant",
+    "other_public": "Other publicly available conversations about online fashion shopping",
+}
+BRIEF_SOURCE_ORDER = [
+    "App Store reviews",
+    "Play Store reviews",
+    "Reddit discussions",
+    "Fashion and shopping communities",
+    "Social media conversations",
+    "YouTube comments",
+    "Product reviews and Q&A where relevant",
+    "Other publicly available conversations about online fashion shopping",
+]
+
 # Blockers that represent lingering *uncertainty* after a user likes an item (Q3).
 UNCERTAINTY_BLOCKERS = {
     "fit_sizing", "styling_uncertainty", "quality_doubt", "social_validation",
@@ -78,6 +101,80 @@ UNCERTAINTY_BLOCKERS = {
 POSTPONE_BLOCKERS = {
     "price", "occasion_timing", "decision_paralysis_too_many_options",
 }
+
+# Journey tag vs the north-star (wishlist → purchase). Not a measured lift.
+# decision_friction = sits between "I like this" and "I buy this".
+# anticipated_ops = post-purchase pain that can suppress the buy if shoppers expect it.
+# post_purchase_ops = loud VOC after the order — weak direct WPC lever.
+WPC_META = {
+    "fit_sizing": {
+        "wpc_stage": "decision_friction",
+        "wpc_leverage": "high",
+        "wpc_note": "Size/fit doubt is a classic stall after a product is liked.",
+        "questions": ["Q3", "Q7"],
+    },
+    "styling_uncertainty": {
+        "wpc_stage": "decision_friction",
+        "wpc_leverage": "high",
+        "wpc_note": "Looks-on-me doubt after shortlisting.",
+        "questions": ["Q3", "Q7"],
+    },
+    "quality_doubt": {
+        "wpc_stage": "decision_friction",
+        "wpc_leverage": "high",
+        "wpc_note": "Fabric/quality hesitation after interest.",
+        "questions": ["Q3", "Q7"],
+    },
+    "social_validation": {
+        "wpc_stage": "decision_friction",
+        "wpc_leverage": "medium",
+        "wpc_note": "Waiting for a second opinion before buying.",
+        "questions": ["Q3", "Q7"],
+    },
+    "trust_authenticity": {
+        "wpc_stage": "decision_friction",
+        "wpc_leverage": "high",
+        "wpc_note": "Reviews and authenticity checks before checkout.",
+        "questions": ["Q3", "Q6", "Q7"],
+    },
+    "price": {
+        "wpc_stage": "decision_friction",
+        "wpc_leverage": "high",
+        "wpc_note": "Sale-wait and value doubt postpone the buy. Not a coupon brief.",
+        "questions": ["Q4", "Q7"],
+    },
+    "occasion_timing": {
+        "wpc_stage": "decision_friction",
+        "wpc_leverage": "medium",
+        "wpc_note": "No immediate occasion — timing, not forgetting.",
+        "questions": ["Q4", "Q7"],
+    },
+    "decision_paralysis_too_many_options": {
+        "wpc_stage": "decision_friction",
+        "wpc_leverage": "high",
+        "wpc_note": "Too many shortlisted items; comparison never resolves.",
+        "questions": ["Q5", "Q4"],
+    },
+    "return_hassle": {
+        "wpc_stage": "anticipated_ops",
+        "wpc_leverage": "medium",
+        "wpc_note": "Loudest post-purchase VOC. Can suppress WPC if a painful return is expected — not a measured lift.",
+        "questions": ["Q2", "Q10"],
+    },
+    "payment_friction": {
+        "wpc_stage": "decision_friction",
+        "wpc_leverage": "medium",
+        "wpc_note": "Checkout/payment friction after the decision is made.",
+        "questions": ["Q2"],
+    },
+    "other": {
+        "wpc_stage": "post_purchase_ops",
+        "wpc_leverage": "low",
+        "wpc_note": "Mostly delivery/cancel/ops. High volume, weak direct wishlist-to-buy lever.",
+        "questions": ["Q2"],
+    },
+}
+LEVERAGE_WEIGHT = {"high": 1.0, "medium": 0.65, "low": 0.35}
 
 # Reason-for-saving heuristic buckets: genuine intent vs. bookmarking (Q8).
 INTENT_HINTS = [
@@ -174,6 +271,39 @@ def top_quotes(items, n, key=lambda it: safe_float(it.get("confidence"))):
 # Opportunity scoring (frequency + frustration, equal weight) — Q2 & Q10
 # ---------------------------------------------------------------------------
 
+def brief_source(src) -> str:
+    return SOURCE_BRIEF.get(str(src or ""), str(src or "Unknown"))
+
+
+def coverage_by_source(records: list[dict], relevant: list[dict]) -> list[dict]:
+    """Always emit the eight brief sources, even if a collector returned zero."""
+    totals = Counter(brief_source(r.get("source")) for r in records)
+    rels = Counter(brief_source(r.get("source")) for r in relevant)
+    rows = []
+    for label in BRIEF_SOURCE_ORDER:
+        total = totals.get(label, 0)
+        rel = rels.get(label, 0)
+        rows.append({
+            "source": label,
+            "records": total,
+            "relevant": rel,
+            "relevant_pct": pct(rel, total),
+        })
+    extra = sorted(
+        (k for k in totals if k not in BRIEF_SOURCE_ORDER and k != "Unknown"),
+    )
+    for label in extra:
+        total = totals[label]
+        rel = rels.get(label, 0)
+        rows.append({
+            "source": label,
+            "records": total,
+            "relevant": rel,
+            "relevant_pct": pct(rel, total),
+        })
+    return rows
+
+
 def opportunity_areas(relevant: list[dict]) -> list[dict]:
     total = len(relevant)
     by_blocker: dict[str, list[dict]] = defaultdict(list)
@@ -188,6 +318,14 @@ def opportunity_areas(relevant: list[dict]) -> list[dict]:
         frustrated = sum(1 for it in items if it.get("sentiment") == FRUSTRATED)
         frust_rate = frustrated / cnt if cnt else 0.0
         avg_conf = sum(safe_float(it.get("confidence")) for it in items) / cnt
+        src_counts = Counter(brief_source(it.get("source")) for it in items)
+        meta = WPC_META.get(bt, {
+            "wpc_stage": "decision_friction",
+            "wpc_leverage": "medium",
+            "wpc_note": "",
+            "questions": [],
+        })
+        weight = LEVERAGE_WEIGHT.get(meta["wpc_leverage"], 0.65)
         rows.append({
             "blocker_type": bt,
             "dimension": BLOCKER_DIMENSION.get(bt, bt),
@@ -195,6 +333,13 @@ def opportunity_areas(relevant: list[dict]) -> list[dict]:
             "reach_pct_of_relevant": pct(cnt, total),
             "frustration_rate_pct": round(100 * frust_rate, 1),
             "avg_confidence": round(avg_conf, 3),
+            "source_count": len(src_counts),
+            "by_source": src_counts.most_common(),
+            "wpc_stage": meta["wpc_stage"],
+            "wpc_leverage": meta["wpc_leverage"],
+            "wpc_note": meta["wpc_note"],
+            "questions": meta["questions"],
+            "_weight": weight,
         })
 
     max_cnt = max((r["mentions"] for r in rows), default=0)
@@ -202,8 +347,70 @@ def opportunity_areas(relevant: list[dict]) -> list[dict]:
         freq_norm = r["mentions"] / max_cnt if max_cnt else 0.0
         r["opportunity_score"] = round(
             100 * (0.5 * freq_norm + 0.5 * r["frustration_rate_pct"] / 100), 1)
+        r["wpc_weighted_score"] = round(r["opportunity_score"] * r.pop("_weight"), 1)
+
+    def _rank(key):
+        order = sorted(rows, key=lambda x: x[key], reverse=True)
+        return {id(x): i + 1 for i, x in enumerate(order)}
+
+    vol = _rank("mentions")
+    fr = _rank("frustration_rate_pct")
+    wp = _rank("wpc_weighted_score")
+    for r in rows:
+        r["volume_rank"] = vol[id(r)]
+        r["frustration_rank"] = fr[id(r)]
+        r["wpc_weighted_rank"] = wp[id(r)]
     rows.sort(key=lambda r: r["opportunity_score"], reverse=True)
     return rows
+
+
+def q2_purchase_blockers(areas: list[dict]) -> dict:
+    stages = ["decision_friction", "anticipated_ops", "post_purchase_ops"]
+    by_stage = []
+    for stage in stages:
+        items = [r for r in areas if r.get("wpc_stage") == stage]
+        by_stage.append({
+            "stage": stage,
+            "mentions": sum(r["mentions"] for r in items),
+            "areas": len(items),
+            "top": items[0]["blocker_type"] if items else None,
+        })
+    return {
+        "metric": "Wishlist → purchase conversion. Public VOC cannot compute the rate.",
+        "method": (
+            "Identify blockers, quantify reach × frustration, then compare by "
+            "journey stage (decision vs anticipated ops vs post-purchase). "
+            "wpc_weighted_score is VOC score × leverage weight — not a measured lift."
+        ),
+        "by_stage": by_stage,
+        "blockers": areas,
+    }
+
+
+def opportunity_comparison(areas: list[dict]) -> dict:
+    def _top(key):
+        row = max(areas, key=lambda r: r.get(key) or 0, default=None)
+        if not row:
+            return None
+        return {"blocker_type": row["blocker_type"], "value": row.get(key)}
+
+    return {
+        "lenses": [
+            {"id": "volume", "label": "How often it shows up in relevant conversations"},
+            {"id": "frustration", "label": "How painful those mentions read"},
+            {"id": "wpc_weighted", "label": "VOC score × journey leverage (not a measured WPC lift)"},
+            {"id": "source_spread", "label": "How many of the eight sources mention it"},
+        ],
+        "note": (
+            "Sentiment is one input (frustration rate), not the output. "
+            "Compare areas on volume, pain, source spread, and whether the "
+            "friction sits on the wishlist→buy path."
+        ),
+        "top_by_volume": _top("mentions"),
+        "top_by_frustration": _top("frustration_rate_pct"),
+        "top_by_wpc_weighted": _top("wpc_weighted_score"),
+        "rows": areas,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -330,18 +537,31 @@ def build_report(records: list[dict]) -> dict:
     failed = sum(1 for r in records
                  if r.get("extraction_error") or r.get("relevant") is None)
     relevant = [r for r in records if r.get("relevant") is True]
+    areas = opportunity_areas(relevant)
 
     return {
+        "north_star": "Wishlist / consideration → purchase conversion on Myntra",
+        "workflow": {
+            "not": "Review summarization or sentiment scoring as the deliverable",
+            "is": (
+                "Identify stated blockers across eight public sources, quantify "
+                "reach and frustration, and compare opportunity areas by whether "
+                "they sit on the wishlist→buy path."
+            ),
+            "sources": BRIEF_SOURCE_ORDER,
+        },
         "coverage": {
             "total_records": total,
             "extracted": total - failed,
             "failed": failed,
             "relevant": len(relevant),
             "not_relevant": (total - failed) - len(relevant),
+            "by_source": coverage_by_source(records, relevant),
         },
-        "opportunity_areas": opportunity_areas(relevant),
+        "opportunity_areas": areas,
+        "opportunity_comparison": opportunity_comparison(areas),
         "q1_why_wishlist": q_reasons_for_saving(relevant),
-        "q2_purchase_blockers": opportunity_areas(relevant),  # ranked blockers
+        "q2_purchase_blockers": q2_purchase_blockers(areas),
         "q3_post_like_uncertainty": q_subset(
             relevant, UNCERTAINTY_BLOCKERS, "Uncertainty after liking a product"),
         "q4_postponement": q_subset(
@@ -380,21 +600,32 @@ def render_markdown(rep: dict) -> str:
              f"({cov['extracted']} extracted, {cov['failed']} failed).")
     L.append(f"- Relevant to fashion purchase/wishlist behavior: "
              f"**{cov['relevant']}** ({pct(cov['relevant'], cov['extracted'])}% "
-             f"of extracted).\n")
+             f"of extracted).")
+    L.append("- Sources (always the eight public channels):")
+    for s in cov.get("by_source") or []:
+        L.append(f"  - {s['source']}: {s['records']} records, "
+                 f"{s['relevant']} relevant ({s['relevant_pct']}%).")
+    L.append("")
 
     # Headline opportunity comparison
     L.append("## Prioritized opportunity areas (Q10 — unmet needs)")
-    L.append("Ranked by an opportunity score weighting **reach** and "
-             "**frustration** equally.\n")
+    L.append("Not a sentiment summary. Each area is **identified** (blocker), "
+             "**quantified** (mentions, reach, frustration), and **compared** "
+             "on volume vs pain vs wishlist→buy leverage. "
+             "`wpc_weighted_score` is VOC score × journey weight — "
+             "**not** a measured conversion lift.\n")
     if rep["opportunity_areas"]:
-        L.append("| Rank | Opportunity (blocker) | Dimension | Mentions | "
-                 "Reach % | Frustration % | Confidence | Score |")
-        L.append("| --- | --- | --- | --- | --- | --- | --- | --- |")
+        L.append("| Rank | Opportunity | Stage | Leverage | Mentions | "
+                 "Reach % | Frustration % | Sources | VOC score | WPC-weighted |")
+        L.append("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |")
         for i, o in enumerate(rep["opportunity_areas"], 1):
-            L.append(f"| {i} | {o['blocker_type']} | {o['dimension']} | "
-                     f"{o['mentions']} | {o['reach_pct_of_relevant']} | "
-                     f"{o['frustration_rate_pct']} | {o['avg_confidence']} | "
-                     f"**{o['opportunity_score']}** |")
+            L.append(
+                f"| {i} | {o['blocker_type']} | {o.get('wpc_stage', '')} | "
+                f"{o.get('wpc_leverage', '')} | {o['mentions']} | "
+                f"{o['reach_pct_of_relevant']} | {o['frustration_rate_pct']} | "
+                f"{o.get('source_count', '')} | **{o['opportunity_score']}** | "
+                f"{o.get('wpc_weighted_score', '')} |"
+            )
     else:
         L.append("_No blocker-tagged relevant items found._")
     L.append("")
@@ -419,9 +650,15 @@ def render_markdown(rep: dict) -> str:
              "(heuristic on stated reason + text).\n")
 
     # Q2 / opportunity = purchase blockers
+    q2 = rep["q2_purchase_blockers"]
     L.append("## Q2 — What prevents wishlisted products from being purchased?")
-    L.append("See the prioritized opportunity table above — the ranked blockers "
-             "are exactly the purchase blockers, by reach and frustration.\n")
+    L.append(q2.get("method") or "")
+    for stg in q2.get("by_stage") or []:
+        L.append(f"- **{stg['stage']}**: {stg['mentions']} mentions "
+                 f"across {stg['areas']} areas"
+                 + (f" (top: {stg['top']})" if stg.get("top") else "")
+                 + ".")
+    L.append("")
 
     # Q3
     q3 = rep["q3_post_like_uncertainty"]

@@ -198,7 +198,7 @@
 <!-- Header Section -->
 <div class="lg:col-span-12 mb-2">
 <h1 class="font-h1 text-h1 text-on-background mb-2">Discovery Lab</h1>
-<p class="font-body text-body text-secondary">10 research questions with quantified answers and spot-check quotes.</p>
+<p class="font-body text-body text-secondary">Ten questions across eight public sources. Answers are counted from structured extraction — not summaries or sentiment scores.</p>
 </div>
 <div id="q-grid" class="lg:col-span-5 xl:col-span-6 grid grid-cols-1 md:grid-cols-2 gap-4 h-fit"></div>
 <div class="lg:col-span-7 xl:col-span-6 flex flex-col gap-6">
@@ -283,19 +283,35 @@
     var p = q.payload;
     var kpis = "";
     var body = "";
+    function blockersOf(payload) {
+      if (Array.isArray(payload)) return payload;
+      if (payload && typeof payload === "object") return payload.blockers || payload.rows || [];
+      return [];
+    }
     if (id === "q1" && p) {
       kpis += kpi("Wishlist signals", p.wishlist_mentions || 0);
       var reasons = p.top_reasons || [];
       body = table(["Reason", "Count"], reasons.map(function (r) { return [r[0], r[1]]; }));
-    } else if ((id === "q2" || id === "q10") && Array.isArray(p)) {
-      var top = p[0] || {};
+    } else if (id === "q2" || id === "q10") {
+      var list = blockersOf(p);
+      var top = list[0] || {};
       kpis += kpi("Top mentions", top.mentions);
       kpis += kpi("Reach", (top.reach_pct_of_relevant != null ? top.reach_pct_of_relevant + "%" : "—"));
-      kpis += kpi("Frustration", (top.frustration_rate_pct != null ? top.frustration_rate_pct + "%" : "—"));
-      kpis += kpi("Score", top.opportunity_score);
-      body = table(["#", "Blocker", "Mentions", "Score"], p.slice(0, 8).map(function (r, i) {
-        return [i + 1, r.dimension || r.blocker_type, r.mentions, r.opportunity_score];
-      }));
+      kpis += kpi("WPC leverage", top.wpc_leverage || "—");
+      kpis += kpi("VOC score", top.opportunity_score);
+      kpis += kpi("WPC-weighted", top.wpc_weighted_score);
+      var stageNote = (p && p.method) ? "<p class='font-body text-secondary mb-3'>" + esc(p.method) + "</p>" : "";
+      if (p && p.by_stage && p.by_stage.length) {
+        stageNote += table(["Stage", "Mentions", "Areas", "Top"], p.by_stage.map(function (s) {
+          return [s.stage, s.mentions, s.areas, s.top];
+        }));
+      }
+      body = stageNote + table(
+        ["#", "Blocker", "Stage", "Leverage", "Mentions", "Sources", "VOC", "WPC-w"],
+        list.slice(0, 10).map(function (r, i) {
+          return [i + 1, r.dimension || r.blocker_type, r.wpc_stage, r.wpc_leverage, r.mentions, r.source_count, r.opportunity_score, r.wpc_weighted_score];
+        })
+      );
     } else if (p && typeof p === "object" && !Array.isArray(p)) {
       if (p.mentions != null) kpis += kpi("Mentions", p.mentions);
       if (p.share_of_blockers_pct != null) kpis += kpi("Share of blockers", p.share_of_blockers_pct + "%");

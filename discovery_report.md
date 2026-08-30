@@ -5,22 +5,31 @@ _AI-powered discovery engine — Myntra. Directional signals for opportunity pri
 ## Coverage
 - Records analyzed: **1422** (1422 extracted, 0 failed).
 - Relevant to fashion purchase/wishlist behavior: **483** (34.0% of extracted).
+- Sources (always the eight public channels):
+  - App Store reviews: 133 records, 55 relevant (41.4%).
+  - Play Store reviews: 440 records, 133 relevant (30.2%).
+  - Reddit discussions: 292 records, 171 relevant (58.6%).
+  - Fashion and shopping communities: 231 records, 63 relevant (27.3%).
+  - Social media conversations: 26 records, 6 relevant (23.1%).
+  - YouTube comments: 180 records, 27 relevant (15.0%).
+  - Product reviews and Q&A where relevant: 70 records, 23 relevant (32.9%).
+  - Other publicly available conversations about online fashion shopping: 50 records, 5 relevant (10.0%).
 
 ## Prioritized opportunity areas (Q10 — unmet needs)
-Ranked by an opportunity score weighting **reach** and **frustration** equally.
+Not a sentiment summary. Each area is **identified** (blocker), **quantified** (mentions, reach, frustration), and **compared** on volume vs pain vs wishlist→buy leverage. `wpc_weighted_score` is VOC score × journey weight — **not** a measured conversion lift.
 
-| Rank | Opportunity (blocker) | Dimension | Mentions | Reach % | Frustration % | Confidence | Score |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | return_hassle | Returns & Exchange | 53 | 11.0 | 94.3 | 0.951 | **82.5** |
-| 2 | other | Other | 52 | 10.8 | 80.8 | 0.916 | **75.1** |
-| 3 | price | Price & Value | 75 | 15.5 | 20.0 | 0.917 | **60.0** |
-| 4 | trust_authenticity | Trust & Reviews | 23 | 4.8 | 78.3 | 0.924 | **54.5** |
-| 5 | fit_sizing | Fit & Size | 27 | 5.6 | 70.4 | 0.894 | **53.2** |
-| 6 | occasion_timing | Occasion & Timing | 3 | 0.6 | 100.0 | 0.94 | **52.0** |
-| 7 | quality_doubt | Quality | 24 | 5.0 | 70.8 | 0.901 | **51.4** |
-| 8 | payment_friction | Payment | 6 | 1.2 | 83.3 | 0.957 | **45.6** |
-| 9 | decision_paralysis_too_many_options | Choice / Comparison | 10 | 2.1 | 30.0 | 0.888 | **21.7** |
-| 10 | styling_uncertainty | Styling | 11 | 2.3 | 9.1 | 0.867 | **11.9** |
+| Rank | Opportunity | Stage | Leverage | Mentions | Reach % | Frustration % | Sources | VOC score | WPC-weighted |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | return_hassle | anticipated_ops | medium | 53 | 11.0 | 94.3 | 6 | **82.5** | 53.6 |
+| 2 | other | post_purchase_ops | low | 52 | 10.8 | 80.8 | 7 | **75.1** | 26.3 |
+| 3 | price | decision_friction | high | 75 | 15.5 | 20.0 | 5 | **60.0** | 60.0 |
+| 4 | trust_authenticity | decision_friction | high | 23 | 4.8 | 78.3 | 5 | **54.5** | 54.5 |
+| 5 | fit_sizing | decision_friction | high | 27 | 5.6 | 70.4 | 6 | **53.2** | 53.2 |
+| 6 | occasion_timing | decision_friction | medium | 3 | 0.6 | 100.0 | 2 | **52.0** | 33.8 |
+| 7 | quality_doubt | decision_friction | high | 24 | 5.0 | 70.8 | 5 | **51.4** | 51.4 |
+| 8 | payment_friction | decision_friction | medium | 6 | 1.2 | 83.3 | 4 | **45.6** | 29.6 |
+| 9 | decision_paralysis_too_many_options | decision_friction | high | 10 | 2.1 | 30.0 | 4 | **21.7** | 21.7 |
+| 10 | styling_uncertainty | decision_friction | high | 11 | 2.3 | 9.1 | 3 | **11.9** | 11.9 |
 
 ## Q1 — Why do users add products to their wishlist?
 - Wishlist/save signals detected: **10**.
@@ -40,7 +49,10 @@ Ranked by an opportunity score weighting **reach** and **frustration** equally.
 - Of 10 wishlist signals: **6 genuine purchase intent**, **1 bookmarking**, 3 unclear (heuristic on stated reason + text).
 
 ## Q2 — What prevents wishlisted products from being purchased?
-See the prioritized opportunity table above — the ranked blockers are exactly the purchase blockers, by reach and frustration.
+Identify blockers, quantify reach × frustration, then compare by journey stage (decision vs anticipated ops vs post-purchase). wpc_weighted_score is VOC score × leverage weight — not a measured lift.
+- **decision_friction**: 179 mentions across 8 areas (top: price).
+- **anticipated_ops**: 53 mentions across 1 areas (top: return_hassle).
+- **post_purchase_ops**: 52 mentions across 1 areas (top: other).
 
 ## Q3 — Uncertainties remaining after a user likes a product
 - **85** mentions (29.9% of all blockers) are lingering uncertainties (fit, styling, quality, trust, social validation).

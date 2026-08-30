@@ -16,9 +16,9 @@ SOURCE_LABELS = {
     "fashion_community": "Fashion and shopping communities",
     "social_twitter": "Social media conversations",
     "youtube": "YouTube comments",
-    "product_review": "Product reviews and Q&A",
-    "product_qa": "Product reviews and Q&A",
-    "other_public": "Other public conversations",
+    "product_review": "Product reviews and Q&A where relevant",
+    "product_qa": "Product reviews and Q&A where relevant",
+    "other_public": "Other publicly available conversations about online fashion shopping",
     "chatgpt_research": "ChatGPT research",
 }
 
@@ -73,6 +73,14 @@ def _quotes(items) -> list[dict]:
     return out[:3]
 
 
+def _blockers(payload):
+    if isinstance(payload, list):
+        return payload
+    if isinstance(payload, dict):
+        return payload.get("blockers") or payload.get("rows") or []
+    return []
+
+
 def main() -> None:
     report = json.loads((ROOT / "discovery_report.json").read_text(encoding="utf-8"))
     quotes_by = {}
@@ -84,8 +92,9 @@ def main() -> None:
     for spec in QUESTIONS:
         payload = report.get(spec["key"])
         entry = {**spec, "payload": payload}
-        if spec["id"] in ("q2", "q10") and isinstance(payload, list) and payload:
-            top = payload[0].get("blocker_type")
+        blockers = _blockers(payload)
+        if spec["id"] in ("q2", "q10") and blockers:
+            top = blockers[0].get("blocker_type")
             entry["spot_quotes"] = _quotes(quotes_by.get(top))
         elif isinstance(payload, dict):
             entry["spot_quotes"] = _quotes(payload.get("quotes"))
@@ -97,11 +106,31 @@ def main() -> None:
         "window.LAB_DATA = " + json.dumps(lab, ensure_ascii=False) + ";\n",
         encoding="utf-8",
     )
+    home = {
+        "north_star": report.get("north_star"),
+        "workflow": report.get("workflow") or {},
+        "coverage": report.get("coverage") or {},
+        "questions": [{"id": q["id"], "short": q["short"], "question": q["question"]} for q in QUESTIONS],
+        "comparison": report.get("opportunity_comparison") or {},
+        "areas": report.get("opportunity_areas") or [],
+    }
+    (FRONT / "home_data.js").write_text(
+        "window.HOME_DATA = " + json.dumps(home, ensure_ascii=False) + ";\n",
+        encoding="utf-8",
+    )
+    (FRONT / "library_data.js").write_text(
+        "window.LIBRARY_DATA = " + json.dumps({
+            "coverage": report.get("coverage") or {},
+            "comparison": report.get("opportunity_comparison") or {},
+            "areas": report.get("opportunity_areas") or [],
+        }, ensure_ascii=False) + ";\n",
+        encoding="utf-8",
+    )
     review = build_review_file()
     (FRONT / "rag_review.json").write_text(
         json.dumps(review, ensure_ascii=False), encoding="utf-8"
     )
-    print("wrote frontend/lab_data.js and frontend/rag_review.json")
+    print("wrote frontend/lab_data.js, home_data.js, library_data.js, rag_review.json")
 
 
 if __name__ == "__main__":

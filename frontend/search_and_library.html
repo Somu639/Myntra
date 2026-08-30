@@ -212,184 +212,79 @@
 </header>
 <!-- Canvas -->
 <main class="p-container_padding flex-1">
-<!-- Page Header & Context -->
 <div class="flex justify-between items-end mb-8">
 <div>
 <h1 class="font-h1 text-h1 text-on-background mb-2">Search and Library</h1>
-<div class="flex items-center gap-4 text-secondary font-body">
-<span><strong class="text-on-background">1,011</strong> total records</span>
-<span class="w-1 h-1 rounded-full bg-myntra-light"></span>
-<span><strong class="text-myntra-pink">359</strong> relevant items found</span>
+<p class="font-body text-secondary">Compare opportunity areas that could influence wishlist→purchase conversion. Sentiment is an input, not the product.</p>
+<div id="lib-meta" class="flex items-center gap-4 text-secondary font-body mt-2"></div>
 </div>
 </div>
-<div class="flex gap-2">
-<button class="px-4 py-2 border border-myntra-light text-myntra-dark font-button text-button rounded-[2px] hover:bg-myntra-gray transition-colors">Export</button>
-<button class="px-4 py-2 bg-myntra-pink text-white font-button text-button rounded-[2px] hover:bg-opacity-90 transition-colors">New Query</button>
+<div class="grid grid-cols-3 gap-4 mb-8" id="lib-tops"></div>
+<div class="flat-card mb-8">
+<h2 class="font-h3 text-h3 mb-4">Volume vs frustration vs WPC-weighted</h2>
+<div id="lib-bars" class="space-y-4"></div>
 </div>
-</div>
-<!-- Tabs -->
-<div class="border-b border-myntra-light mb-8 flex gap-8">
-<button class="pb-3 border-b-2 border-myntra-pink text-myntra-dark font-body-bold text-body-bold">Opportunities</button>
-<button class="pb-3 border-b-2 border-transparent text-secondary hover:text-myntra-dark font-body text-body transition-colors">Sentiment</button>
-<button class="pb-3 border-b-2 border-transparent text-secondary hover:text-myntra-dark font-body text-body transition-colors">Sources</button>
-</div>
-<!-- Bento Grid Layout -->
-<div class="grid grid-cols-12 gap-grid_gutter">
-<!-- Chart Card (Top Left) -->
-<div class="col-span-12 lg:col-span-8 flat-card">
-<h2 class="font-h3 text-h3 mb-6">Mentions vs Frustration (Top Drivers)</h2>
-<div class="space-y-4">
-<!-- Chart Row 1 -->
-<div>
-<div class="flex justify-between text-label font-label mb-1 text-secondary">
-<span>Returns &amp; Exchange</span>
-<span>95.1% Frustrated</span>
-</div>
-<div class="flex h-6 w-full rounded-sm overflow-hidden">
-<div class="bg-myntra-dark w-[80%]" title="Mentions"></div>
-<div class="bg-myntra-pink w-[20%]" title="Frustration"></div>
-</div>
-</div>
-<!-- Chart Row 2 -->
-<div>
-<div class="flex justify-between text-label font-label mb-1 text-secondary">
-<span>Size &amp; Fit</span>
-<span>72.4% Frustrated</span>
-</div>
-<div class="flex h-6 w-full rounded-sm overflow-hidden">
-<div class="bg-myntra-dark w-[60%]" title="Mentions"></div>
-<div class="bg-myntra-pink w-[40%]" title="Frustration"></div>
-</div>
-</div>
-<!-- Chart Row 3 -->
-<div>
-<div class="flex justify-between text-label font-label mb-1 text-secondary">
-<span>Delivery Speed</span>
-<span>68.2% Frustrated</span>
-</div>
-<div class="flex h-6 w-full rounded-sm overflow-hidden">
-<div class="bg-myntra-dark w-[55%]" title="Mentions"></div>
-<div class="bg-myntra-pink w-[45%]" title="Frustration"></div>
-</div>
-</div>
-</div>
-<div class="flex justify-end gap-4 mt-4 text-label font-label text-secondary">
-<div class="flex items-center gap-1"><span class="w-3 h-3 bg-myntra-dark inline-block rounded-sm"></span> Volume</div>
-<div class="flex items-center gap-1"><span class="w-3 h-3 bg-myntra-pink inline-block rounded-sm"></span> Frustration Intensity</div>
-</div>
-</div>
-<!-- Mini Views (Top Right) -->
-<div class="col-span-12 lg:col-span-4 flex flex-col gap-grid_gutter">
-<!-- Sentiment Mini -->
-<div class="flat-card flex-1">
-<h3 class="font-body-bold text-body-bold mb-4">Sentiment Overview</h3>
-<div class="flex h-4 w-full rounded-sm overflow-hidden mb-2">
-<div class="bg-myntra-pink w-[60%]" title="Frustrated"></div>
-<div class="bg-myntra-dark opacity-50 w-[25%]" title="Mixed"></div>
-<div class="bg-[#43665E] w-[15%]" title="Positive"></div>
-</div>
-<div class="flex justify-between text-label font-label text-secondary">
-<span>60% Frustrated</span>
-<span>15% Positive</span>
-</div>
-</div>
-<!-- Sources Mini -->
-<div class="flat-card flex-1">
-<h3 class="font-body-bold text-body-bold mb-4">Top Sources</h3>
-<div class="space-y-2">
-<div class="flex items-center gap-2">
-<span class="text-label font-label w-20 truncate">App Store</span>
-<div class="h-2 bg-myntra-dark w-[70%] rounded-sm"></div>
-</div>
-<div class="flex items-center gap-2">
-<span class="text-label font-label w-20 truncate">Play Store</span>
-<div class="h-2 bg-myntra-dark w-[50%] rounded-sm"></div>
-</div>
-<div class="flex items-center gap-2">
-<span class="text-label font-label w-20 truncate">Reddit</span>
-<div class="h-2 bg-myntra-dark w-[30%] rounded-sm"></div>
-</div>
-</div>
-</div>
-</div>
-<!-- Data Table (Full Width Bottom) -->
-<div class="col-span-12 flat-card p-0 overflow-hidden">
-<div class="p-card_padding border-b border-myntra-light flex justify-between items-center">
-<h2 class="font-h3 text-h3">Top Blockers</h2>
-<button class="text-myntra-dark text-button font-button flex items-center gap-1 hover:text-myntra-pink transition-colors">
-<span class="material-symbols-outlined text-[16px]" data-icon="filter_list">filter_list</span> Filter
-                        </button>
+<div class="flat-card p-0 overflow-hidden mb-8">
+<div class="p-card_padding border-b border-myntra-light">
+<h2 class="font-h3 text-h3">Opportunity comparison</h2>
+<p class="font-body text-secondary text-sm mt-1">WPC-weighted = VOC score × journey leverage. Not a measured conversion lift.</p>
 </div>
 <div class="overflow-x-auto">
 <table class="w-full text-left border-collapse">
 <thead>
 <tr class="bg-myntra-gray border-b border-myntra-light text-label font-label text-secondary">
-<th class="py-3 px-6 font-bold">Dimension</th>
-<th class="py-3 px-6 font-bold text-right">Mentions</th>
-<th class="py-3 px-6 font-bold text-right">Reach</th>
-<th class="py-3 px-6 font-bold text-right">Frustration</th>
-<th class="py-3 px-6 font-bold text-right">Confidence</th>
-<th class="py-3 px-6 font-bold text-right">Score</th>
+<th class="py-3 px-4">Area</th><th class="py-3 px-4">Stage</th><th class="py-3 px-4">Leverage</th>
+<th class="py-3 px-4 text-right">Mentions</th><th class="py-3 px-4 text-right">Frustration</th>
+<th class="py-3 px-4 text-right">Sources</th><th class="py-3 px-4 text-right">VOC</th>
+<th class="py-3 px-4 text-right">WPC-w</th>
 </tr>
 </thead>
-<tbody class="text-body font-body">
-<!-- Highlighted Row -->
-<tr class="border-b border-myntra-light hover:bg-myntra-gray transition-colors bg-[#FF3F6C]/5">
-<td class="py-4 px-6 font-body-bold">Returns &amp; Exchange</td>
-<td class="py-4 px-6 text-right">41</td>
-<td class="py-4 px-6 text-right">11.4%</td>
-<td class="py-4 px-6 text-right">
-<span class="sentiment-frustrated px-2 py-1 text-xs font-bold">95.1%</span>
-</td>
-<td class="py-4 px-6 text-right">High</td>
-<td class="py-4 px-6 text-right font-body-bold text-myntra-pink">78.6</td>
-</tr>
-<!-- Regular Row 1 -->
-<tr class="border-b border-myntra-light hover:bg-myntra-gray transition-colors">
-<td class="py-4 px-6">Size &amp; Fit Accuracy</td>
-<td class="py-4 px-6 text-right">32</td>
-<td class="py-4 px-6 text-right">8.9%</td>
-<td class="py-4 px-6 text-right">72.4%</td>
-<td class="py-4 px-6 text-right">Medium</td>
-<td class="py-4 px-6 text-right">62.1</td>
-</tr>
-<!-- Regular Row 2 -->
-<tr class="border-b border-myntra-light hover:bg-myntra-gray transition-colors">
-<td class="py-4 px-6">Delivery Delays</td>
-<td class="py-4 px-6 text-right">28</td>
-<td class="py-4 px-6 text-right">7.8%</td>
-<td class="py-4 px-6 text-right">68.2%</td>
-<td class="py-4 px-6 text-right">High</td>
-<td class="py-4 px-6 text-right">58.4</td>
-</tr>
-<!-- Regular Row 3 -->
-<tr class="border-b border-myntra-light hover:bg-myntra-gray transition-colors">
-<td class="py-4 px-6">App Performance (Lag)</td>
-<td class="py-4 px-6 text-right">15</td>
-<td class="py-4 px-6 text-right">4.1%</td>
-<td class="py-4 px-6 text-right">88.0%</td>
-<td class="py-4 px-6 text-right">Low</td>
-<td class="py-4 px-6 text-right">45.2</td>
-</tr>
-</tbody>
+<tbody id="lib-rows" class="text-body font-body"></tbody>
 </table>
 </div>
-<div class="p-4 border-t border-myntra-light flex justify-center text-label font-label text-secondary">
-                        Showing 4 of 10 blockers
-                    </div>
 </div>
+<div class="flat-card">
+<h2 class="font-h3 text-h3 mb-4">Eight sources</h2>
+<div id="lib-sources" class="space-y-2"></div>
 </div>
 </main>
 </div>
 
 <script src="config.js"></script>
+<script src="library_data.js"></script>
 <script>
 (function () {
   var url = (window.STREAMLIT_BACKEND_URL || "").replace(/\/$/, "");
-  if (!url) return;
-  document.querySelectorAll("a[href='#']").forEach(function () {});
   var link = document.getElementById("streamlit-backend-link");
-  if (link) link.href = url;
+  if (url && link) link.href = url;
+  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
+  var d = window.LIBRARY_DATA || {};
+  var cov = d.coverage || {};
+  var cmp = d.comparison || {};
+  var rows = d.areas || cmp.rows || [];
+  var meta = document.getElementById("lib-meta");
+  if (meta) meta.innerHTML = '<span><strong class="text-on-background">' + esc(cov.total_records) + '</strong> records</span><span class="w-1 h-1 rounded-full bg-myntra-light"></span><span><strong class="text-myntra-pink">' + esc(cov.relevant) + '</strong> relevant</span>';
+  var tops = document.getElementById("lib-tops");
+  if (tops) {
+    [["Highest volume","top_by_volume"],["Highest frustration","top_by_frustration"],["Highest WPC-weighted","top_by_wpc_weighted"]].forEach(function(pair){
+      var hit = cmp[pair[1]] || {};
+      tops.innerHTML += '<div class="flat-card"><p class="font-label text-secondary uppercase">' + pair[0] + '</p><p class="font-h3">' + esc(hit.blocker_type||"—") + '</p><p class="text-sm text-secondary">' + esc(hit.value) + '</p></div>';
+    });
+  }
+  var maxM = Math.max.apply(null, rows.map(function(r){return r.mentions||0;}).concat([1]));
+  var bars = document.getElementById("lib-bars");
+  if (bars) bars.innerHTML = rows.slice(0,8).map(function(r){
+    var w = Math.round(100*(r.mentions||0)/maxM);
+    return '<div><div class="flex justify-between text-label text-secondary mb-1"><span>' + esc(r.dimension) + ' · ' + esc(r.wpc_stage) + '</span><span>' + esc(r.frustration_rate_pct) + '% frustrated · WPC-w ' + esc(r.wpc_weighted_score) + '</span></div><div class="h-3 bg-[#F5F5F6] rounded-sm overflow-hidden"><div class="h-3 bg-[#FF3F6C]" style="width:' + w + '%"></div></div></div>';
+  }).join("");
+  var tbody = document.getElementById("lib-rows");
+  if (tbody) tbody.innerHTML = rows.map(function(r,i){
+    return '<tr class="border-b border-myntra-light' + (i===0?' bg-[#FF3F6C]/5':'') + '"><td class="py-3 px-4 font-body-bold">' + esc(r.dimension) + '</td><td class="py-3 px-4">' + esc(r.wpc_stage) + '</td><td class="py-3 px-4">' + esc(r.wpc_leverage) + '</td><td class="py-3 px-4 text-right">' + esc(r.mentions) + '</td><td class="py-3 px-4 text-right">' + esc(r.frustration_rate_pct) + '%</td><td class="py-3 px-4 text-right">' + esc(r.source_count) + '</td><td class="py-3 px-4 text-right font-body-bold text-myntra-pink">' + esc(r.opportunity_score) + '</td><td class="py-3 px-4 text-right">' + esc(r.wpc_weighted_score) + '</td></tr>';
+  }).join("");
+  var src = document.getElementById("lib-sources");
+  if (src) src.innerHTML = (cov.by_source||[]).map(function(s){
+    return '<div class="flex justify-between gap-3 py-1 border-b border-myntra-light"><span>' + esc(s.source) + '</span><span class="text-secondary">' + esc(s.records) + ' records · ' + esc(s.relevant) + ' relevant</span></div>';
+  }).join("");
 })();
 </script>
 

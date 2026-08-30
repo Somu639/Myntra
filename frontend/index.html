@@ -173,102 +173,31 @@
 </header>
 <!-- Canvas -->
 <div class="p-container_padding space-y-8 max-w-7xl mx-auto w-full">
-<!-- Hero Section -->
 <section class="mb-12">
 <h1 class="font-h1 text-[48px] leading-[56px] font-extrabold pink-brand mb-4 tracking-tight">Myntra Discovery Engine</h1>
 <p class="font-h3 text-h3 text-neutral max-w-4xl opacity-90 leading-relaxed">
-                    Phase 1 is quantitative discovery: funnel, time-to-purchase, stock, price, revisits, and category cuts that map <em>where</em> wishlist drop-off concentrates. Public reviews are a companion for stated blockers — they cannot fill those rates.
-                </p>
-<div class="mt-8 flex gap-6">
-<div class="card-surface p-4 flex gap-4 items-center">
-<div class="p-3 bg-surface-container-high rounded-full text-primary">
-<span class="material-symbols-outlined">analytics</span>
-</div>
-<div>
-<p class="font-label text-label text-secondary uppercase">Records Analyzed</p>
-<p class="font-h2 text-h2 text-neutral">1,422 <span class="font-body text-body text-secondary ml-2">(483 relevant - 34.0%)</span></p>
-</div>
-</div>
-<div class="card-surface p-4 flex gap-4 items-center border-l-4" style="border-left-color: #FF3F6C;">
-<div class="p-3 bg-[#FEE8ED] rounded-full pink-brand">
-<span class="material-symbols-outlined">trending_up</span>
-</div>
-<div>
-<p class="font-label text-label text-secondary uppercase">Top Opportunity</p>
-<p class="font-h2 text-h2 text-neutral">Returns &amp; Exchange <span class="font-body-bold text-body-bold pink-brand ml-2">Score 82.5</span></p>
-</div>
-</div>
-</div>
+Analyze eight public sources, answer ten wishlist→purchase questions, then identify, quantify, and compare opportunity areas. This is not a review summary or a sentiment dashboard. Scores are not conversion lifts.
+</p>
+<div class="mt-8 flex flex-wrap gap-6" id="home-kpis"></div>
 </section>
-<!-- Main 2-Column Grid -->
 <div class="grid grid-cols-12 gap-grid_gutter">
-<!-- Left Column: How analysis works -->
 <div class="col-span-12 lg:col-span-7 space-y-6">
-<h3 id="phase-1" class="font-h3 text-h3 text-neutral border-b border-outline-variant pb-2 mb-6">Phase 1 — Quantitative discovery</h3>
-<div class="space-y-4 relative before:absolute before:inset-y-0 before:left-[19px] before:w-[2px] before:bg-outline-variant">
-<div class="card-surface p-card_padding flex gap-6 relative z-10 border-l-[4px]" style="border-left-color: #FF3F6C;">
-<div class="w-10 h-10 rounded-full pink-brand-bg text-white flex items-center justify-center font-body-bold text-body-bold shrink-0">1</div>
-<div>
-<h4 class="font-h3 text-h3 text-neutral mb-2">Funnel + revisits + time-to-purchase</h4>
-<p class="font-body text-body text-secondary">Never revisited / revisited not bought / purchased / removed. Zero revisits = forgetting; many revisits + no buy = deliberation. Converter latency: decisive vs long-tail.</p>
+<h3 class="font-h3 text-h3 text-neutral border-b border-outline-variant pb-2 mb-6">Workflow</h3>
+<div class="space-y-4">
+<div class="card-surface p-card_padding border-l-[4px]" style="border-left-color: #FF3F6C;"><h4 class="font-h3 text-h3 mb-2">1 · Collect eight public sources</h4><p class="font-body text-secondary">App Store, Play Store, Reddit, fashion communities, social, YouTube, product Q&amp;A, other public fashion-shopping talk.</p></div>
+<div class="card-surface p-card_padding"><h4 class="font-h3 text-h3 mb-2">2 · Extract structured codes</h4><p class="font-body text-secondary">Wishlist signal, reason for saving, blocker, resolution channel, segment — not star-rating averages.</p></div>
+<div class="card-surface p-card_padding"><h4 class="font-h3 text-h3 mb-2">3 · Answer ten discovery questions</h4><p class="font-body text-secondary">Why save, what blocks the buy, leftover uncertainty, postpone, compare, off-platform research, dimension mix, intent vs bookmark, segments, unmet needs.</p></div>
+<div class="card-surface p-card_padding"><h4 class="font-h3 text-h3 mb-2">4 · Compare opportunity areas</h4><p class="font-body text-secondary">Volume × frustration × source spread × whether the friction sits on the wishlist→buy path. Sentiment is an input, not the deliverable.</p></div>
 </div>
+<h3 class="font-h3 text-h3 text-neutral border-b border-outline-variant pb-2 mt-8 mb-4">Ten questions</h3>
+<ol id="home-questions" class="space-y-2 font-body text-neutral list-decimal pl-6"></ol>
 </div>
-<div class="card-surface p-card_padding flex gap-6 relative z-10">
-<div class="w-10 h-10 rounded-full bg-surface border-2 flex items-center justify-center font-body-bold text-body-bold shrink-0" style="border-color: #FF3F6C; color: #FF3F6C; background-color: white;">2</div>
-<div>
-<h4 class="font-h3 text-h3 text-neutral mb-2">Stock + price trajectory</h4>
-<p class="font-body text-body text-secondary">Size/color OOS at intended purchase vs add. Price drop/rise/flat for converters vs non-converters (sale-wait test).</p>
-</div>
-</div>
-<div class="card-surface p-card_padding flex gap-6 relative z-10">
-<div class="w-10 h-10 rounded-full bg-surface border-2 flex items-center justify-center font-body-bold text-body-bold shrink-0" style="border-color: #EAEAEC; color: #282C3F; background-color: white;">3</div>
-<div>
-<h4 class="font-h3 text-h3 text-neutral mb-2">Wishlist size + category</h4>
-<p class="font-body text-body text-secondary">Power-wishlisters (100+) vs light (5–10). Occasion-wear vs basics — different psychology, do not average.</p>
-</div>
-</div>
-<div class="card-surface p-card_padding flex gap-6 relative z-10">
-<div class="w-10 h-10 rounded-full bg-surface border-2 flex items-center justify-center font-body-bold text-body-bold shrink-0" style="border-color: #EAEAEC; color: #282C3F; background-color: white;">4</div>
-<div>
-<h4 class="font-h3 text-h3 text-neutral mb-2">Search-before-drop + cart baseline</h4>
-<p class="font-body text-body text-secondary">Same-item reviews vs competing products before abandon. Wishlist vs cart abandonment — wishlist-specific or general hesitation.</p>
-</div>
-</div>
-</div>
-</div>
-<!-- Right Column: Sources -->
 <div class="col-span-12 lg:col-span-5 space-y-6">
-<h3 class="font-h3 text-h3 text-neutral border-b border-outline-variant pb-2 mb-6">Where reviews are fetched from</h3>
-<div class="grid grid-cols-2 gap-4">
-<div class="card-surface p-4 flex flex-col items-center justify-center text-center cursor-default select-none pointer-events-none">
-<span class="material-symbols-outlined text-3xl mb-2" data-icon="shop" style="color: #FF3F6C;">shop</span>
-<span class="font-body-bold text-body-bold text-neutral">Play Store</span>
-</div>
-<div class="card-surface p-4 flex flex-col items-center justify-center text-center cursor-default select-none pointer-events-none">
-<span class="material-symbols-outlined text-3xl mb-2" data-icon="phone_iphone" style="color: #FF3F6C;">phone_iphone</span>
-<span class="font-body-bold text-body-bold text-neutral">App Store</span>
-</div>
-<div class="card-surface p-4 flex flex-col items-center justify-center text-center cursor-default select-none pointer-events-none">
-<span class="material-symbols-outlined text-3xl mb-2" data-icon="forum" style="color: #FF3F6C;">forum</span>
-<span class="font-body-bold text-body-bold text-neutral">Reddit</span>
-</div>
-<div class="card-surface p-4 flex flex-col items-center justify-center text-center cursor-default select-none pointer-events-none">
-<span class="material-symbols-outlined text-3xl mb-2" data-icon="diversity_3" style="color: #FF3F6C;">diversity_3</span>
-<span class="font-body-bold text-body-bold text-neutral text-sm">Fashion Communities</span>
-</div>
-<div class="card-surface p-4 flex flex-col items-center justify-center text-center cursor-default select-none pointer-events-none">
-<span class="material-symbols-outlined text-3xl mb-2" data-icon="share" style="color: #FF3F6C;">share</span>
-<span class="font-body-bold text-body-bold text-neutral">Social Media</span>
-</div>
-<div class="card-surface p-4 flex flex-col items-center justify-center text-center cursor-default select-none pointer-events-none">
-<span class="material-symbols-outlined text-3xl mb-2" data-icon="play_circle" style="color: #FF3F6C;">play_circle</span>
-<span class="font-body-bold text-body-bold text-neutral">YouTube</span>
-</div>
-<div class="card-surface p-4 flex flex-col items-center justify-center text-center cursor-default select-none pointer-events-none col-span-2">
-<span class="material-symbols-outlined text-3xl mb-2" data-icon="reviews" style="color: #FF3F6C;">reviews</span>
-<span class="font-body-bold text-body-bold text-neutral">Product Reviews &amp; Q&amp;A</span>
-</div>
-</div>
+<h3 class="font-h3 text-h3 text-neutral border-b border-outline-variant pb-2 mb-6">Sources analyzed</h3>
+<div id="home-sources" class="space-y-2"></div>
+<h3 class="font-h3 text-h3 text-neutral border-b border-outline-variant pb-2 mt-8 mb-4">Opportunity comparison</h3>
+<p class="font-body text-secondary text-sm mb-3">WPC-weighted = VOC score × journey leverage. Not a measured lift.</p>
+<div id="home-opp" class="overflow-x-auto"></div>
 </div>
 </div>
 <!-- Bottom Shortcuts -->
@@ -305,13 +234,31 @@
 </main>
 
 <script src="config.js"></script>
+<script src="home_data.js"></script>
 <script>
 (function () {
   var url = (window.STREAMLIT_BACKEND_URL || "").replace(/\/$/, "");
-  if (!url) return;
-  document.querySelectorAll("a[href='#']").forEach(function () {});
   var link = document.getElementById("streamlit-backend-link");
-  if (link) link.href = url;
+  if (url && link) link.href = url;
+  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
+  var d = window.HOME_DATA || {};
+  var cov = d.coverage || {};
+  var top = (d.areas || [])[0] || {};
+  document.getElementById("home-kpis").innerHTML =
+    '<div class="card-surface p-4"><p class="font-label text-secondary uppercase">Records analyzed</p><p class="font-h2">' + esc(cov.total_records) + ' <span class="font-body text-secondary">' + esc(cov.relevant) + ' relevant</span></p></div>' +
+    '<div class="card-surface p-4 border-l-4" style="border-left-color:#FF3F6C;"><p class="font-label text-secondary uppercase">Top VOC opportunity</p><p class="font-h2">' + esc(top.dimension || "—") + ' <span class="pink-brand font-body-bold">score ' + esc(top.opportunity_score) + '</span></p></div>' +
+    '<div class="card-surface p-4"><p class="font-label text-secondary uppercase">Highest WPC-weighted</p><p class="font-h2">' + esc(((d.comparison||{}).top_by_wpc_weighted||{}).blocker_type || "—") + '</p></div>';
+  document.getElementById("home-questions").innerHTML = (d.questions||[]).map(function(q,i){
+    return '<li><a class="hover:text-primary" href="discovery_lab.html">' + esc(q.question) + '</a></li>';
+  }).join("");
+  document.getElementById("home-sources").innerHTML = (cov.by_source||[]).map(function(s){
+    return '<div class="card-surface p-3 flex justify-between gap-3"><span class="font-body-bold text-sm">' + esc(s.source) + '</span><span class="font-label text-secondary">' + esc(s.records) + ' · ' + esc(s.relevant) + ' relevant</span></div>';
+  }).join("");
+  var rows = d.areas || [];
+  document.getElementById("home-opp").innerHTML = '<table class="w-full text-sm"><thead><tr class="text-left text-secondary"><th class="py-1">Area</th><th>Stage</th><th>Mentions</th><th>VOC</th><th>WPC-w</th></tr></thead><tbody>' +
+    rows.slice(0,8).map(function(r){
+      return '<tr class="border-t border-outline-variant"><td class="py-1">' + esc(r.dimension) + '</td><td>' + esc(r.wpc_stage) + '</td><td>' + esc(r.mentions) + '</td><td>' + esc(r.opportunity_score) + '</td><td>' + esc(r.wpc_weighted_score) + '</td></tr>';
+    }).join("") + '</tbody></table>';
 })();
 </script>
 

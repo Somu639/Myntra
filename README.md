@@ -277,4 +277,6 @@ Local Streamlit: `streamlit run streamlit_app.py`
 | `rag.py` | Token-overlap retrieve + ChatGPT↔VOC triangulation |
 | `rag_review.json` | Reviewer pack (hypotheses vs this corpus) |
 | `frontend/lab_data.js` | Discovery Lab question payloads (generated) |
+| `frontend/home_data.js` | Home: eight sources + ten questions + opportunity comparison |
+| `frontend/library_data.js` | Search and Library comparison pack |
 | `frontend/reviewer.html` | Static Reviewer · RAG |
