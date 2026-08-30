@@ -10,6 +10,7 @@
   body { background:#F5F5F6; font-family: Assistant, sans-serif; color:#282C3F; }
   .card { background:#fff; border:1px solid #EAEAEC; border-radius:4px; }
   .pink { color:#FF3F6C; }
+  .lab-select { width:100%; border:1px solid #EAEAEC; border-radius:4px; padding:10px 12px; background:#fff; }
 </style>
 </head>
 <body class="flex min-h-screen">
@@ -30,7 +31,19 @@
 </aside>
 <main class="ml-[260px] flex-1 p-8 max-w-6xl">
   <h1 class="text-3xl font-extrabold pink mb-2">Reviewer · RAG</h1>
-  <p class="text-[#535766] mb-6 max-w-3xl">Retrieve ChatGPT wishlist-conversion research against this corpus. The share is a PM case study — example funnel rates in it are not Myntra measurements. Source: <a class="pink underline" href="https://chatgpt.com/share/6a92fd04-47c4-83e8-942a-4d34aad1ce3b" target="_blank" rel="noopener">ChatGPT share</a>.</p>
+  <p class="text-[#535766] mb-6 max-w-3xl">Retrieve ChatGPT wishlist-conversion research against this corpus, and fetch reviews from any of the eight public platforms. The share is a PM case study — example funnel rates in it are not Myntra measurements. Source: <a class="pink underline" href="https://chatgpt.com/share/6a92fd04-47c4-83e8-942a-4d34aad1ce3b" target="_blank" rel="noopener">ChatGPT share</a>.</p>
+
+  <section class="card p-6 mb-6">
+    <h2 class="font-bold text-lg mb-3">Fetch reviews</h2>
+    <p class="text-sm text-[#535766] mb-3">Pull saved conversations from one platform. Live scrape runs in Streamlit Reviewer.</p>
+    <div class="flex flex-wrap gap-3 items-end mb-4">
+      <label class="flex-1 min-w-[220px] text-xs uppercase tracking-widest pink font-semibold">Platform
+        <select id="plat" class="lab-select mt-1 text-sm font-normal text-[#282C3F] normal-case tracking-normal"></select>
+      </label>
+      <button type="button" id="fetch-btn" class="bg-[#FF3F6C] text-white font-bold px-4 py-2 rounded">Fetch reviews</button>
+    </div>
+    <div id="fetched"></div>
+  </section>
 
   <section class="card p-6 mb-6">
     <p class="text-xs uppercase tracking-widest pink font-semibold mb-2">Problem (research)</p>
@@ -58,6 +71,7 @@
     <p class="text-xs text-[#94969F] mt-3">sized_in_voc = that friction exists in public reviews. not_in_public_voc = no matching VOC row (often availability / OOS).</p>
   </section>
 </main>
+<script src="lab_data.js"></script>
 <script>
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
 function tok(s){return (s||"").toLowerCase().match(/[a-z0-9]+/g)||[];}
@@ -67,6 +81,22 @@ function score(q, doc){
   var n=0; Q.forEach(w=>{if(D.has(w))n++;});
   return Q.size? n/Math.sqrt(Q.size):0;
 }
+(function(){
+  var lab = window.LAB_DATA || {};
+  var plats = lab.platforms || [];
+  var platEl = document.getElementById("plat");
+  platEl.innerHTML = plats.map(function(p){ return "<option value=\""+esc(p)+"\">"+esc(p)+"</option>"; }).join("");
+  document.getElementById("fetch-btn").addEventListener("click", function(){
+    var key = platEl.value;
+    var list = (lab.reviews_by_source || {})[key] || [];
+    var box = document.getElementById("fetched");
+    box.innerHTML = list.length
+      ? list.map(function(q){
+          return "<div class='mb-3 p-3 bg-[#F5F5F6] rounded'><p class='italic text-sm'>"+esc((q.text||"").slice(0,360))+"</p><p class='text-xs mt-1'>"+esc(q.source)+(q.blocker?" · "+esc(q.blocker):"")+"</p></div>";
+        }).join("")
+      : "<p class='text-sm text-[#535766]'>No saved reviews for this platform yet.</p>";
+  });
+})();
 fetch("rag_review.json").then(r=>r.json()).then(function(data){
   document.getElementById("problem").textContent = data.problem_statement||"";
   document.getElementById("north").textContent = data.north_star||"";

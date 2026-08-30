@@ -445,7 +445,7 @@ def page_home(report: dict, records: list[dict]) -> None:
     nav_guide = [
         ("Discovery Lab", "The ten questions with quantified cuts and verbatim quotes."),
         ("Search and Library", "Compare opportunity areas across volume, pain, and WPC leverage."),
-        ("Reviewer", "RAG over VOC quotes plus the ChatGPT wishlist-conversion research."),
+        ("Reviewer", "RAG over VOC + ChatGPT research, and fetch reviews from any of the eight platforms."),
         ("Segments", "Who feels which blocker — model-inferred concentration."),
         ("Raw Data", "Browse extracted conversations by the eight sources."),
         ("Phase 1", "First-party funnel map — empty until warehouse data."),
@@ -506,14 +506,14 @@ def page_discovery_lab(report: dict, quotes: dict, records: list[dict]) -> None:
 
     st.markdown("### Discovery Lab")
     st.caption(
-        "Pick a section, then a question. Optionally fetch reviews from one of the eight platforms "
-        "and cut the answer to that source. Counts come from structured extraction, not summaries."
+        "Pick a section, then a question. Optionally cut the answer to one of the eight platforms. "
+        "Counts come from structured extraction, not summaries. Fetch live reviews from Reviewer."
     )
 
     section_names = [name for name, _ in QUESTION_SECTIONS]
     if "lab_section" not in st.session_state:
         st.session_state["lab_section"] = "Purchase path"
-    c1, c2, c3, c4 = st.columns([1.2, 2.2, 2.2, 1.1])
+    c1, c2, c3 = st.columns([1.2, 2.6, 2.2])
     section = c1.selectbox("Section", section_names, key="lab_section")
     qids = dict(QUESTION_SECTIONS)[section]
     q_specs = [q for q in DISCOVERY_QUESTIONS if q["id"] in qids]
@@ -522,18 +522,6 @@ def page_discovery_lab(report: dict, quotes: dict, records: list[dict]) -> None:
     spec = q_specs[q_labels.index(picked_q)]
     platforms = ["All platforms"] + SOURCE_FILTER_OPTIONS
     platform = c3.selectbox("Platform", platforms, key="lab_platform")
-    fetch_clicked = c4.button("Fetch reviews", use_container_width=True)
-
-    if fetch_clicked:
-        target = platform if platform != "All platforms" else "Play Store reviews"
-        with st.spinner(f"Fetching reviews from {target}…"):
-            try:
-                fetched, note = _fetch_platform_reviews(target)
-            except Exception as exc:
-                fetched, note = [], f"Collector not available here ({exc}). Showing saved reviews from this corpus."
-        st.session_state["lab_fetched"] = fetched
-        st.session_state["lab_fetch_note"] = note
-        st.session_state["lab_fetch_platform"] = target
 
     view = report
     view_records = records
@@ -547,30 +535,6 @@ def page_discovery_lab(report: dict, quotes: dict, records: list[dict]) -> None:
         f"{platform}: {cov.get('relevant', len([r for r in view_records if r.get('relevant')]))} relevant "
         f"/ {cov.get('total_records', len(view_records))} records in this cut."
     )
-
-    fetched = st.session_state.get("lab_fetched") or []
-    if fetched or st.session_state.get("lab_fetch_note"):
-        st.markdown(f"##### Reviews from {st.session_state.get('lab_fetch_platform') or platform}")
-        st.caption(st.session_state.get("lab_fetch_note") or "")
-        if fetched:
-            for rec in fetched[:12]:
-                quote_block(
-                    rec.get("text") or "",
-                    source_label(rec.get("source")),
-                    rec.get("rating"),
-                )
-        else:
-            saved = [
-                r for r in records
-                if source_label(r.get("source")) == (st.session_state.get("lab_fetch_platform") or platform)
-                and (r.get("text") or "").strip()
-            ][:8]
-            if saved:
-                st.info("Live fetch did not return new items. Showing saved reviews from this corpus.")
-                for rec in saved:
-                    quote_block(rec.get("text") or "", source_label(rec.get("source")), rec.get("rating"))
-            else:
-                st.warning("No reviews on disk for that platform yet. Run `python collect.py --sources …` locally.")
 
     st.markdown(f"#### {spec['question']}")
     st.caption(spec["lens"])
@@ -831,14 +795,51 @@ def page_phase1(spec: dict) -> None:
     )
 
 
-def page_reviewer() -> None:
+def page_reviewer(records: list[dict] | None = None) -> None:
     from rag import load_chatgpt, load_voc, retrieve, build_review_file
 
+    records = records or []
     st.markdown("### Reviewer · RAG")
     st.caption(
         "Retrieve public-VOC quotes and ChatGPT wishlist-conversion research, then ground an answer. "
-        "The ChatGPT share is a PM case study — its example funnel rates are not Myntra measurements."
+        "The ChatGPT share is a PM case study — its example funnel rates are not Myntra measurements. "
+        "Fetch reviews from any of the eight public platforms below."
     )
+
+    st.markdown("#### Fetch reviews")
+    fc1, fc2 = st.columns([3, 1])
+    fetch_platform = fc1.selectbox("Platform", SOURCE_FILTER_OPTIONS, key="reviewer_platform")
+    fetch_clicked = fc2.button("Fetch reviews", use_container_width=True, key="reviewer_fetch")
+    if fetch_clicked:
+        with st.spinner(f"Fetching reviews from {fetch_platform}…"):
+            try:
+                fetched, note = _fetch_platform_reviews(fetch_platform)
+            except Exception as exc:
+                fetched, note = [], f"Collector not available here ({exc}). Showing saved reviews from this corpus."
+        st.session_state["reviewer_fetched"] = fetched
+        st.session_state["reviewer_fetch_note"] = note
+        st.session_state["reviewer_fetch_platform"] = fetch_platform
+
+    fetched = st.session_state.get("reviewer_fetched") or []
+    if fetched or st.session_state.get("reviewer_fetch_note"):
+        st.markdown(f"##### Reviews from {st.session_state.get('reviewer_fetch_platform') or fetch_platform}")
+        st.caption(st.session_state.get("reviewer_fetch_note") or "")
+        if fetched:
+            for rec in fetched[:12]:
+                quote_block(rec.get("text") or "", source_label(rec.get("source")), rec.get("rating"))
+        else:
+            saved = [
+                r for r in records
+                if source_label(r.get("source")) == (st.session_state.get("reviewer_fetch_platform") or fetch_platform)
+                and (r.get("text") or "").strip()
+            ][:8]
+            if saved:
+                st.info("Live fetch did not return new items. Showing saved reviews from this corpus.")
+                for rec in saved:
+                    quote_block(rec.get("text") or "", source_label(rec.get("source")), rec.get("rating"))
+            else:
+                st.warning("No reviews on disk for that platform yet. Run `python collect.py --sources …` locally.")
+
     review_path = ROOT / "rag_review.json"
     review = json.loads(review_path.read_text(encoding="utf-8")) if review_path.exists() else build_review_file()
     research = load_chatgpt()
@@ -958,7 +959,7 @@ def main() -> None:
     elif page == "Raw Data":
         page_raw(records)
     elif page == "Reviewer":
-        page_reviewer()
+        page_reviewer(records)
     else:
         page_roadmap()
 

@@ -207,22 +207,20 @@
 <main class="flex-1 p-8 max-w-[1600px] mx-auto w-full flex flex-col gap-6">
 <div>
 <h1 class="font-h1 text-h1 text-on-background mb-2">Discovery Lab</h1>
-<p class="font-body text-body text-secondary">Pick a section, then a question. Fetch reviews from any of the eight platforms and cut the answer to that source.</p>
+<p class="font-body text-body text-secondary">Pick a section, then a question. Optionally cut the answer to one platform. Fetch live reviews from Reviewer.</p>
 </div>
 <div class="bg-white-card border border-neutral rounded-lg p-4 grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
 <label class="md:col-span-2 font-label text-secondary">Section
 <select id="sec" class="lab-select mt-1"></select>
 </label>
-<label class="md:col-span-4 font-label text-secondary">Question
+<label class="md:col-span-6 font-label text-secondary">Question
 <select id="qsel" class="lab-select mt-1"></select>
 </label>
 <label class="md:col-span-4 font-label text-secondary">Platform
 <select id="plat" class="lab-select mt-1"></select>
 </label>
-<button type="button" id="fetch-btn" class="fetch-btn md:col-span-2 mt-1">Fetch reviews</button>
 </div>
 <p id="cut-meta" class="font-label text-secondary"></p>
-<div id="fetched" class="hidden bg-white-card border border-neutral rounded-lg p-card_padding"></div>
 <div class="bg-white-card border border-neutral rounded-lg flex flex-col overflow-hidden shadow-sm">
 <div class="p-card_padding border-b border-neutral bg-surface-bright flex flex-col gap-4">
 <span id="d-lens" class="font-subtitle text-subtitle text-primary tracking-widest uppercase">LENS</span>
@@ -379,28 +377,6 @@
     if (ids.indexOf(current) >= 0) qEl.value = current;
     else current = qEl.value;
   }
-  function showFetched() {
-    var box = document.getElementById("fetched");
-    var key = platform === "All platforms" ? "Play Store reviews" : platform;
-    var list = [];
-    if (platform === "All platforms") {
-      (lab.platforms || []).forEach(function (name) {
-        ((lab.reviews_by_source || {})[name] || []).slice(0, 2).forEach(function (r) { list.push(r); });
-      });
-    } else {
-      list = (lab.reviews_by_source || {})[key] || [];
-    }
-    var live = url
-      ? '<p class="font-body text-secondary mb-3">Showing saved reviews from this corpus. Live scrape runs in Streamlit: <a class="text-primary underline" href="' + esc(url) + '" target="_blank" rel="noopener">open backend</a>.</p>'
-      : '<p class="font-body text-secondary mb-3">Showing saved reviews from this corpus. Use Streamlit Discovery Lab to fetch a fresh public scrape.</p>';
-    box.classList.remove("hidden");
-    box.innerHTML = "<h3 class='font-h3 mb-2'>Reviews from " + esc(key) + "</h3>" + live + (list.length
-      ? list.map(function (q) {
-          return '<div class="border-l-4 border-primary bg-primary-fixed/5 p-4 rounded-r-DEFAULT mb-3"><p class="italic mb-1">' + esc((q.text || "").slice(0, 360)) + "</p><div class='font-label text-secondary'>" + esc(q.source || "") + (q.blocker ? " · " + esc(q.blocker) : "") + "</div></div>";
-        }).join("")
-      : "<p class='font-body text-secondary'>No saved reviews for this platform yet.</p>");
-    box.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }
   secEl.innerHTML = sections.map(function (s) { return '<option value="' + esc(s.label) + '">' + esc(s.label) + "</option>"; }).join("");
   secEl.value = "Purchase path";
   platEl.innerHTML = platforms.map(function (p) { return '<option value="' + esc(p) + '">' + esc(p) + "</option>"; }).join("");
@@ -409,7 +385,6 @@
   secEl.addEventListener("change", function () { fillQuestions(); renderDetail(qEl.value); });
   qEl.addEventListener("change", function () { renderDetail(qEl.value); });
   platEl.addEventListener("change", function () { platform = platEl.value; renderDetail(current); });
-  document.getElementById("fetch-btn").addEventListener("click", showFetched);
   renderDetail(current);
 })();
 </script>
