@@ -117,8 +117,18 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #EAEAEC; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #c2c5de; }
-        .q-card { cursor: pointer; pointer-events: auto; position: relative; z-index: 2; user-select: none; }
-        .q-card.is-active { border-width: 2px; border-color: #FF3F6C; background: #FEE8ED; box-shadow: 0 0 0 4px rgba(255,63,108,0.15); }
+        .lab-select {
+          width: 100%;
+          border: 1px solid #EAEAEC;
+          border-radius: 4px;
+          padding: 10px 12px;
+          background: #fff;
+          color: #282C3F;
+          font-family: Assistant, sans-serif;
+          font-size: 14px;
+        }
+        .lab-select:focus { outline: 2px solid #FF3F6C; border-color: #FF3F6C; }
+        .fetch-btn { background: #FF3F6C; color: #fff; font-weight: 700; border-radius: 4px; padding: 10px 16px; }
     </style>
 </head>
 <body class="font-body text-body text-on-background flex min-h-screen antialiased overflow-x-hidden">
@@ -194,14 +204,25 @@
 </div>
 </header>
 <!-- Canvas -->
-<main class="flex-1 p-8 grid grid-cols-1 lg:grid-cols-12 gap-grid_gutter max-w-[1600px] mx-auto w-full">
-<!-- Header Section -->
-<div class="lg:col-span-12 mb-2">
+<main class="flex-1 p-8 max-w-[1600px] mx-auto w-full flex flex-col gap-6">
+<div>
 <h1 class="font-h1 text-h1 text-on-background mb-2">Discovery Lab</h1>
-<p class="font-body text-body text-secondary">Ten questions across eight public sources. Answers are counted from structured extraction — not summaries or sentiment scores.</p>
+<p class="font-body text-body text-secondary">Pick a section, then a question. Fetch reviews from any of the eight platforms and cut the answer to that source.</p>
 </div>
-<div id="q-grid" class="lg:col-span-5 xl:col-span-6 grid grid-cols-1 md:grid-cols-2 gap-4 h-fit"></div>
-<div class="lg:col-span-7 xl:col-span-6 flex flex-col gap-6">
+<div class="bg-white-card border border-neutral rounded-lg p-4 grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+<label class="md:col-span-2 font-label text-secondary">Section
+<select id="sec" class="lab-select mt-1"></select>
+</label>
+<label class="md:col-span-4 font-label text-secondary">Question
+<select id="qsel" class="lab-select mt-1"></select>
+</label>
+<label class="md:col-span-4 font-label text-secondary">Platform
+<select id="plat" class="lab-select mt-1"></select>
+</label>
+<button type="button" id="fetch-btn" class="fetch-btn md:col-span-2 mt-1">Fetch reviews</button>
+</div>
+<p id="cut-meta" class="font-label text-secondary"></p>
+<div id="fetched" class="hidden bg-white-card border border-neutral rounded-lg p-card_padding"></div>
 <div class="bg-white-card border border-neutral rounded-lg flex flex-col overflow-hidden shadow-sm">
 <div class="p-card_padding border-b border-neutral bg-surface-bright flex flex-col gap-4">
 <span id="d-lens" class="font-subtitle text-subtitle text-primary tracking-widest uppercase">LENS</span>
@@ -216,7 +237,6 @@
 <div class="p-card_padding bg-surface-bright">
 <h3 class="font-h3 text-h3 text-on-background mb-4">Verbatim evidence</h3>
 <div id="d-quotes" class="flex flex-col gap-4"></div>
-</div>
 </div>
 </div>
 </main>
@@ -234,8 +254,18 @@
   if (!lab.questions || !lab.questions.length) {
     document.getElementById("d-body").innerHTML = "<p class='font-body text-secondary'>Lab data failed to load (lab_data.js). Rebuild with <code>python build_frontend_data.py</code>.</p>";
   }
-  var grid = document.getElementById("q-grid");
+  var sections = lab.sections || [
+    {label:"Intent", ids:["q1","q8"]},
+    {label:"Purchase path", ids:["q2","q3","q4","q5"]},
+    {label:"Research", ids:["q6","q7"]},
+    {label:"Who & opportunity", ids:["q9","q10"]}
+  ];
+  var platforms = ["All platforms"].concat(lab.platforms || []);
+  var secEl = document.getElementById("sec");
+  var qEl = document.getElementById("qsel");
+  var platEl = document.getElementById("plat");
   var current = "q2";
+  var platform = "All platforms";
 
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
@@ -280,7 +310,12 @@
     document.getElementById("d-lens").textContent = "LENS: " + q.lens;
     document.getElementById("d-title").textContent = q.short;
     document.getElementById("d-question").textContent = q.question;
-    var p = q.payload;
+    var platPack = (lab.by_platform || {})[platform] || {};
+    var p = platPack[id] != null ? platPack[id] : q.payload;
+    var srcRows = ((lab.coverage || {}).by_source || []).filter(function (s) { return platform === "All platforms" || s.source === platform; });
+    var recN = srcRows.reduce(function (a, s) { return a + (s.records || 0); }, 0);
+    var relN = srcRows.reduce(function (a, s) { return a + (s.relevant || 0); }, 0);
+    document.getElementById("cut-meta").textContent = platform + ": " + relN + " relevant / " + recN + " records in this cut.";
     var kpis = "";
     var body = "";
     function blockersOf(payload) {
@@ -330,22 +365,51 @@
         return Object.keys(p[0]).map(function (k) { return r[k]; });
       }));
     }
-    document.getElementById("d-kpis").innerHTML = kpis || kpi("Records", (lab.coverage && lab.coverage.relevant) || "—");
-    document.getElementById("d-body").innerHTML = body || "<p class='font-body text-secondary'>No structured cut for this question.</p>";
-    renderQuotes(q.spot_quotes);
+    document.getElementById("d-kpis").innerHTML = kpis || kpi("Records", relN || "—");
+    document.getElementById("d-body").innerHTML = body || "<p class='font-body text-secondary'>No structured cut for this question on this platform.</p>";
+    var qquotes = ((lab.quotes_by_platform || {})[platform] || {})[id] || q.spot_quotes;
+    renderQuotes(qquotes);
   }
-  grid.innerHTML = (lab.questions || []).map(function (q, i) {
-    return '<button type="button" data-qid="' + esc(q.id) + '" class="q-card bg-white-card border border-neutral rounded-DEFAULT p-4 hover:border-primary/50 transition-colors flex flex-col gap-3 text-left w-full">'
-      + '<div class="flex items-start justify-between"><span class="material-symbols-outlined text-secondary">' + esc(q.icon) + "</span>"
-      + '<span class="font-label text-label text-neutral-light bg-neutral-light px-2 py-0.5 rounded-sm">Q' + (i + 1) + "</span></div>"
-      + '<div class="mt-auto"><h3 class="font-h3 text-h3 text-on-background mb-1">' + esc(q.short) + "</h3>"
-      + '<p class="font-body text-body text-secondary text-sm line-clamp-2">' + esc(q.question) + "</p>"
-      + '<p class="font-subtitle text-subtitle text-primary mt-3">LENS: ' + esc(q.lens) + "</p></div></button>";
-  }).join("");
-  grid.addEventListener("click", function (e) {
-    var btn = e.target.closest("[data-qid]");
-    if (btn) renderDetail(btn.getAttribute("data-qid"));
-  });
+  function fillQuestions() {
+    var sec = sections.filter(function (s) { return s.label === secEl.value; })[0] || sections[1] || sections[0];
+    var ids = (sec && (sec.ids || sec.question_ids)) || [];
+    qEl.innerHTML = (lab.questions || []).filter(function (q) { return !ids.length || ids.indexOf(q.id) >= 0; }).map(function (q) {
+      return '<option value="' + esc(q.id) + '">' + esc(q.short) + " — " + esc(q.question) + "</option>";
+    }).join("");
+    if (ids.indexOf(current) >= 0) qEl.value = current;
+    else current = qEl.value;
+  }
+  function showFetched() {
+    var box = document.getElementById("fetched");
+    var key = platform === "All platforms" ? "Play Store reviews" : platform;
+    var list = [];
+    if (platform === "All platforms") {
+      (lab.platforms || []).forEach(function (name) {
+        ((lab.reviews_by_source || {})[name] || []).slice(0, 2).forEach(function (r) { list.push(r); });
+      });
+    } else {
+      list = (lab.reviews_by_source || {})[key] || [];
+    }
+    var live = url
+      ? '<p class="font-body text-secondary mb-3">Showing saved reviews from this corpus. Live scrape runs in Streamlit: <a class="text-primary underline" href="' + esc(url) + '" target="_blank" rel="noopener">open backend</a>.</p>'
+      : '<p class="font-body text-secondary mb-3">Showing saved reviews from this corpus. Use Streamlit Discovery Lab to fetch a fresh public scrape.</p>';
+    box.classList.remove("hidden");
+    box.innerHTML = "<h3 class='font-h3 mb-2'>Reviews from " + esc(key) + "</h3>" + live + (list.length
+      ? list.map(function (q) {
+          return '<div class="border-l-4 border-primary bg-primary-fixed/5 p-4 rounded-r-DEFAULT mb-3"><p class="italic mb-1">' + esc((q.text || "").slice(0, 360)) + "</p><div class='font-label text-secondary'>" + esc(q.source || "") + (q.blocker ? " · " + esc(q.blocker) : "") + "</div></div>";
+        }).join("")
+      : "<p class='font-body text-secondary'>No saved reviews for this platform yet.</p>");
+    box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+  secEl.innerHTML = sections.map(function (s) { return '<option value="' + esc(s.label) + '">' + esc(s.label) + "</option>"; }).join("");
+  secEl.value = "Purchase path";
+  platEl.innerHTML = platforms.map(function (p) { return '<option value="' + esc(p) + '">' + esc(p) + "</option>"; }).join("");
+  fillQuestions();
+  qEl.value = current;
+  secEl.addEventListener("change", function () { fillQuestions(); renderDetail(qEl.value); });
+  qEl.addEventListener("change", function () { renderDetail(qEl.value); });
+  platEl.addEventListener("change", function () { platform = platEl.value; renderDetail(current); });
+  document.getElementById("fetch-btn").addEventListener("click", showFetched);
   renderDetail(current);
 })();
 </script>

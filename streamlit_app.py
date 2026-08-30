@@ -113,6 +113,25 @@ DISCOVERY_QUESTIONS = [
     },
 ]
 
+QUESTION_SECTIONS = [
+    ("Intent", ["q1", "q8"]),
+    ("Purchase path", ["q2", "q3", "q4", "q5"]),
+    ("Research", ["q6", "q7"]),
+    ("Who & opportunity", ["q9", "q10"]),
+]
+SECTION_FOR_Q = {qid: name for name, ids in QUESTION_SECTIONS for qid in ids}
+
+PLATFORM_COLLECTORS = {
+    "App Store reviews": ["ios"],
+    "Play Store reviews": ["play"],
+    "Reddit discussions": ["reddit"],
+    "Fashion and shopping communities": ["communities"],
+    "Social media conversations": ["social"],
+    "YouTube comments": ["youtube"],
+    "Product reviews and Q&A where relevant": ["product"],
+    "Other publicly available conversations about online fashion shopping": ["social"],
+}
+
 # Friendly names for the Raw Data source filter (always shown, in this order).
 SOURCE_LABELS = {
     "app_store_myntra": "App Store reviews",
@@ -441,32 +460,117 @@ def page_home(report: dict, records: list[dict]) -> None:
             )
 
 
-def page_discovery_lab(report: dict, quotes: dict) -> None:
+def _fetch_platform_reviews(platform: str, limit: int = 25) -> tuple[list[dict], str]:
+    """Live-collect from one public platform. Falls back to an error string."""
+    from collect import COLLECTORS, Writer
+
+    keys = PLATFORM_COLLECTORS.get(platform) or []
+    if not keys:
+        return [], f"No collector mapped for {platform}."
+    tmp = ROOT / f".lab_fetch_{keys[0]}.jsonl"
+    writer = Writer(str(tmp))
+    try:
+        for name in keys:
+            COLLECTORS[name](writer, limit)
+    except Exception as exc:
+        writer.close()
+        return [], f"Fetch failed: {exc}"
+    writer.close()
+    rows = []
+    if tmp.exists():
+        for line in tmp.read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            try:
+                rec = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if source_label(rec.get("source")) == platform or platform.startswith("Other"):
+                rows.append(rec)
+            elif source_label(rec.get("source")) in PLATFORM_COLLECTORS:
+                # social collector also writes other_public
+                if keys == ["social"]:
+                    rows.append(rec)
+    if not rows and tmp.exists():
+        for line in tmp.read_text(encoding="utf-8").splitlines()[-limit:]:
+            if line.strip():
+                try:
+                    rows.append(json.loads(line))
+                except json.JSONDecodeError:
+                    pass
+    return rows[-limit:], f"Fetched {len(rows[-limit:])} reviews from {platform}."
+
+
+def page_discovery_lab(report: dict, quotes: dict, records: list[dict]) -> None:
+    from discover import build_report
+
     st.markdown("### Discovery Lab")
     st.caption(
-        "Ten product-discovery questions across the eight public sources. "
-        "Answers are counted from structured extraction — not review summaries or sentiment scores."
+        "Pick a section, then a question. Optionally fetch reviews from one of the eight platforms "
+        "and cut the answer to that source. Counts come from structured extraction, not summaries."
     )
-    labels = [f"{q['icon']} {q['short_title']}" for q in DISCOVERY_QUESTIONS]
-    if "lab_q" not in st.session_state:
-        st.session_state["lab_q"] = labels[1]
-    def _pick_lab(lab: str) -> None:
-        st.session_state["lab_q"] = lab
-    for row_start in range(0, len(labels), 5):
-        cols = st.columns(5)
-        for i, lab in enumerate(labels[row_start:row_start + 5]):
-            active = st.session_state["lab_q"] == lab
-            cols[i].button(
-                lab,
-                key=f"lab_btn_{lab}",
-                use_container_width=True,
-                type="primary" if active else "secondary",
-                on_click=_pick_lab,
-                args=(lab,),
-            )
-    picked = st.session_state["lab_q"]
-    spec = DISCOVERY_QUESTIONS[labels.index(picked)]
-    payload = report.get(spec["key"], {})
+
+    section_names = [name for name, _ in QUESTION_SECTIONS]
+    if "lab_section" not in st.session_state:
+        st.session_state["lab_section"] = "Purchase path"
+    c1, c2, c3, c4 = st.columns([1.2, 2.2, 2.2, 1.1])
+    section = c1.selectbox("Section", section_names, key="lab_section")
+    qids = dict(QUESTION_SECTIONS)[section]
+    q_specs = [q for q in DISCOVERY_QUESTIONS if q["id"] in qids]
+    q_labels = [f"{q['icon']} {q['short_title']} — {q['question']}" for q in q_specs]
+    picked_q = c2.selectbox("Question", q_labels, key=f"lab_question_{section}")
+    spec = q_specs[q_labels.index(picked_q)]
+    platforms = ["All platforms"] + SOURCE_FILTER_OPTIONS
+    platform = c3.selectbox("Platform", platforms, key="lab_platform")
+    fetch_clicked = c4.button("Fetch reviews", use_container_width=True)
+
+    if fetch_clicked:
+        target = platform if platform != "All platforms" else "Play Store reviews"
+        with st.spinner(f"Fetching reviews from {target}…"):
+            try:
+                fetched, note = _fetch_platform_reviews(target)
+            except Exception as exc:
+                fetched, note = [], f"Collector not available here ({exc}). Showing saved reviews from this corpus."
+        st.session_state["lab_fetched"] = fetched
+        st.session_state["lab_fetch_note"] = note
+        st.session_state["lab_fetch_platform"] = target
+
+    view = report
+    view_records = records
+    if platform != "All platforms":
+        view_records = [r for r in records if source_label(r.get("source")) == platform]
+        view = build_report(view_records) if view_records else {}
+    payload = view.get(spec["key"], {})
+
+    cov = view.get("coverage") or {}
+    st.caption(
+        f"{platform}: {cov.get('relevant', len([r for r in view_records if r.get('relevant')]))} relevant "
+        f"/ {cov.get('total_records', len(view_records))} records in this cut."
+    )
+
+    fetched = st.session_state.get("lab_fetched") or []
+    if fetched or st.session_state.get("lab_fetch_note"):
+        st.markdown(f"##### Reviews from {st.session_state.get('lab_fetch_platform') or platform}")
+        st.caption(st.session_state.get("lab_fetch_note") or "")
+        if fetched:
+            for rec in fetched[:12]:
+                quote_block(
+                    rec.get("text") or "",
+                    source_label(rec.get("source")),
+                    rec.get("rating"),
+                )
+        else:
+            saved = [
+                r for r in records
+                if source_label(r.get("source")) == (st.session_state.get("lab_fetch_platform") or platform)
+                and (r.get("text") or "").strip()
+            ][:8]
+            if saved:
+                st.info("Live fetch did not return new items. Showing saved reviews from this corpus.")
+                for rec in saved:
+                    quote_block(rec.get("text") or "", source_label(rec.get("source")), rec.get("rating"))
+            else:
+                st.warning("No reviews on disk for that platform yet. Run `python collect.py --sources …` locally.")
 
     st.markdown(f"#### {spec['question']}")
     st.caption(spec["lens"])
@@ -554,8 +658,21 @@ def page_discovery_lab(report: dict, quotes: dict) -> None:
         st.markdown("##### Sample quotes (spot-check categorization)")
         rows = blocker_rows(payload)
         top_bt = (rows[0].get("blocker_type") if rows else None)
-        for item in (quotes.get(top_bt) or [])[:3]:
+        shown = 0
+        for item in quotes.get(top_bt) or []:
+            if platform != "All platforms" and source_label(item.get("source")) != platform:
+                continue
             quote_block(item.get("text", ""), item.get("source", ""), item.get("rating"))
+            shown += 1
+            if shown >= 3:
+                break
+        if not shown:
+            for rec in view_records:
+                if rec.get("blocker_type") == top_bt and rec.get("text"):
+                    quote_block(rec.get("text") or "", source_label(rec.get("source")), rec.get("rating"))
+                    shown += 1
+                    if shown >= 3:
+                        break
 
 
 def page_library(report: dict, records: list[dict]) -> None:
@@ -833,7 +950,7 @@ def main() -> None:
     elif page == "Phase 1":
         page_phase1(phase1)
     elif page == "Discovery Lab":
-        page_discovery_lab(report, quotes)
+        page_discovery_lab(report, quotes, records)
     elif page == "Search and Library":
         page_library(report, records)
     elif page == "Segments":

@@ -8,6 +8,7 @@ blocker_by_segment.csv
 resolution_channel_summary.csv
 __pycache__/
 *.pyc
+.lab_fetch_*.jsonl
 .venv/
 venv/
 _stitch_extract/
