@@ -467,6 +467,7 @@ def _fetch_platform_reviews(platform: str, limit: int = 25) -> tuple[list[dict],
     keys = PLATFORM_COLLECTORS.get(platform) or []
     if not keys:
         return [], f"No collector mapped for {platform}."
+    limit = max(5, min(int(limit or 25), 100))
     tmp = ROOT / f".lab_fetch_{keys[0]}.jsonl"
     writer = Writer(str(tmp))
     try:
@@ -506,22 +507,122 @@ def page_discovery_lab(report: dict, quotes: dict, records: list[dict]) -> None:
 
     st.markdown("### Discovery Lab")
     st.caption(
-        "Pick a section, then a question. Optionally cut the answer to one of the eight platforms. "
-        "Counts come from structured extraction, not summaries. Fetch live reviews from Reviewer."
+        "Pick a section and a question. Then choose which platforms to fetch from "
+        "and how many reviews you want — the answer table recuts to your platform filter."
     )
 
     section_names = [name for name, _ in QUESTION_SECTIONS]
     if "lab_section" not in st.session_state:
         st.session_state["lab_section"] = "Purchase path"
-    c1, c2, c3 = st.columns([1.2, 2.6, 2.2])
+    c1, c2 = st.columns([1.3, 3.7])
     section = c1.selectbox("Section", section_names, key="lab_section")
     qids = dict(QUESTION_SECTIONS)[section]
     q_specs = [q for q in DISCOVERY_QUESTIONS if q["id"] in qids]
     q_labels = [f"{q['icon']} {q['short_title']} — {q['question']}" for q in q_specs]
     picked_q = c2.selectbox("Question", q_labels, key=f"lab_question_{section}")
     spec = q_specs[q_labels.index(picked_q)]
-    platforms = ["All platforms"] + SOURCE_FILTER_OPTIONS
-    platform = c3.selectbox("Platform", platforms, key="lab_platform")
+
+    # ── Fetch controls ────────────────────────────────────────────────────────
+    st.markdown("---")
+    st.markdown("#### 🔍 Fetch live reviews")
+
+    platform_col, count_col = st.columns([3, 2])
+
+    with platform_col:
+        st.markdown("**Select platforms to fetch from**")
+        sel_all_col, clear_col, _ = st.columns([1, 1, 3])
+        if sel_all_col.button("Select all", key="lab_sel_all", use_container_width=True):
+            for _p in SOURCE_FILTER_OPTIONS:
+                st.session_state[f"lab_plat_{_p}"] = True
+        if clear_col.button("Clear all", key="lab_clear_all", use_container_width=True):
+            for _p in SOURCE_FILTER_OPTIONS:
+                st.session_state[f"lab_plat_{_p}"] = False
+
+        chk_cols = st.columns(2)
+        selected_platforms: list[str] = []
+        for i, p in enumerate(SOURCE_FILTER_OPTIONS):
+            _default = st.session_state.get(f"lab_plat_{p}", False)
+            _checked = chk_cols[i % 2].checkbox(p, value=_default, key=f"lab_plat_{p}")
+            if _checked:
+                selected_platforms.append(p)
+
+    with count_col:
+        st.markdown("**How many reviews per platform**")
+        _slider_val = int(st.session_state.get("lab_fetch_n_val", 25))
+        n_slider = st.slider(
+            "Reviews per platform",
+            min_value=5,
+            max_value=500,
+            value=_slider_val,
+            step=5,
+            key="lab_fetch_slider",
+            label_visibility="collapsed",
+        )
+        n_custom = st.number_input(
+            "Or type a custom count (5 – 500)",
+            min_value=5,
+            max_value=500,
+            value=n_slider,
+            step=5,
+            key="lab_fetch_custom",
+        )
+        n_reviews_final = int(n_custom)
+        st.session_state["lab_fetch_n_val"] = n_reviews_final
+        st.caption(
+            f"Will fetch up to **{n_reviews_final}** reviews per platform  ·  "
+            f"**{len(selected_platforms)}** platform(s) selected"
+        )
+
+    btn_col, clr_col = st.columns([3, 1])
+    _btn_label = (
+        f"🚀  Fetch reviews  —  {len(selected_platforms)} platform"
+        + ("s" if len(selected_platforms) != 1 else "")
+        + f"  ×  {n_reviews_final} reviews"
+        if selected_platforms
+        else "🚀  Fetch reviews  (select at least one platform)"
+    )
+    fetch_clicked = btn_col.button(
+        _btn_label,
+        use_container_width=True,
+        key="lab_fetch",
+        disabled=len(selected_platforms) == 0,
+    )
+    if clr_col.button("🗑️ Clear", key="lab_clear_results", use_container_width=True):
+        for _k in ("lab_fetched", "lab_fetch_note", "lab_fetch_platform",
+                   "lab_fetch_limit", "lab_fetch_results"):
+            st.session_state.pop(_k, None)
+
+    if fetch_clicked and selected_platforms:
+        _limit = n_reviews_final
+        _all_fetched: list[dict] = []
+        _per_plat: dict[str, tuple[list[dict], str]] = {}
+        _prog = st.progress(0, text="Starting fetch…")
+        for _idx, _target in enumerate(selected_platforms):
+            _prog.progress(
+                _idx / len(selected_platforms),
+                text=f"Fetching from {_target}… ({_idx + 1}/{len(selected_platforms)})",
+            )
+            try:
+                _rows_p, _note_p = _fetch_platform_reviews(_target, limit=_limit)
+            except Exception as _exc:
+                _rows_p, _note_p = [], f"Collector not available ({_exc})."
+            _per_plat[_target] = (_rows_p[:_limit], _note_p)
+            _all_fetched.extend(_rows_p[:_limit])
+        _prog.progress(1.0, text=f"Done — {len(_all_fetched)} reviews fetched total.")
+        st.session_state["lab_fetched"] = _all_fetched
+        st.session_state["lab_fetch_results"] = _per_plat
+        st.session_state["lab_fetch_limit"] = _limit
+        st.session_state["lab_fetch_platform"] = ", ".join(selected_platforms)
+
+    # ── Platform filter for analytics view ───────────────────────────────────
+    st.markdown("---")
+    _platforms_view = ["All platforms"] + SOURCE_FILTER_OPTIONS
+    platform = st.selectbox(
+        "Filter analysis view by platform",
+        _platforms_view,
+        key="lab_platform",
+        help="Recuts the discovery-question answer table to this platform's saved records.",
+    )
 
     view = report
     view_records = records
@@ -536,125 +637,74 @@ def page_discovery_lab(report: dict, quotes: dict, records: list[dict]) -> None:
         f"/ {cov.get('total_records', len(view_records))} records in this cut."
     )
 
-    st.markdown(f"#### {spec['question']}")
-    st.caption(spec["lens"])
+    # ── Show fetched reviews ──────────────────────────────────────────────────
+    _per_plat_results = st.session_state.get("lab_fetch_results") or {}
+    _all_fetched_show = st.session_state.get("lab_fetched") or []
+    _fetch_limit_show = int(st.session_state.get("lab_fetch_limit") or n_reviews_final)
 
-    if spec["id"] == "q1":
-        st.metric("Wishlist signals", payload.get("wishlist_mentions", 0))
-        reasons = payload.get("top_reasons") or []
-        if reasons:
-            st.dataframe(
-                pd.DataFrame(reasons, columns=["reason", "count"]),
-                hide_index=True, use_container_width=True,
-            )
-        for q in payload.get("quotes") or []:
-            quote_block(q.get("text", ""), q.get("source", ""), q.get("rating"))
-
-    elif spec["id"] in ("q2", "q10"):
-        if spec["id"] == "q2" and isinstance(payload, dict):
-            st.caption(payload.get("method") or "")
-            stages = payload.get("by_stage") or []
-            if stages:
-                st.dataframe(pd.DataFrame(stages), hide_index=True, use_container_width=True)
-        rows = blocker_rows(payload)
-        if rows:
-            df = pd.DataFrame(rows)
-            want = [
-                "blocker_type", "dimension", "wpc_stage", "wpc_leverage",
-                "mentions", "reach_pct_of_relevant", "frustration_rate_pct",
-                "source_count", "opportunity_score", "wpc_weighted_score",
-            ]
-            show = df[[c for c in want if c in df.columns]].rename(columns={
-                "blocker_type": "blocker",
-                "reach_pct_of_relevant": "reach %",
-                "frustration_rate_pct": "frustration %",
-                "opportunity_score": "VOC score",
-                "wpc_weighted_score": "WPC-weighted",
-                "source_count": "sources",
-            })
-            st.dataframe(show, hide_index=True, use_container_width=True)
-            if "VOC score" in show.columns:
-                st.bar_chart(show.set_index("dimension")["VOC score"], color="#FF3F6C")
-            st.caption("WPC-weighted = VOC score × journey leverage. Not a measured conversion lift.")
-
-    elif spec["id"] in ("q3", "q4", "q5"):
-        st.metric("Mentions", payload.get("mentions", 0))
-        st.caption(f"{payload.get('share_of_blockers_pct', 0)}% of identified blockers")
-        br = payload.get("breakdown") or []
-        if br:
-            st.dataframe(pd.DataFrame(br, columns=["blocker", "count"]),
-                         hide_index=True, use_container_width=True)
-        for q in payload.get("quotes") or []:
-            quote_block(q.get("text", ""), q.get("source", ""), q.get("rating"))
-
-    elif spec["id"] == "q6":
-        st.metric("Off-platform mentions", payload.get("off_platform_total", 0))
-        ch = payload.get("by_channel") or []
-        if ch:
-            df = pd.DataFrame(ch, columns=["channel", "mentions"])
-            st.bar_chart(df.set_index("channel"), color="#FF3F6C")
-            st.dataframe(df, hide_index=True, use_container_width=True)
-        for q in payload.get("quotes") or []:
-            quote_block(q.get("text", ""), q.get("source", ""), q.get("rating"))
-
-    elif spec["id"] == "q7":
-        dims = payload.get("by_dimension") or []
-        if dims:
-            df = pd.DataFrame(dims)
-            st.bar_chart(df.set_index("dimension")["share_pct"], color="#FF3F6C")
-            st.dataframe(df, hide_index=True, use_container_width=True)
-
-    elif spec["id"] == "q8":
-        c1, c2, c3, c4 = st.columns(4)
-        c1.metric("Wishlist mentions", payload.get("wishlist_mentions", 0))
-        c2.metric("Genuine intent", payload.get("genuine_intent", 0))
-        c3.metric("Bookmarking", payload.get("bookmarking", 0))
-        c4.metric("Unclear", payload.get("unclear", 0))
-        st.info("Wishlist talk is rare in app reviews. Treat this cut as under-sampled; recruit interviews.")
-
-    elif spec["id"] == "q9":
-        if isinstance(payload, dict):
-            st.caption(payload.get("note") or "")
-            personas = payload.get("personas") or []
-            if personas:
-                st.dataframe(
-                    pd.DataFrame([{
-                        "segment": p.get("name"),
-                        "age": p.get("age"),
-                        "wishlist behavior": p.get("wishlist_behavior"),
-                        "primary need": p.get("primary_need"),
-                        "main barrier": p.get("main_barrier"),
-                        "VOC mentions": p.get("voc_mentions"),
-                        "top VOC score": p.get("top_voc_score"),
-                    } for p in personas]),
-                    hide_index=True,
-                    use_container_width=True,
-                )
+    if _per_plat_results:
+        st.markdown(
+            f"#### 📋 Fetched reviews — "
+            f"{len(_all_fetched_show)} total across {len(_per_plat_results)} platform(s)"
+        )
+        for _pname, (_rows, _note) in _per_plat_results.items():
+            with st.expander(
+                f"**{_pname}** — {len(_rows)} review(s) fetched",
+                expanded=len(_rows) > 0,
+            ):
+                st.caption(_note)
+                if _rows:
+                    for _rec in _rows:
+                        quote_block(
+                            _rec.get("text") or "",
+                            source_label(_rec.get("source")),
+                            _rec.get("rating"),
+                        )
+                else:
+                    _saved = [
+                        r for r in records
+                        if source_label(r.get("source")) == _pname
+                        and (r.get("text") or "").strip()
+                    ][:_fetch_limit_show]
+                    if _saved:
+                        st.info(
+                            "Live fetch returned nothing. "
+                            "Showing saved corpus reviews for this platform."
+                        )
+                        for _rec in _saved:
+                            quote_block(
+                                _rec.get("text") or "",
+                                source_label(_rec.get("source")),
+                                _rec.get("rating"),
+                            )
+                    else:
+                        st.warning(
+                            "No reviews on disk for this platform yet. "
+                            "Run `python collect.py --sources …` locally."
+                        )
+        st.markdown("---")
+    elif st.session_state.get("lab_fetch_note"):
+        st.caption(st.session_state.get("lab_fetch_note") or "")
+        # Legacy single-platform fallback
+        _fetched_leg = st.session_state.get("lab_fetched") or []
+        _plat_leg = st.session_state.get("lab_fetch_platform") or platform
+        if _fetched_leg:
+            st.markdown(f"##### Reviews from {_plat_leg} ({_fetch_limit_show})")
+            for _rec in _fetched_leg[:_fetch_limit_show]:
+                quote_block(_rec.get("text") or "", source_label(_rec.get("source")), _rec.get("rating"))
         else:
-            rows = payload if isinstance(payload, list) else []
-            if rows:
-                st.dataframe(pd.DataFrame(rows), hide_index=True, use_container_width=True)
-
-    # Spot-check quotes for the top blocker when looking at opportunities
-    if spec["id"] in ("q2", "q10") and quotes:
-        st.markdown("##### Sample quotes (spot-check categorization)")
-        rows = blocker_rows(payload)
-        top_bt = (rows[0].get("blocker_type") if rows else None)
-        shown = 0
-        for item in quotes.get(top_bt) or []:
-            if platform != "All platforms" and source_label(item.get("source")) != platform:
-                continue
-            quote_block(item.get("text", ""), item.get("source", ""), item.get("rating"))
-            shown += 1
-            if shown >= 3:
-                break
-        if not shown:
-            for rec in view_records:
-                if rec.get("blocker_type") == top_bt and rec.get("text"):
-                    quote_block(rec.get("text") or "", source_label(rec.get("source")), rec.get("rating"))
-                    shown += 1
-                    if shown >= 3:
-                        break
+            _saved = [
+                r for r in records
+                if source_label(r.get("source")) == _plat_leg
+                and (r.get("text") or "").strip()
+            ][:_fetch_limit_show]
+            if _saved:
+                st.info("Live fetch did not return new items. Showing saved reviews from this corpus.")
+                for _rec in _saved:
+                    quote_block(_rec.get("text") or "", source_label(_rec.get("source")), _rec.get("rating"))
+            else:
+                st.warning("No reviews on disk for that platform yet. Run `python collect.py --sources …` locally.")
+        st.markdown("---")
 
 
 def page_library(report: dict, records: list[dict]) -> None:
@@ -852,32 +902,35 @@ def page_reviewer(records: list[dict] | None = None) -> None:
     )
 
     st.markdown("#### Fetch reviews")
-    fc1, fc2 = st.columns([3, 1])
+    fc1, fc2, fc3 = st.columns([2.4, 1.2, 1.2])
     fetch_platform = fc1.selectbox("Platform", SOURCE_FILTER_OPTIONS, key="reviewer_platform")
-    fetch_clicked = fc2.button("Fetch reviews", use_container_width=True, key="reviewer_fetch")
+    fetch_n = fc2.selectbox("How many reviews", [10, 25, 50, 100], index=1, key="reviewer_fetch_n")
+    fetch_clicked = fc3.button("Fetch reviews", use_container_width=True, key="reviewer_fetch")
     if fetch_clicked:
-        with st.spinner(f"Fetching reviews from {fetch_platform}…"):
+        with st.spinner(f"Fetching {fetch_n} reviews from {fetch_platform}…"):
             try:
-                fetched, note = _fetch_platform_reviews(fetch_platform)
+                fetched, note = _fetch_platform_reviews(fetch_platform, limit=int(fetch_n))
             except Exception as exc:
                 fetched, note = [], f"Collector not available here ({exc}). Showing saved reviews from this corpus."
-        st.session_state["reviewer_fetched"] = fetched
+        st.session_state["reviewer_fetched"] = fetched[: int(fetch_n)]
         st.session_state["reviewer_fetch_note"] = note
         st.session_state["reviewer_fetch_platform"] = fetch_platform
+        st.session_state["reviewer_fetch_limit"] = int(fetch_n)
 
     fetched = st.session_state.get("reviewer_fetched") or []
     if fetched or st.session_state.get("reviewer_fetch_note"):
         st.markdown(f"##### Reviews from {st.session_state.get('reviewer_fetch_platform') or fetch_platform}")
         st.caption(st.session_state.get("reviewer_fetch_note") or "")
         if fetched:
-            for rec in fetched[:12]:
+            for rec in fetched[: int(st.session_state.get("reviewer_fetch_limit") or fetch_n)]:
                 quote_block(rec.get("text") or "", source_label(rec.get("source")), rec.get("rating"))
         else:
+            cap = int(st.session_state.get("reviewer_fetch_limit") or fetch_n)
             saved = [
                 r for r in records
                 if source_label(r.get("source")) == (st.session_state.get("reviewer_fetch_platform") or fetch_platform)
                 and (r.get("text") or "").strip()
-            ][:8]
+            ][:cap]
             if saved:
                 st.info("Live fetch did not return new items. Showing saved reviews from this corpus.")
                 for rec in saved:
