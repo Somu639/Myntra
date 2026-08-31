@@ -40,6 +40,9 @@
       <label class="flex-1 min-w-[220px] text-xs uppercase tracking-widest pink font-semibold">Platform
         <select id="plat" class="lab-select mt-1 text-sm font-normal text-[#282C3F] normal-case tracking-normal"></select>
       </label>
+      <label class="w-28 text-xs uppercase tracking-widest pink font-semibold">How many
+        <select id="howmany" class="lab-select mt-1 text-sm font-normal text-[#282C3F] normal-case tracking-normal"></select>
+      </label>
       <button type="button" id="fetch-btn" class="bg-[#FF3F6C] text-white font-bold px-4 py-2 rounded">Fetch reviews</button>
     </div>
     <div id="fetched"></div>
@@ -85,13 +88,16 @@ function score(q, doc){
   var lab = window.LAB_DATA || {};
   var plats = lab.platforms || [];
   var platEl = document.getElementById("plat");
+  var howEl = document.getElementById("howmany");
+  howEl.innerHTML = [10,25,50,100].map(function(n){ return "<option value=\""+n+"\""+(n===25?" selected":"")+">"+n+"</option>"; }).join("");
   platEl.innerHTML = plats.map(function(p){ return "<option value=\""+esc(p)+"\">"+esc(p)+"</option>"; }).join("");
   document.getElementById("fetch-btn").addEventListener("click", function(){
     var key = platEl.value;
-    var list = (lab.reviews_by_source || {})[key] || [];
+    var n = parseInt(howEl.value, 10) || 25;
+    var list = ((lab.reviews_by_source || {})[key] || []).slice(0, n);
     var box = document.getElementById("fetched");
     box.innerHTML = list.length
-      ? list.map(function(q){
+      ? "<p class='text-sm text-[#535766] mb-3'>Showing "+list.length+" of "+n+" requested.</p>"+list.map(function(q){
           return "<div class='mb-3 p-3 bg-[#F5F5F6] rounded'><p class='italic text-sm'>"+esc((q.text||"").slice(0,360))+"</p><p class='text-xs mt-1'>"+esc(q.source)+(q.blocker?" · "+esc(q.blocker):"")+"</p></div>";
         }).join("")
       : "<p class='text-sm text-[#535766]'>No saved reviews for this platform yet.</p>";

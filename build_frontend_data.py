@@ -107,7 +107,7 @@ def _pack_questions(report: dict, quotes_by: dict) -> list[dict]:
     return out
 
 
-def _reviews_by_source(records: list[dict], n: int = 16) -> dict:
+def _reviews_by_source(records: list[dict], n: int = 100) -> dict:
     buckets: dict[str, list] = {label: [] for label in BRIEF_SOURCE_ORDER}
     for r in records:
         label = brief_source(r.get("source"))
