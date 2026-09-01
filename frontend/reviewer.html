@@ -35,7 +35,7 @@
 
   <section class="card p-6 mb-6">
     <h2 class="font-bold text-lg mb-3">Fetch reviews</h2>
-    <p class="text-sm text-[#535766] mb-3">Pull saved conversations from one platform. Live scrape runs in Streamlit Reviewer.</p>
+    <p class="text-sm text-[#535766] mb-3">Pull saved conversations from one platform or across all platforms. Live scrape runs in Streamlit Reviewer.</p>
     <div class="flex flex-wrap gap-3 items-end mb-4">
       <label class="flex-1 min-w-[220px] text-xs uppercase tracking-widest pink font-semibold">Platform
         <select id="plat" class="lab-select mt-1 text-sm font-normal text-[#282C3F] normal-case tracking-normal"></select>
@@ -90,14 +90,22 @@ function score(q, doc){
   var platEl = document.getElementById("plat");
   var howEl = document.getElementById("howmany");
   howEl.innerHTML = [10,25,50,100].map(function(n){ return "<option value=\""+n+"\""+(n===25?" selected":"")+">"+n+"</option>"; }).join("");
-  platEl.innerHTML = plats.map(function(p){ return "<option value=\""+esc(p)+"\">"+esc(p)+"</option>"; }).join("");
+  platEl.innerHTML = ["All platforms"].concat(plats).map(function(p){ return "<option value=\""+esc(p)+"\">"+esc(p)+"</option>"; }).join("");
   document.getElementById("fetch-btn").addEventListener("click", function(){
     var key = platEl.value;
     var n = parseInt(howEl.value, 10) || 25;
-    var list = ((lab.reviews_by_source || {})[key] || []).slice(0, n);
+    var list = [];
+    if (key === "All platforms") {
+      Object.keys(lab.reviews_by_source || {}).forEach(function(src){
+        ((lab.reviews_by_source || {})[src] || []).forEach(function(r){ list.push(r); });
+      });
+    } else {
+      list = (lab.reviews_by_source || {})[key] || [];
+    }
+    list = list.slice(0, n);
     var box = document.getElementById("fetched");
     box.innerHTML = list.length
-      ? "<p class='text-sm text-[#535766] mb-3'>Showing "+list.length+" of "+n+" requested.</p>"+list.map(function(q){
+      ? "<p class='text-sm text-[#535766] mb-3'>Showing "+list.length+" of "+n+" requested from <strong>"+esc(key)+"</strong>.</p>"+list.map(function(q){
           return "<div class='mb-3 p-3 bg-[#F5F5F6] rounded'><p class='italic text-sm'>"+esc((q.text||"").slice(0,360))+"</p><p class='text-xs mt-1'>"+esc(q.source)+(q.blocker?" · "+esc(q.blocker):"")+"</p></div>";
         }).join("")
       : "<p class='text-sm text-[#535766]'>No saved reviews for this platform yet.</p>";
