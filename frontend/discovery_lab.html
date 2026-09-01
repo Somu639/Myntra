@@ -224,7 +224,7 @@
 <main class="flex-1 p-8 max-w-[1600px] mx-auto w-full flex flex-col gap-6">
 <div>
 <h1 class="font-h1 text-h1 text-on-background mb-2">Discovery Lab</h1>
-<p class="font-body text-body text-secondary">Pick a section and a question. Choose a platform and how many reviews to fetch. The answer recuts to that platform.</p>
+<p class="font-body text-body text-secondary">Pick a section and a question. Choose a platform to recut the analysis. Click <strong>Show relevant quotes</strong> to surface verbatim evidence for the selected question.</p>
 </div>
 <div class="bg-white-card border border-neutral rounded-lg p-4 grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
 <label class="md:col-span-2 font-label text-secondary">Section
@@ -239,7 +239,7 @@
 <label class="md:col-span-1 font-label text-secondary">How many
 <select id="howmany" class="lab-select mt-1"></select>
 </label>
-<button type="button" id="fetch-btn" class="fetch-btn md:col-span-2 mt-1">Fetch reviews</button>
+<button type="button" id="fetch-btn" class="fetch-btn md:col-span-2 mt-1">Show relevant quotes</button>
 </div>
 <p id="cut-meta" class="font-label text-secondary"></p>
 <div id="fetched" class="hidden bg-white-card border border-neutral rounded-lg p-card_padding"></div>
@@ -489,20 +489,41 @@
           : "<p class='font-body text-secondary'>No blockers match the selected filter.</p>");
 
     } else if (id === "q3" && p) {
-      // Uncertainty breakdown — show with chips
+      // Uncertainty breakdown — show with chips + inline quotes
       kpis += kpi("Mentions", p.mentions || 0);
       if (p.share_of_blockers_pct != null) kpis += kpi("Share of blockers", p.share_of_blockers_pct + "%");
       var br = p.breakdown || [];
-      if (br.length) {
-        body = platformNotice + table(
-          ["Category", "Mentions"],
-          br.map(function (r) {
-            return [blockerChip(r[0]), r[1]];
-          })
-        );
-      } else {
-        body = platformNotice + "<p class='font-body text-secondary'>No breakdown for this cut.</p>";
+      var breakdownHtml = br.length
+        ? table(
+            ["Category", "Mentions"],
+            br.map(function (r) { return [blockerChip(r[0]), r[1]]; })
+          )
+        : "<p class='font-body text-secondary'>No breakdown for this cut.</p>";
+
+      // Show payload quotes grouped by blocker type under the table
+      var pQuotes = p.quotes || [];
+      var groupedByBlocker = {};
+      pQuotes.forEach(function (q) {
+        var bt = q.blocker_type || "other";
+        if (!groupedByBlocker[bt]) groupedByBlocker[bt] = [];
+        groupedByBlocker[bt].push(q);
+      });
+      var quotesHtml = "";
+      if (pQuotes.length) {
+        quotesHtml = "<h4 class='font-h3 text-h3 mt-6 mb-3'>Sample quotes by uncertainty type</h4>";
+        Object.keys(groupedByBlocker).forEach(function (bt) {
+          quotesHtml += '<div class="mb-4">'
+            + '<div class="mb-2">' + blockerChip(bt) + '</div>'
+            + groupedByBlocker[bt].map(function (q) {
+                return '<div class="border-l-4 border-primary bg-primary-fixed/5 p-3 rounded-r-DEFAULT mb-2">'
+                  + '<p class="italic text-sm mb-1">' + esc((q.text || "").slice(0, 360)) + "</p>"
+                  + '<span class="font-label text-secondary text-xs">' + esc(q.source || "") + (q.rating != null ? ' · ★' + esc(q.rating) : "") + "</span>"
+                  + "</div>";
+              }).join("")
+            + "</div>";
+        });
       }
+      body = platformNotice + breakdownHtml + quotesHtml;
 
     } else if (id === "q9" && p && p.personas) {
       kpis += kpi("Personas", (p.personas || []).length);
@@ -578,33 +599,115 @@
   var howEl = document.getElementById("howmany");
   var fetchBtn = document.getElementById("fetch-btn");
 
+  // ── Collect all quotes relevant to the current question + platform ──────
+  function getRelevantQuotes(qid, plat, n) {
+    var q = findQ(qid);
+    var pool = [];
+    var seen = {};
+
+    function addQuote(r) {
+      var key = (r.text || "").slice(0, 80);
+      if (seen[key]) return;
+      seen[key] = true;
+      pool.push(r);
+    }
+
+    // 1. Platform-specific quotes for this question (highest relevance)
+    var platQuotes = ((lab.quotes_by_platform || {})[plat] || {})[qid] || [];
+    platQuotes.forEach(addQuote);
+
+    // 2. Payload quotes embedded in the question answer
+    var payload = plat === "All platforms"
+      ? (q ? q.payload : null)
+      : (((lab.by_platform || {})[plat] || {})[qid]);
+    if (payload && typeof payload === "object") {
+      var pq = payload.quotes || [];
+      pq.forEach(function (r) {
+        addQuote({ text: r.text, source: r.source, rating: r.rating, blocker: r.blocker_type });
+      });
+      // For blockers list (q2/q10): pull quotes from each blocker's by_source
+      var blockers = Array.isArray(payload) ? payload : (payload.blockers || payload.rows || []);
+      blockers.forEach(function (b) {
+        (b.quotes || []).forEach(function (r) {
+          addQuote({ text: r.text, source: r.source, rating: r.rating, blocker: b.blocker_type });
+        });
+      });
+    }
+
+    // 3. Spot quotes on the question object
+    if (q && q.spot_quotes) {
+      q.spot_quotes.forEach(addQuote);
+    }
+
+    // 4. Pad with reviews_by_source that have a relevant blocker type
+    //    (derive relevant blocker types from the question's payload)
+    var relevantBlockers = {};
+    if (payload && typeof payload === "object") {
+      var blist = Array.isArray(payload) ? payload : (payload.blockers || payload.rows || payload.breakdown || []);
+      blist.forEach(function (b) {
+        var bt = b.blocker_type || b[0];
+        if (bt) relevantBlockers[bt] = true;
+      });
+    }
+    // Always include all if no specific blockers found (e.g. q1, q8)
+    var filterByBlocker = Object.keys(relevantBlockers).length > 0;
+
+    var sources = plat === "All platforms"
+      ? Object.keys(lab.reviews_by_source || {})
+      : [plat];
+
+    sources.forEach(function (src) {
+      ((lab.reviews_by_source || {})[src] || []).forEach(function (r) {
+        if (pool.length >= n * 3) return; // don't over-collect
+        if (filterByBlocker && !relevantBlockers[r.blocker]) return;
+        addQuote(r);
+      });
+    });
+
+    // Apply active blocker filter if set
+    if (activeBlockerFilter) {
+      pool = pool.filter(function (r) {
+        return (r.blocker || r.blocker_type) === activeBlockerFilter;
+      });
+    }
+
+    return pool.slice(0, n);
+  }
+
   function showFetched() {
     var box = document.getElementById("fetched");
     var n = parseInt(howEl.value, 10) || 25;
-    var key = platform;
-    var list = [];
-    if (platform === "All platforms") {
-      Object.keys(lab.reviews_by_source || {}).forEach(function (name) {
-        ((lab.reviews_by_source || {})[name] || []).forEach(function (r) { list.push(r); });
-      });
-    } else {
-      list = (lab.reviews_by_source || {})[key] || [];
-    }
-    list = list.slice(0, n);
+    var list = getRelevantQuotes(current, platform, n);
+    var q = findQ(current);
+    var qLabel = q ? q.short + " — " + q.question : current;
+
+    var filterLabel = activeBlockerFilter
+      ? ' · filtered to <strong>' + esc((BLOCKER_META[activeBlockerFilter] || {}).label || activeBlockerFilter) + '</strong>'
+      : '';
+
+    var header = '<h3 class="font-h3 mb-1">Relevant quotes</h3>'
+      + '<p class="font-body text-secondary mb-3"><strong>' + esc(platform) + '</strong> · '
+      + esc(qLabel) + filterLabel + '</p>';
+
     var live = url
-      ? '<p class="font-body text-secondary mb-3">Showing ' + list.length + ' saved reviews. Live scrape available in Streamlit: <a class="text-primary underline" href="' + esc(url) + '" target="_blank" rel="noopener">open backend</a>.</p>'
-      : '<p class="font-body text-secondary mb-3">Showing ' + list.length + ' saved reviews from this corpus (requested ' + n + ').</p>';
+      ? '<p class="font-label text-secondary mb-3">Live scrape available in Streamlit: <a class="text-primary underline" href="' + esc(url) + '" target="_blank" rel="noopener">open backend</a>.</p>'
+      : '';
+
     box.classList.remove("hidden");
-    box.innerHTML = "<h3 class='font-h3 mb-2'>Reviews from " + esc(key) + "</h3>" + live + (list.length
-      ? list.map(function (q) {
-          var chip = q.blocker ? '<span style="margin-left:6px">' + blockerChip(q.blocker) + '</span>' : "";
+    box.innerHTML = header + live + (list.length
+      ? list.map(function (r) {
+          var chip = (r.blocker || r.blocker_type)
+            ? '<span style="margin-left:4px">' + blockerChip(r.blocker || r.blocker_type) + '</span>'
+            : "";
           return '<div class="border-l-4 border-primary bg-primary-fixed/5 p-4 rounded-r-DEFAULT mb-3">'
-            + '<p class="italic mb-1">' + esc((q.text || "").slice(0, 360)) + "</p>"
+            + '<p class="italic mb-2">' + esc((r.text || "").slice(0, 480)) + "</p>"
             + '<div class="font-label text-secondary flex flex-wrap items-center gap-2">'
-            + esc(q.source || "")
-            + chip + "</div></div>";
+            + esc(r.source || "")
+            + (r.rating != null ? '<span>· ★ ' + esc(r.rating) + '</span>' : '')
+            + chip
+            + "</div></div>";
         }).join("")
-      : "<p class='font-body text-secondary'>No saved reviews for this platform yet.</p>");
+      : "<p class='font-body text-secondary'>No relevant quotes found for this question/platform combination. Try <strong>All platforms</strong> or a different question.</p>");
     box.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
