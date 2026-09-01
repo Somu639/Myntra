@@ -129,6 +129,23 @@
         }
         .lab-select:focus { outline: 2px solid #FF3F6C; border-color: #FF3F6C; }
         .fetch-btn { background: #FF3F6C; color: #fff; font-weight: 700; border-radius: 4px; padding: 10px 16px; }
+        /* Blocker category chips */
+        .blocker-chip { display:inline-block; padding:2px 8px; border-radius:12px; font-size:11px; font-weight:700; line-height:18px; white-space:nowrap; }
+        .chip-fit     { background:#EBF5FF; color:#0066CC; }
+        .chip-price   { background:#FFF3E0; color:#E65100; }
+        .chip-return  { background:#FDE8ED; color:#C2185B; }
+        .chip-quality { background:#E8F5E9; color:#2E7D32; }
+        .chip-trust   { background:#F3E5F5; color:#6A1B9A; }
+        .chip-styling { background:#FFF8E1; color:#F57F17; }
+        .chip-choice  { background:#E8EAF6; color:#283593; }
+        .chip-payment { background:#E0F2F1; color:#00695C; }
+        .chip-occasion{ background:#FCE4EC; color:#880E4F; }
+        .chip-other   { background:#F5F5F5; color:#616161; }
+        /* Platform notice banner */
+        .platform-notice { background:#FFF3CD; border:1px solid #FFEAA7; border-radius:4px; padding:8px 12px; font-size:12px; color:#856404; margin-bottom:12px; }
+        /* Blocker filter bar */
+        .blocker-filter-btn { padding:4px 10px; border:1px solid #EAEAEC; border-radius:12px; font-size:12px; font-weight:600; cursor:pointer; background:#fff; color:#535766; transition:all 0.15s; }
+        .blocker-filter-btn.active { background:#FF3F6C; color:#fff; border-color:#FF3F6C; }
     </style>
 </head>
 <body class="font-body text-body text-on-background flex min-h-screen antialiased overflow-x-hidden">
@@ -269,6 +286,27 @@
   var platEl = document.getElementById("plat");
   var current = "q2";
   var platform = "All platforms";
+  // Active blocker-type filter (null = show all)
+  var activeBlockerFilter = null;
+
+  // ── Blocker type → display config ──────────────────────────────────────────
+  var BLOCKER_META = {
+    "fit_sizing":                        { label: "Fit & Size",        chipClass: "chip-fit"     },
+    "price":                             { label: "Price & Value",     chipClass: "chip-price"   },
+    "return_hassle":                     { label: "Returns & Exchange",chipClass: "chip-return"  },
+    "quality_doubt":                     { label: "Quality",           chipClass: "chip-quality" },
+    "trust_authenticity":                { label: "Trust & Reviews",   chipClass: "chip-trust"   },
+    "styling_uncertainty":               { label: "Styling",           chipClass: "chip-styling" },
+    "decision_paralysis_too_many_options":{ label: "Choice Overload",  chipClass: "chip-choice"  },
+    "payment_friction":                  { label: "Payment",           chipClass: "chip-payment" },
+    "occasion_timing":                   { label: "Occasion & Timing", chipClass: "chip-occasion"},
+    "other":                             { label: "Other",             chipClass: "chip-other"   }
+  };
+
+  function blockerChip(blockerType) {
+    var meta = BLOCKER_META[blockerType] || { label: blockerType || "Unknown", chipClass: "chip-other" };
+    return '<span class="blocker-chip ' + meta.chipClass + '">' + esc(meta.label) + '</span>';
+  }
 
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
@@ -283,26 +321,64 @@
   function table(headers, rows) {
     var h = headers.map(function (x) { return "<th class='py-2 px-3 text-left'>" + esc(x) + "</th>"; }).join("");
     var b = rows.map(function (r) {
-      return "<tr class='border-t border-neutral'>" + r.map(function (c) {
+      return "<tr class='border-t border-neutral'>" + r.map(function (c, ci) {
+        // Column 1 (index 1) in blocker tables is the chip column — render raw HTML
+        if (ci === 1 && typeof c === "string" && c.indexOf("blocker-chip") !== -1) {
+          return "<td class='py-2 px-3'>" + c + "</td>";
+        }
         return "<td class='py-2 px-3'>" + esc(c) + "</td>";
       }).join("") + "</tr>";
     }).join("");
     return "<table class='w-full text-sm'><thead class='bg-neutral-light'><tr>" + h + "</tr></thead><tbody>" + b + "</tbody></table>";
   }
+
+  // ── Blocker category filter bar ────────────────────────────────────────────
+  function renderBlockerFilterBar(blockerList) {
+    if (!blockerList || !blockerList.length) return "";
+    var types = [];
+    blockerList.forEach(function (r) {
+      var t = r.blocker_type;
+      if (t && types.indexOf(t) === -1) types.push(t);
+    });
+    if (types.length <= 1) return "";
+    var btns = '<button class="blocker-filter-btn' + (activeBlockerFilter === null ? ' active' : '') + '" data-btype="">All</button>';
+    types.forEach(function (t) {
+      var meta = BLOCKER_META[t] || { label: t, chipClass: "chip-other" };
+      btns += '<button class="blocker-filter-btn' + (activeBlockerFilter === t ? ' active' : '') + '" data-btype="' + esc(t) + '">' + esc(meta.label) + '</button>';
+    });
+    return '<div id="blocker-filter-bar" class="flex flex-wrap gap-2 mb-4">' + btns + '</div>';
+  }
+
+  function bindBlockerFilterBar() {
+    var bar = document.getElementById("blocker-filter-bar");
+    if (!bar) return;
+    bar.querySelectorAll(".blocker-filter-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        activeBlockerFilter = btn.getAttribute("data-btype") || null;
+        renderDetail(current);
+      });
+    });
+  }
+
   function renderQuotes(list) {
     var el = document.getElementById("d-quotes");
     if (!list || !list.length) { el.innerHTML = "<p class='font-body text-secondary'>No spot-check quotes for this cut.</p>"; return; }
     el.innerHTML = list.map(function (q) {
+      var chip = q.blocker ? blockerChip(q.blocker) : "";
       return '<div class="border-l-4 border-primary bg-primary-fixed/5 p-4 rounded-r-DEFAULT">'
         + '<p class="font-body italic mb-2">' + esc((q.text || "").slice(0, 360)) + "</p>"
-        + '<div class="font-label text-secondary">' + esc(q.source || "")
-        + (q.rating != null ? " · rating " + esc(q.rating) : "")
-        + (q.blocker ? " · " + esc(q.blocker) : "") + "</div></div>";
+        + '<div class="font-label text-secondary flex flex-wrap items-center gap-2">'
+        + esc(q.source || "")
+        + (q.rating != null ? '<span>· rating ' + esc(q.rating) + '</span>' : "")
+        + chip
+        + "</div></div>";
     }).join("");
   }
+
   function findQ(id) {
     return (lab.questions || []).filter(function (q) { return q.id === id; })[0];
   }
+
   function renderDetail(id) {
     current = id;
     document.querySelectorAll(".q-card").forEach(function (c) {
@@ -313,49 +389,133 @@
     document.getElementById("d-lens").textContent = "LENS: " + q.lens;
     document.getElementById("d-title").textContent = q.short;
     document.getElementById("d-question").textContent = q.question;
+
+    // ── BUG FIX 1: Use per-platform data strictly; never silently fall back ──
     var platPack = (lab.by_platform || {})[platform] || {};
-    var p = platPack[id] != null ? platPack[id] : q.payload;
-    var srcRows = ((lab.coverage || {}).by_source || []).filter(function (s) { return platform === "All platforms" || s.source === platform; });
+    var isAllPlatforms = (platform === "All platforms");
+    // Get the actual per-platform payload (may be null/undefined for sparse platforms)
+    var platformPayload = platPack[id];
+    // Use per-platform when available; fall back to aggregate ONLY for "All platforms"
+    var p = isAllPlatforms ? q.payload : platformPayload;
+    var usingFallback = (!isAllPlatforms && (platformPayload == null));
+
+    var srcRows = ((lab.coverage || {}).by_source || []).filter(function (s) {
+      return isAllPlatforms || s.source === platform;
+    });
     var recN = srcRows.reduce(function (a, s) { return a + (s.records || 0); }, 0);
     var relN = srcRows.reduce(function (a, s) { return a + (s.relevant || 0); }, 0);
-    document.getElementById("cut-meta").textContent = platform + ": " + relN + " relevant / " + recN + " records in this cut.";
+
+    // Show platform coverage stats
+    var cutMeta = platform + ": " + relN + " relevant / " + recN + " records in this cut.";
+    document.getElementById("cut-meta").textContent = cutMeta;
+
     var kpis = "";
     var body = "";
+    var platformNotice = "";
+
+    if (usingFallback) {
+      // Platform selected but no pre-computed data — show a clear notice
+      platformNotice = '<div class="platform-notice">⚠️ No pre-computed data for <strong>' + esc(platform)
+        + '</strong> on this question (only ' + relN + ' relevant records in this source). '
+        + 'Showing nothing — switch to <strong>All platforms</strong> to see the full aggregate.</div>';
+      body = platformNotice + "<p class='font-body text-secondary'>This platform has too few records to produce a reliable breakdown for this question. Try selecting <strong>All platforms</strong> or a higher-volume source like Reddit or Play Store.</p>";
+      document.getElementById("d-kpis").innerHTML = kpi("Relevant records", relN || 0);
+      document.getElementById("d-body").innerHTML = body;
+      document.getElementById("d-quotes").innerHTML = "<p class='font-body text-secondary'>No quotes available for this platform/question combination.</p>";
+      return;
+    }
+
+    // ── Show a subtle banner when platform data is sparse (< 5 blockers or < 10 records) ──
+    if (!isAllPlatforms && relN < 15) {
+      platformNotice = '<div class="platform-notice">ℹ️ <strong>' + esc(platform) + '</strong> has only '
+        + relN + ' relevant records. Results may not be representative.</div>';
+    }
+
     function blockersOf(payload) {
       if (Array.isArray(payload)) return payload;
       if (payload && typeof payload === "object") return payload.blockers || payload.rows || [];
       return [];
     }
+
     if (id === "q1" && p) {
       kpis += kpi("Wishlist signals", p.wishlist_mentions || 0);
       var reasons = p.top_reasons || [];
-      body = table(["Reason", "Count"], reasons.map(function (r) { return [r[0], r[1]]; }));
+      body = platformNotice + table(["Reason", "Count"], reasons.map(function (r) { return [r[0], r[1]]; }));
+
     } else if (id === "q2" || id === "q10") {
-      var list = blockersOf(p);
+      var allBlockers = blockersOf(p);
+
+      // Apply active blocker-type filter
+      var list = activeBlockerFilter
+        ? allBlockers.filter(function (r) { return r.blocker_type === activeBlockerFilter; })
+        : allBlockers;
+
       var top = list[0] || {};
-      kpis += kpi("Top mentions", top.mentions);
+      kpis += kpi("Top mentions", top.mentions != null ? top.mentions : "—");
       kpis += kpi("Reach", (top.reach_pct_of_relevant != null ? top.reach_pct_of_relevant + "%" : "—"));
       kpis += kpi("WPC leverage", top.wpc_leverage || "—");
-      kpis += kpi("VOC score", top.opportunity_score);
-      kpis += kpi("WPC-weighted", top.wpc_weighted_score);
-      var stageNote = (p && p.method) ? "<p class='font-body text-secondary mb-3'>" + esc(p.method) + "</p>" : "";
+      kpis += kpi("VOC score", top.opportunity_score != null ? top.opportunity_score : "—");
+      kpis += kpi("WPC-weighted", top.wpc_weighted_score != null ? top.wpc_weighted_score : "—");
+
+      var stageNote = (p && p.method)
+        ? "<p class='font-body text-secondary mb-3'>" + esc(p.method) + "</p>"
+        : "";
       if (p && p.by_stage && p.by_stage.length) {
-        stageNote += table(["Stage", "Mentions", "Areas", "Top"], p.by_stage.map(function (s) {
+        stageNote += table(["Stage", "Mentions", "Areas", "Top blocker"], p.by_stage.map(function (s) {
           return [s.stage, s.mentions, s.areas, s.top];
-        }));
+        })) + "<div class='mb-4'></div>";
       }
-      body = stageNote + table(
-        ["#", "Blocker", "Stage", "Leverage", "Mentions", "Sources", "VOC", "WPC-w"],
-        list.slice(0, 10).map(function (r, i) {
-          return [i + 1, r.dimension || r.blocker_type, r.wpc_stage, r.wpc_leverage, r.mentions, r.source_count, r.opportunity_score, r.wpc_weighted_score];
-        })
-      );
+
+      // ── BUG FIX 2: Render blocker chips + filter bar ────────────────────
+      var filterBar = renderBlockerFilterBar(allBlockers);
+
+      var blockerRows = list.slice(0, 10).map(function (r, i) {
+        return [
+          i + 1,
+          // Column 1: chip — raw HTML injected intentionally
+          blockerChip(r.blocker_type),
+          r.wpc_stage || "—",
+          r.wpc_leverage || "—",
+          r.mentions != null ? r.mentions : "—",
+          r.source_count != null ? r.source_count : "—",
+          r.opportunity_score != null ? r.opportunity_score : "—",
+          r.wpc_weighted_score != null ? r.wpc_weighted_score : "—"
+        ];
+      });
+
+      body = platformNotice + stageNote + filterBar
+        + (list.length
+          ? table(["#", "Category", "Stage", "Leverage", "Mentions", "Sources", "VOC score", "WPC-weighted"], blockerRows)
+          : "<p class='font-body text-secondary'>No blockers match the selected filter.</p>");
+
+    } else if (id === "q3" && p) {
+      // Uncertainty breakdown — show with chips
+      kpis += kpi("Mentions", p.mentions || 0);
+      if (p.share_of_blockers_pct != null) kpis += kpi("Share of blockers", p.share_of_blockers_pct + "%");
+      var br = p.breakdown || [];
+      if (br.length) {
+        body = platformNotice + table(
+          ["Category", "Mentions"],
+          br.map(function (r) {
+            return [blockerChip(r[0]), r[1]];
+          })
+        );
+      } else {
+        body = platformNotice + "<p class='font-body text-secondary'>No breakdown for this cut.</p>";
+      }
+
     } else if (id === "q9" && p && p.personas) {
       kpis += kpi("Personas", (p.personas || []).length);
-      body = "<p class='font-body text-secondary mb-3'>" + esc(p.note || "Age bands are intended profiles. VOC mentions size the hypothesized barrier, not the age group.") + "</p>"
-        + table(["Segment", "Age", "Need", "Barrier", "VOC mentions"], (p.personas || []).map(function (s) {
-          return [s.name, s.age, s.primary_need, s.main_barrier, s.voc_mentions];
-        }));
+      // Show chips in barrier column
+      body = platformNotice
+        + "<p class='font-body text-secondary mb-3'>" + esc(p.note || "Age bands are intended profiles. VOC mentions size the hypothesized barrier, not the age group.") + "</p>"
+        + table(
+            ["Segment", "Age", "Need", "Main barrier", "VOC mentions"],
+            (p.personas || []).map(function (s) {
+              return [s.name, s.age, s.primary_need, s.main_barrier, s.voc_mentions];
+            })
+          );
+
     } else if (p && typeof p === "object" && !Array.isArray(p)) {
       if (p.mentions != null) kpis += kpi("Mentions", p.mentions);
       if (p.share_of_blockers_pct != null) kpis += kpi("Share of blockers", p.share_of_blockers_pct + "%");
@@ -363,22 +523,48 @@
       if (p.wishlist_mentions != null) kpis += kpi("Wishlist mentions", p.wishlist_mentions);
       if (p.genuine_intent != null) kpis += kpi("Genuine", p.genuine_intent);
       if (p.bookmarking != null) kpis += kpi("Bookmarking", p.bookmarking);
-      var br = p.breakdown || p.by_channel || [];
-      if (br.length) body = table(["Item", "Count"], br.map(function (r) { return [r[0] || r.channel, r[1] != null ? r[1] : r.mentions]; }));
+
+      // Breakdown with chips where the item key is a known blocker type
+      var br2 = p.breakdown || p.by_channel || [];
+      if (br2.length) {
+        body = platformNotice + table(
+          ["Category", "Count"],
+          br2.map(function (r) {
+            var key = r[0] || r.channel || "";
+            var display = BLOCKER_META[key] ? blockerChip(key) : esc(key);
+            return [display, r[1] != null ? r[1] : r.mentions];
+          })
+        );
+      }
       var dims = p.by_dimension || [];
-      if (dims.length) body = table(["Dimension", "Mentions", "Share %"], dims.map(function (r) {
-        return [r.dimension, r.mentions, r.share_pct];
-      }));
-    } else if (Array.isArray(p)) {
-      body = table(Object.keys(p[0] || {}), p.slice(0, 12).map(function (r) {
-        return Object.keys(p[0]).map(function (k) { return r[k]; });
-      }));
+      if (dims.length) {
+        body = platformNotice + table(
+          ["Dimension", "Mentions", "Share %"],
+          dims.map(function (r) { return [r.dimension, r.mentions, r.share_pct]; })
+        );
+      }
+
+    } else if (Array.isArray(p) && p.length) {
+      body = platformNotice + table(
+        Object.keys(p[0] || {}),
+        p.slice(0, 12).map(function (r) {
+          return Object.keys(p[0]).map(function (k) { return r[k]; });
+        })
+      );
     }
+
     document.getElementById("d-kpis").innerHTML = kpis || kpi("Records", relN || "—");
-    document.getElementById("d-body").innerHTML = body || "<p class='font-body text-secondary'>No structured cut for this question on this platform.</p>";
-    var qquotes = ((lab.quotes_by_platform || {})[platform] || {})[id] || q.spot_quotes;
-    renderQuotes(qquotes);
+    document.getElementById("d-body").innerHTML = body || "<p class='font-body text-secondary'>No structured data for this question on this platform.</p>";
+
+    // Quotes: use platform-specific quotes; don't fall back to aggregate
+    var platQuotes = ((lab.quotes_by_platform || {})[platform] || {})[id];
+    var quotesToShow = platQuotes && platQuotes.length ? platQuotes : (isAllPlatforms ? q.spot_quotes : []);
+    renderQuotes(quotesToShow);
+
+    // Bind the filter bar buttons after DOM update
+    bindBlockerFilterBar();
   }
+
   function fillQuestions() {
     var sec = sections.filter(function (s) { return s.label === secEl.value; })[0] || sections[1] || sections[0];
     var ids = (sec && (sec.ids || sec.question_ids)) || [];
@@ -388,8 +574,10 @@
     if (ids.indexOf(current) >= 0) qEl.value = current;
     else current = qEl.value;
   }
+
   var howEl = document.getElementById("howmany");
   var fetchBtn = document.getElementById("fetch-btn");
+
   function showFetched() {
     var box = document.getElementById("fetched");
     var n = parseInt(howEl.value, 10) || 25;
@@ -404,25 +592,32 @@
     }
     list = list.slice(0, n);
     var live = url
-      ? '<p class="font-body text-secondary mb-3">Showing ' + list.length + ' saved reviews. Live scrape of this count runs in Streamlit: <a class="text-primary underline" href="' + esc(url) + '" target="_blank" rel="noopener">open backend</a>.</p>'
+      ? '<p class="font-body text-secondary mb-3">Showing ' + list.length + ' saved reviews. Live scrape available in Streamlit: <a class="text-primary underline" href="' + esc(url) + '" target="_blank" rel="noopener">open backend</a>.</p>'
       : '<p class="font-body text-secondary mb-3">Showing ' + list.length + ' saved reviews from this corpus (requested ' + n + ').</p>';
     box.classList.remove("hidden");
     box.innerHTML = "<h3 class='font-h3 mb-2'>Reviews from " + esc(key) + "</h3>" + live + (list.length
       ? list.map(function (q) {
-          return '<div class="border-l-4 border-primary bg-primary-fixed/5 p-4 rounded-r-DEFAULT mb-3"><p class="italic mb-1">' + esc((q.text || "").slice(0, 360)) + "</p><div class='font-label text-secondary'>" + esc(q.source || "") + (q.blocker ? " · " + esc(q.blocker) : "") + "</div></div>";
+          var chip = q.blocker ? '<span style="margin-left:6px">' + blockerChip(q.blocker) + '</span>' : "";
+          return '<div class="border-l-4 border-primary bg-primary-fixed/5 p-4 rounded-r-DEFAULT mb-3">'
+            + '<p class="italic mb-1">' + esc((q.text || "").slice(0, 360)) + "</p>"
+            + '<div class="font-label text-secondary flex flex-wrap items-center gap-2">'
+            + esc(q.source || "")
+            + chip + "</div></div>";
         }).join("")
       : "<p class='font-body text-secondary'>No saved reviews for this platform yet.</p>");
     box.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
+
   secEl.innerHTML = sections.map(function (s) { return '<option value="' + esc(s.label) + '">' + esc(s.label) + "</option>"; }).join("");
   secEl.value = "Purchase path";
   platEl.innerHTML = platforms.map(function (p) { return '<option value="' + esc(p) + '">' + esc(p) + "</option>"; }).join("");
   howEl.innerHTML = [10, 25, 50, 100].map(function (n) { return '<option value="' + n + '"' + (n === 25 ? " selected" : "") + ">" + n + "</option>"; }).join("");
   fillQuestions();
   qEl.value = current;
-  secEl.addEventListener("change", function () { fillQuestions(); renderDetail(qEl.value); });
-  qEl.addEventListener("change", function () { renderDetail(qEl.value); });
-  platEl.addEventListener("change", function () { platform = platEl.value; renderDetail(current); });
+
+  secEl.addEventListener("change", function () { fillQuestions(); activeBlockerFilter = null; renderDetail(qEl.value); });
+  qEl.addEventListener("change", function () { activeBlockerFilter = null; renderDetail(qEl.value); });
+  platEl.addEventListener("change", function () { platform = platEl.value; activeBlockerFilter = null; renderDetail(current); });
   if (fetchBtn) fetchBtn.addEventListener("click", showFetched);
   renderDetail(current);
 })();
