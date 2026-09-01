@@ -1,399 +1,726 @@
 <!DOCTYPE html>
-
-<html lang="en"><head>
+<html lang="en">
+<head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>AI Roadmap - Myntra Discovery Engine</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
-        tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              "colors": {
-                      "on-background": "#271719",
-                      "background": "#fff8f7",
-                      "primary-fixed": "#ffd9dc",
-                      "secondary": "#5a5d73",
-                      "primary-container": "#df2457",
-                      "on-primary-fixed": "#400011",
-                      "tertiary-container": "#008644",
-                      "tertiary": "#006a34",
-                      "error": "#ba1a1a",
-                      "on-secondary-fixed-variant": "#42465a",
-                      "on-tertiary-container": "#f6fff3",
-                      "surface-container": "#ffe9ea",
-                      "surface-bright": "#fff8f7",
-                      "secondary-fixed-dim": "#c2c5de",
-                      "outline": "#8f6f72",
-                      "inverse-surface": "#3e2c2d",
-                      "on-tertiary": "#ffffff",
-                      "tertiary-fixed": "#7dfca2",
-                      "on-primary-container": "#fffbff",
-                      "on-tertiary-fixed-variant": "#005227",
-                      "outline-variant": "#e3bdc0",
-                      "secondary-container": "#dbdef8",
-                      "on-secondary-container": "#5e6177",
-                      "secondary-fixed": "#dee1fa",
-                      "on-secondary-fixed": "#161b2d",
-                      "surface-container-high": "#ffe1e3",
-                      "tertiary-fixed-dim": "#5fde88",
-                      "surface": "#fff8f7",
-                      "on-primary-fixed-variant": "#910031",
-                      "surface-tint": "#bd0043",
-                      "surface-variant": "#f9dbdd",
-                      "primary": "#b90041",
-                      "on-error": "#ffffff",
-                      "on-primary": "#ffffff",
-                      "on-tertiary-fixed": "#00210c",
-                      "surface-container-highest": "#f9dbdd",
-                      "on-secondary": "#ffffff",
-                      "on-surface": "#271719",
-                      "surface-dim": "#f1d3d5",
-                      "surface-container-low": "#fff0f0",
-                      "on-surface-variant": "#5b4042",
-                      "surface-container-lowest": "#ffffff",
-                      "primary-fixed-dim": "#ffb2ba",
-                      "error-container": "#ffdad6",
-                      "inverse-on-surface": "#ffeced",
-                      "on-error-container": "#93000a",
-                      "inverse-primary": "#ffb2ba",
-                      
-                      "myntra-pink": "#FF3F6C",
-                      "myntra-dark": "#282C3F",
-                      "myntra-grey-bg": "#F5F5F6",
-                      "myntra-border": "#EAEAEC",
-                      "myntra-text-sec": "#535766"
-              },
-              "borderRadius": {
-                      "DEFAULT": "0.125rem",
-                      "lg": "0.25rem",
-                      "xl": "0.5rem",
-                      "full": "0.75rem",
-                      "myntra-card": "4px",
-                      "myntra-btn": "2px",
-                      "myntra-chip": "2px"
-              },
-              "spacing": {
-                      "stack_gap": "16px",
-                      "card_padding": "24px",
-                      "sidebar_width": "260px",
-                      "container_padding": "32px",
-                      "grid_gutter": "24px"
-              },
-              "fontFamily": {
-                      "h2": [
-                              "Assistant"
-                      ],
-                      "wordmark": [
-                              "Assistant"
-                      ],
-                      "button": [
-                              "Assistant"
-                      ],
-                      "subtitle": [
-                              "Assistant"
-                      ],
-                      "h1": [
-                              "Assistant"
-                      ],
-                      "h3": [
-                              "Assistant"
-                      ],
-                      "body": [
-                              "Assistant"
-                      ],
-                      "body-bold": [
-                              "Assistant"
-                      ],
-                      "label": [
-                              "Assistant"
-                      ]
-              },
-              "fontSize": {
-                      "h2": [
-                              "24px",
-                              {
-                                      "lineHeight": "32px",
-                                      "fontWeight": "800"
-                              }
-                      ],
-                      "wordmark": [
-                              "24px",
-                              {
-                                      "lineHeight": "100%",
-                                      "letterSpacing": "-0.04em",
-                                      "fontWeight": "800"
-                              }
-                      ],
-                      "button": [
-                              "13px",
-                              {
-                                      "lineHeight": "16px",
-                                      "letterSpacing": "0.02em",
-                                      "fontWeight": "700"
-                              }
-                      ],
-                      "subtitle": [
-                              "11px",
-                              {
-                                      "lineHeight": "16px",
-                                      "letterSpacing": "0.12em",
-                                      "fontWeight": "700"
-                              }
-                      ],
-                      "h1": [
-                              "32px",
-                              {
-                                      "lineHeight": "40px",
-                                      "letterSpacing": "-0.01em",
-                                      "fontWeight": "800"
-                              }
-                      ],
-                      "h3": [
-                              "18px",
-                              {
-                                      "lineHeight": "24px",
-                                      "fontWeight": "700"
-                              }
-                      ],
-                      "body": [
-                              "14px",
-                              {
-                                      "lineHeight": "20px",
-                                      "fontWeight": "400"
-                              }
-                      ],
-                      "body-bold": [
-                              "14px",
-                              {
-                                      "lineHeight": "20px",
-                                      "fontWeight": "700"
-                              }
-                      ],
-                      "label": [
-                              "12px",
-                              {
-                                      "lineHeight": "16px",
-                                      "fontWeight": "600"
-                              }
-                      ]
-              }
+tailwind.config = {
+  darkMode:"class",
+  theme:{
+    extend:{
+      colors:{
+        "myntra-pink":"#FF3F6C","myntra-dark":"#282C3F",
+        "myntra-grey-bg":"#F5F5F6","myntra-border":"#EAEAEC",
+        "myntra-text-sec":"#535766","primary":"#b90041",
+        "surface":"#fff8f7","outline-variant":"#e3bdc0"
       },
-          },
-        }
-      </script>
+      borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem"},
+      spacing:{"card_padding":"24px","container_padding":"32px"},
+      fontFamily:{"body":["Assistant"],"h1":["Assistant"],"h2":["Assistant"],"h3":["Assistant"],"label":["Assistant"],"subtitle":["Assistant"],"body-bold":["Assistant"],"wordmark":["Assistant"]},
+      fontSize:{
+        "h1":["32px",{lineHeight:"40px",fontWeight:"800"}],
+        "h2":["24px",{lineHeight:"32px",fontWeight:"800"}],
+        "h3":["18px",{lineHeight:"24px",fontWeight:"700"}],
+        "body":["14px",{lineHeight:"20px",fontWeight:"400"}],
+        "body-bold":["14px",{lineHeight:"20px",fontWeight:"700"}],
+        "label":["12px",{lineHeight:"16px",fontWeight:"600"}],
+        "subtitle":["11px",{lineHeight:"16px",letterSpacing:"0.12em",fontWeight:"700"}],
+        "wordmark":["24px",{lineHeight:"100%",letterSpacing:"-0.04em",fontWeight:"800"}]
+      }
+    }
+  }
+}
+</script>
+<style>
+body { background:#F5F5F6; font-family:Assistant,sans-serif; color:#282C3F; }
+.card { background:#fff; border:1px solid #EAEAEC; border-radius:4px; }
+/* Bar chart bars */
+.survey-bar-track { background:#F5F5F6; border-radius:2px; height:10px; }
+.survey-bar-fill  { background:#FF3F6C; border-radius:2px; height:10px; transition:width 0.6s ease; }
+.survey-bar-fill-blue { background:#4F8EF7; }
+.survey-bar-fill-green{ background:#2ECC71; }
+/* Donut chart placeholder */
+.donut-segment { stroke-linecap:butt; fill:none; }
+/* Feature pill */
+.rank-badge { display:inline-flex; align-items:center; gap:4px; background:#FF3F6C; color:#fff; font-size:11px; font-weight:700; padding:3px 10px; border-radius:0 0 0 4px; }
+.feature-pill { display:inline-block; padding:3px 10px; border-radius:12px; font-size:12px; font-weight:700; }
+.pill-now   { background:#FEE8ED; color:#C2185B; }
+.pill-next  { background:#FFF3E0; color:#E65100; }
+.pill-later { background:#E8F5E9; color:#2E7D32; }
+/* Tab */
+.tab-btn { padding:8px 18px; border-bottom:3px solid transparent; font-weight:700; font-size:13px; color:#535766; cursor:pointer; }
+.tab-btn.active { border-color:#FF3F6C; color:#FF3F6C; }
+/* Stat card */
+.stat-card { background:#fff; border:1px solid #EAEAEC; border-radius:4px; padding:16px 20px; }
+</style>
 </head>
-<body class="bg-myntra-grey-bg text-myntra-dark font-body min-h-screen selection:bg-myntra-pink selection:text-white">
-<!-- SideNavBar -->
-<aside class="w-[260px] h-screen fixed left-0 top-0 bg-[#FFFFFF] border-r border-myntra-border flex flex-col py-stack_gap z-20">
-<div class="px-container_padding mb-8">
-<h1 class="font-wordmark text-wordmark text-myntra-pink tracking-tighter">Myntra</h1>
-<p class="font-subtitle text-subtitle text-myntra-text-sec uppercase mt-1">DISCOVERY ENGINE</p>
-</div>
-<nav class="flex-1 flex flex-col gap-1 px-4">
-<a class="flex items-center gap-3 px-4 py-3 rounded-myntra-card text-myntra-text-sec hover:bg-myntra-grey-bg transition-colors duration-200" href="index.html">
-<span class="material-symbols-outlined">home</span>
-<span class="font-body">Home</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-myntra-card text-myntra-text-sec hover:bg-myntra-grey-bg transition-colors duration-200" href="reviewer.html">
-<span class="material-symbols-outlined">rate_review</span>
-<span class="font-body">Reviewer</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-myntra-card text-myntra-text-sec hover:bg-myntra-grey-bg transition-colors duration-200" href="discovery_lab.html">
-<span class="material-symbols-outlined">science</span>
-<span class="font-body">Discovery Lab</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-myntra-card text-myntra-text-sec hover:bg-myntra-grey-bg transition-colors duration-200" href="search_and_library.html">
-<span class="material-symbols-outlined">inventory_2</span>
-<span class="font-body">Search and Library</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-myntra-card text-myntra-text-sec hover:bg-myntra-grey-bg transition-colors duration-200" href="segments.html">
-<span class="material-symbols-outlined">groups</span>
-<span class="font-body">Segments</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-myntra-card text-myntra-text-sec hover:bg-myntra-grey-bg transition-colors duration-200" href="raw_data.html">
-<span class="material-symbols-outlined">database</span>
-<span class="font-body">Raw Data</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 text-myntra-pink font-body-bold border-l-4 border-myntra-pink bg-[#FFF0F4] rounded-r-myntra-card transition-colors duration-200" href="ai_roadmap.html">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">psychology</span>
-<span>AI Roadmap</span>
-</a>
-</nav>
-<div class="px-container_padding mt-auto border-t border-myntra-border pt-4">
-<p class="font-subtitle text-subtitle text-myntra-text-sec mb-2">LLM: Groq key present</p>
-<a class="flex items-center gap-3 text-myntra-text-sec hover:text-myntra-dark transition-colors text-xs" href="#">
-<span class="material-symbols-outlined text-sm">settings_input_component</span>
-<span class="truncate">Backend: local files (collect -&gt; extract -&gt; discover)</span>
-</a>
-</div>
 
-<a id="streamlit-backend-link" href="https://share.streamlit.io/deploy?repository=Somu639/Myntra&amp;branch=master&amp;mainModule=streamlit_app.py" target="_blank" rel="noopener"
-   class="mt-3 block w-full text-center py-2 rounded-DEFAULT font-button text-button"
-   style="background:#FF3F6C;color:#fff;text-decoration:none;">Open Streamlit backend</a>
-
+<body class="min-h-screen">
+<!-- Sidebar -->
+<aside class="w-[260px] h-screen fixed left-0 top-0 bg-white border-r border-[#EAEAEC] flex flex-col py-4 z-20">
+  <div class="px-8 mb-8">
+    <h1 class="text-2xl font-extrabold text-[#FF3F6C] tracking-tighter">Myntra</h1>
+    <p class="text-[11px] uppercase tracking-[0.12em] text-[#5a5d73]">DISCOVERY ENGINE</p>
+  </div>
+  <nav class="flex-1 px-4 flex flex-col gap-1 overflow-y-auto">
+    <a class="flex items-center gap-3 px-4 py-2 rounded text-[#535766] hover:bg-[#FFF0F4]" href="index.html"><span class="material-symbols-outlined text-[20px]">home</span><span>Home</span></a>
+    <a class="flex items-center gap-3 px-4 py-2 rounded text-[#535766] hover:bg-[#FFF0F4]" href="discovery_lab.html"><span class="material-symbols-outlined text-[20px]">science</span><span>Discovery Lab</span></a>
+    <a class="flex items-center gap-3 px-4 py-2 rounded text-[#535766] hover:bg-[#FFF0F4]" href="search_and_library.html"><span class="material-symbols-outlined text-[20px]">inventory_2</span><span>Search and Library</span></a>
+    <a class="flex items-center gap-3 px-4 py-2 rounded text-[#535766] hover:bg-[#FFF0F4]" href="segments.html"><span class="material-symbols-outlined text-[20px]">groups</span><span>Segments</span></a>
+    <a class="flex items-center gap-3 px-4 py-2 rounded text-[#535766] hover:bg-[#FFF0F4]" href="raw_data.html"><span class="material-symbols-outlined text-[20px]">database</span><span>Raw Data</span></a>
+    <a class="flex items-center gap-3 px-4 py-2 rounded text-[#535766] hover:bg-[#FFF0F4]" href="reviewer.html"><span class="material-symbols-outlined text-[20px]">rate_review</span><span>Reviewer</span></a>
+    <a class="flex items-center gap-3 px-4 py-2 font-bold text-[#FF3F6C] border-l-4 border-[#FF3F6C] bg-[#FFF0F4]" href="ai_roadmap.html"><span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">psychology</span><span>AI Roadmap</span></a>
+  </nav>
+  <div class="px-6 mt-4 border-t border-[#EAEAEC] pt-4">
+    <p class="text-[11px] uppercase tracking-widest text-[#535766] mb-2">Survey basis</p>
+    <p class="text-xs text-[#535766]">16 user responses · Primary research</p>
+  </div>
+  <a id="streamlit-backend-link" href="https://share.streamlit.io/deploy?repository=Somu639/Myntra&branch=master&mainModule=streamlit_app.py"
+     target="_blank" rel="noopener"
+     class="mt-3 mx-4 block text-center py-2 rounded font-bold text-sm text-white"
+     style="background:#FF3F6C">Open Streamlit</a>
 </aside>
-<!-- TopAppBar -->
-<header class="h-16 ml-[260px] sticky top-0 z-10 bg-[#FFFFFF] border-b border-myntra-border flex items-center justify-between px-container_padding w-[calc(100%-260px)]">
-<div class="flex items-center gap-4">
-<h2 class="font-h3 text-h3 text-myntra-dark">Myntra Discovery Engine</h2>
-</div>
-<div class="flex items-center gap-4 text-myntra-text-sec">
-<button class="hover:text-myntra-pink transition-colors duration-200">
-<span class="material-symbols-outlined">notifications</span>
-</button>
-<button class="hover:text-myntra-pink transition-colors duration-200">
-<span class="material-symbols-outlined">account_circle</span>
-</button>
-</div>
+
+<!-- Header -->
+<header class="h-16 ml-[260px] sticky top-0 z-10 bg-white border-b border-[#EAEAEC] flex items-center justify-between px-8 w-[calc(100%-260px)]">
+  <h2 class="font-bold text-lg text-[#282C3F]">Myntra Discovery Engine</h2>
+  <div class="flex gap-3 text-[#535766]">
+    <button><span class="material-symbols-outlined">notifications</span></button>
+    <button><span class="material-symbols-outlined">account_circle</span></button>
+  </div>
 </header>
-<!-- Main Canvas -->
-<main class="ml-[260px] p-container_padding max-w-6xl">
-<!-- Page Header -->
-<div class="mb-8">
-<h1 class="font-h1 text-h1 text-myntra-dark mb-2">AI Roadmap</h1>
-<p class="font-body text-body text-myntra-text-sec">Prioritized solutions — evidence → solution, not a sized business case.</p>
-</div>
-<!-- North Star Callout -->
-<div class="bg-[#FFFFFF] border border-myntra-border rounded-myntra-card p-6 mb-8 flex items-center gap-4">
-<div class="w-12 h-12 rounded-full bg-[#FFF0F4] flex items-center justify-center text-myntra-pink">
-<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">star</span>
-</div>
-<div>
-<p class="font-subtitle text-subtitle text-myntra-text-sec uppercase mb-1">North-Star Metric Focus</p>
-<p class="font-h3 text-h3 text-myntra-dark">wishlist / consideration → purchase conversion</p>
-</div>
-</div>
-<!-- Stacked Solution Cards -->
-<div class="flex flex-col gap-6">
-<!-- Card 1 (Rank 1) -->
-<div class="bg-[#FFFFFF] border border-myntra-border rounded-myntra-card overflow-hidden flex flex-col md:flex-row relative">
-<!-- Rank Badge -->
-<div class="absolute top-0 right-0 bg-myntra-pink text-white font-label text-label px-3 py-1 rounded-bl-myntra-card z-10 flex items-center gap-1 shadow-sm">
-<span class="material-symbols-outlined text-[14px]">local_fire_department</span> Rank 1
-                </div>
-<!-- Score & Title Column -->
-<div class="p-card_padding border-b md:border-b-0 md:border-r border-myntra-border md:w-1/3 bg-[#FAFAFA]">
-<div class="flex items-center gap-3 mb-4">
-<div class="text-4xl font-h1 text-myntra-dark">78.6</div>
-<div class="flex flex-col">
-<span class="font-subtitle text-subtitle text-myntra-text-sec uppercase">Confidence</span>
-<span class="font-subtitle text-subtitle text-myntra-text-sec uppercase">Score</span>
-</div>
-</div>
-<h2 class="font-h2 text-h2 text-myntra-dark mb-2 leading-tight">De-risk Returns &amp; Exchange</h2>
-<p class="font-body text-body text-myntra-text-sec mb-4">Directly impacts post-consideration friction preventing purchase conversion.</p>
-<div class="bg-[#FEE8ED] text-myntra-pink p-3 rounded-myntra-chip border border-[#FFD9E2]">
-<p class="font-label text-label uppercase mb-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">format_quote</span> Evidence</p>
-<p class="font-body-bold text-body-bold italic">“no one comes for return pickups.”</p>
-</div>
-</div>
-<!-- Solutions Column -->
-<div class="p-card_padding md:w-2/3">
-<h3 class="font-h3 text-h3 text-myntra-dark mb-4 flex items-center gap-2">
-<span class="material-symbols-outlined text-myntra-text-sec">construction</span> Proposed AI Solutions
-                    </h3>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-<div class="border border-myntra-border rounded-myntra-card p-4 hover:border-myntra-dark transition-colors">
-<h4 class="font-body-bold text-body-bold text-myntra-dark mb-1">Fast-track refund</h4>
-<p class="font-body text-body text-myntra-text-sec text-sm">Automated risk assessment to release funds immediately on drop-off.</p>
-</div>
-<div class="border border-myntra-border rounded-myntra-card p-4 hover:border-myntra-dark transition-colors">
-<h4 class="font-body-bold text-body-bold text-myntra-dark mb-1">Return pickup optimization</h4>
-<p class="font-body text-body text-myntra-text-sec text-sm">Dynamic routing and predictive scheduling to reduce missed pickups.</p>
-</div>
-<div class="border border-myntra-border rounded-myntra-card p-4 hover:border-myntra-dark transition-colors">
-<h4 class="font-body-bold text-body-bold text-myntra-dark mb-1">Visual return tracker</h4>
-<p class="font-body text-body text-myntra-text-sec text-sm">Computer vision to verify item condition before shipping back.</p>
-</div>
-</div>
-<div class="mt-6 flex justify-end">
-<button class="bg-myntra-pink text-white font-button text-button px-4 py-2 rounded-myntra-btn hover:bg-[#E5355F] transition-colors">Develop Spec</button>
-</div>
-</div>
-</div>
-<!-- Card 2 -->
-<div class="bg-[#FFFFFF] border border-myntra-border rounded-myntra-card overflow-hidden flex flex-col md:flex-row opacity-90 hover:opacity-100 transition-opacity">
-<!-- Score & Title Column -->
-<div class="p-card_padding border-b md:border-b-0 md:border-r border-myntra-border md:w-1/3 bg-[#FAFAFA]">
-<div class="flex items-center gap-3 mb-4">
-<div class="text-4xl font-h1 text-myntra-text-sec">77.1</div>
-<div class="flex flex-col">
-<span class="font-subtitle text-subtitle text-myntra-text-sec uppercase">Confidence</span>
-</div>
-</div>
-<h2 class="font-h2 text-h2 text-myntra-dark mb-2 leading-tight">Operational delivery / cancel / support</h2>
-<p class="font-body text-body text-myntra-text-sec">Mitigating anxiety during the critical fulfillment window.</p>
-</div>
-<!-- Solutions Column -->
-<div class="p-card_padding md:w-2/3 flex flex-col justify-center">
-<ul class="space-y-3">
-<li class="flex items-start gap-3">
-<span class="material-symbols-outlined text-myntra-text-sec mt-0.5 text-[20px]">check_circle</span>
-<div>
-<h4 class="font-body-bold text-body-bold text-myntra-dark">Predictive Support Routing</h4>
-<p class="font-body text-body text-myntra-text-sec text-sm">Pre-empting WISMO (Where Is My Order) queries with proactive NLP messaging.</p>
-</div>
-</li>
-<li class="flex items-start gap-3">
-<span class="material-symbols-outlined text-myntra-text-sec mt-0.5 text-[20px]">check_circle</span>
-<div>
-<h4 class="font-body-bold text-body-bold text-myntra-dark">Frictionless Cancellation Flow</h4>
-<p class="font-body text-body text-myntra-text-sec text-sm">Intent-based dialogs to save sales or process gracefully.</p>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<!-- Card 3 -->
-<div class="bg-[#FFFFFF] border border-myntra-border rounded-myntra-card overflow-hidden flex flex-col md:flex-row opacity-75 hover:opacity-100 transition-opacity">
-<!-- Score & Title Column -->
-<div class="p-card_padding border-b md:border-b-0 md:border-r border-myntra-border md:w-1/3 bg-[#FAFAFA]">
-<div class="flex items-center gap-3 mb-4">
-<div class="text-4xl font-h1 text-myntra-text-sec">59.9</div>
-<div class="flex flex-col">
-<span class="font-subtitle text-subtitle text-myntra-text-sec uppercase">Confidence</span>
-</div>
-</div>
-<h2 class="font-h2 text-h2 text-myntra-dark mb-2 leading-tight">Price &amp; value / quality / trust</h2>
-<p class="font-body text-body text-myntra-text-sec">Building long-term brand equity and perceived item worth.</p>
-</div>
-<!-- Solutions Column -->
-<div class="p-card_padding md:w-2/3 flex flex-col justify-center">
-<ul class="space-y-3">
-<li class="flex items-start gap-3">
-<span class="material-symbols-outlined text-myntra-text-sec mt-0.5 text-[20px]">check_circle</span>
-<div>
-<h4 class="font-body-bold text-body-bold text-myntra-dark">Dynamic Value Prop Highlighting</h4>
-<p class="font-body text-body text-myntra-text-sec text-sm">Extracting and displaying key quality metrics from reviews.</p>
-</div>
-</li>
-<li class="flex items-start gap-3">
-<span class="material-symbols-outlined text-myntra-text-sec mt-0.5 text-[20px]">check_circle</span>
-<div>
-<h4 class="font-body-bold text-body-bold text-myntra-dark">Automated Authenticity Verification</h4>
-<p class="font-body text-body text-myntra-text-sec text-sm">Badging high-trust sellers based on historical data.</p>
-</div>
-</li>
-</ul>
-</div>
-</div>
-</div>
+
+<!-- Main -->
+<main class="ml-[260px] p-8 max-w-6xl">
+
+  <!-- Page title -->
+  <div class="mb-2">
+    <h1 class="text-3xl font-extrabold text-[#282C3F] mb-1">AI Roadmap</h1>
+    <p class="text-[#535766] text-sm">Built from 16 primary survey responses. Priorities are evidence-driven, not assumed.</p>
+  </div>
+
+  <!-- Survey meta bar -->
+  <div class="flex flex-wrap gap-3 mb-8 mt-4">
+    <div class="stat-card flex items-center gap-3">
+      <span class="material-symbols-outlined text-[#FF3F6C]">groups</span>
+      <div><p class="text-xs text-[#535766] uppercase tracking-wider">Respondents</p><p class="text-xl font-extrabold">16</p></div>
+    </div>
+    <div class="stat-card flex items-center gap-3">
+      <span class="material-symbols-outlined text-[#FF3F6C]">person</span>
+      <div><p class="text-xs text-[#535766] uppercase tracking-wider">Dominant age</p><p class="text-xl font-extrabold">25–34</p><p class="text-xs text-[#535766]">75% of respondents</p></div>
+    </div>
+    <div class="stat-card flex items-center gap-3">
+      <span class="material-symbols-outlined text-[#FF3F6C]">favorite</span>
+      <div><p class="text-xs text-[#535766] uppercase tracking-wider">Avg wishlist size</p><p class="text-xl font-extrabold">30+ items</p><p class="text-xs text-[#535766]">25% have 30+ items</p></div>
+    </div>
+    <div class="stat-card flex items-center gap-3">
+      <span class="material-symbols-outlined text-[#FF3F6C]">trending_up</span>
+      <div><p class="text-xs text-[#535766] uppercase tracking-wider">Purchase likelihood</p><p class="text-xl font-extrabold">3 / 5</p><p class="text-xs text-[#535766]">62.5% rate themselves 3</p></div>
+    </div>
+    <div class="stat-card flex items-center gap-3">
+      <span class="material-symbols-outlined text-[#FF3F6C]">shopping_cart</span>
+      <div><p class="text-xs text-[#535766] uppercase tracking-wider">Shops online</p><p class="text-xl font-extrabold">Once/month</p><p class="text-xs text-[#535766]">37.5% most common</p></div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="flex border-b border-[#EAEAEC] mb-8 overflow-x-auto" id="tabs">
+    <button class="tab-btn active" data-tab="roadmap">🗺 Roadmap</button>
+    <button class="tab-btn" data-tab="survey">📊 Survey findings</button>
+    <button class="tab-btn" data-tab="signals">💬 User signals</button>
+  </div>
+
+  <!-- ════════════════ TAB: ROADMAP ════════════════ -->
+  <div id="tab-roadmap">
+
+    <!-- North star -->
+    <div class="card p-5 mb-6 flex items-center gap-4">
+      <div class="w-10 h-10 rounded-full bg-[#FFF0F4] flex items-center justify-center text-[#FF3F6C] shrink-0">
+        <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">star</span>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-widest text-[#535766] mb-0.5">North-Star</p>
+        <p class="font-bold text-[#282C3F]">Increase wishlist → purchase conversion by reducing pre-purchase uncertainty</p>
+        <p class="text-xs text-[#535766] mt-1">Survey signal: 62.5% rate purchase likelihood at 3/5 — the gap is solvable confidence, not intent.</p>
+      </div>
+    </div>
+
+    <!-- ── RANK 1 ── -->
+    <div class="card overflow-hidden mb-5 relative">
+      <div class="rank-badge absolute top-0 right-0">🔥 Rank 1 · Now</div>
+      <div class="flex flex-col md:flex-row">
+        <!-- Left -->
+        <div class="p-6 md:w-[340px] shrink-0 border-b md:border-b-0 md:border-r border-[#EAEAEC] bg-[#FAFAFA]">
+          <div class="flex items-end gap-2 mb-3">
+            <span class="text-5xl font-extrabold text-[#282C3F]">75</span>
+            <span class="text-lg text-[#535766] mb-1">%</span>
+          </div>
+          <h2 class="text-xl font-extrabold text-[#282C3F] mb-2 leading-snug">Personalised Size &amp; Fit Confidence</h2>
+          <p class="text-sm text-[#535766] mb-4">Product photos/videos were the #1 pre-purchase check (75%). Size chart &amp; fit info follow at 56.3%. Users need to see how it looks <em>on them</em>.</p>
+          <div class="bg-[#FEE8ED] border border-[#FFD9E2] rounded p-3 text-sm">
+            <p class="font-bold text-[#C2185B] mb-1">Survey evidence</p>
+            <ul class="text-[#535766] space-y-1 text-xs list-disc list-inside">
+              <li>75% check product photos before buying</li>
+              <li>56.3% check size chart</li>
+              <li>31.3% use body measurements</li>
+              <li>31.3% watch product videos</li>
+              <li>31.3% chose "Personalised size/fit confidence" as most useful feature</li>
+            </ul>
+          </div>
+          <div class="mt-3 flex gap-2 flex-wrap">
+            <span class="feature-pill pill-now">Now</span>
+            <span class="feature-pill" style="background:#EBF5FF;color:#0066CC">High impact</span>
+          </div>
+        </div>
+        <!-- Right -->
+        <div class="p-6 flex-1">
+          <h3 class="font-bold text-[#282C3F] mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#535766] text-[20px]">construction</span> AI Solutions
+          </h3>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="border border-[#EAEAEC] rounded p-4 hover:border-[#FF3F6C] transition-colors">
+              <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-[#FF3F6C] text-[18px]">checkroom</span><h4 class="font-bold text-sm">Virtual try-on overlay</h4></div>
+              <p class="text-xs text-[#535766]">AR/ML model renders wishlisted garments on user's body type from a single selfie or saved measurements.</p>
+            </div>
+            <div class="border border-[#EAEAEC] rounded p-4 hover:border-[#FF3F6C] transition-colors">
+              <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-[#FF3F6C] text-[18px]">straighten</span><h4 class="font-bold text-sm">Smart size recommendation</h4></div>
+              <p class="text-xs text-[#535766]">Uses body measurements + purchase history + brand-specific size charts to predict fit. Shows "Likely fits you" badge on wishlist card.</p>
+            </div>
+            <div class="border border-[#EAEAEC] rounded p-4 hover:border-[#FF3F6C] transition-colors">
+              <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-[#FF3F6C] text-[18px]">photo_library</span><h4 class="font-bold text-sm">Customer photo aggregation</h4></div>
+              <p class="text-xs text-[#535766]">ML clusters real-customer photos by body type so users see how the product looks on someone similar to them.</p>
+            </div>
+            <div class="border border-[#EAEAEC] rounded p-4 hover:border-[#FF3F6C] transition-colors">
+              <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-[#FF3F6C] text-[18px]">video_library</span><h4 class="font-bold text-sm">Auto-surface review videos</h4></div>
+              <p class="text-xs text-[#535766]">NLP identifies review videos that mention fit/size and pins them to the wishlist item. No user effort needed.</p>
+            </div>
+          </div>
+          <div class="mt-4 p-3 bg-[#F5F5F6] rounded text-xs text-[#535766]">
+            <strong>Conversion hypothesis:</strong> Users sitting at 3/5 purchase intent move to 4/5 when they can confirm fit visually — eliminating the primary reason to delay.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RANK 2 ── -->
+    <div class="card overflow-hidden mb-5 relative">
+      <div class="rank-badge absolute top-0 right-0" style="background:#E65100">📋 Rank 2 · Now</div>
+      <div class="flex flex-col md:flex-row">
+        <div class="p-6 md:w-[340px] shrink-0 border-b md:border-b-0 md:border-r border-[#EAEAEC] bg-[#FAFAFA]">
+          <div class="flex items-end gap-2 mb-3">
+            <span class="text-5xl font-extrabold text-[#282C3F]">68.8</span>
+            <span class="text-lg text-[#535766] mb-1">%</span>
+          </div>
+          <h2 class="text-xl font-extrabold text-[#282C3F] mb-2 leading-snug">Genuine Customer Reviews &amp; Social Proof</h2>
+          <p class="text-sm text-[#535766] mb-4">68.8% check customer reviews before buying. 25% say more genuine reviews is the single factor that would most increase their confidence.</p>
+          <div class="bg-[#FEE8ED] border border-[#FFD9E2] rounded p-3 text-sm">
+            <p class="font-bold text-[#C2185B] mb-1">Survey evidence</p>
+            <ul class="text-[#535766] space-y-1 text-xs list-disc list-inside">
+              <li>68.8% check customer reviews pre-purchase</li>
+              <li>25% chose "More genuine customer reviews" as top confidence factor</li>
+              <li>18.8% chose "Real customer proof" as most useful new feature</li>
+              <li>12.5% check Reddit/social media reviews</li>
+            </ul>
+          </div>
+          <div class="mt-3 flex gap-2 flex-wrap">
+            <span class="feature-pill pill-now">Now</span>
+            <span class="feature-pill" style="background:#EBF5FF;color:#0066CC">High impact</span>
+          </div>
+        </div>
+        <div class="p-6 flex-1">
+          <h3 class="font-bold text-[#282C3F] mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#535766] text-[20px]">construction</span> AI Solutions
+          </h3>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="border border-[#EAEAEC] rounded p-4 hover:border-[#FF3F6C] transition-colors">
+              <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-[#FF3F6C] text-[18px]">verified</span><h4 class="font-bold text-sm">Verified purchase badge</h4></div>
+              <p class="text-xs text-[#535766]">ML flags suspected fake reviews. Surface only verified-purchase reviews prominently on wishlist hover-state.</p>
+            </div>
+            <div class="border border-[#EAEAEC] rounded p-4 hover:border-[#FF3F6C] transition-colors">
+              <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-[#FF3F6C] text-[18px]">summarize</span><h4 class="font-bold text-sm">AI review summary card</h4></div>
+              <p class="text-xs text-[#535766]">NLP condenses 100s of reviews into a 3-line "What buyers say" card — quality, fit, value split — directly on the wishlist item.</p>
+            </div>
+            <div class="border border-[#EAEAEC] rounded p-4 hover:border-[#FF3F6C] transition-colors">
+              <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-[#FF3F6C] text-[18px]">forum</span><h4 class="font-bold text-sm">Reddit/social signal ingestion</h4></div>
+              <p class="text-xs text-[#535766]">Surface organic Reddit and social mentions of a product directly in the review panel, reducing off-platform research trips.</p>
+            </div>
+            <div class="border border-[#EAEAEC] rounded p-4 hover:border-[#FF3F6C] transition-colors">
+              <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-[#FF3F6C] text-[18px]">people</span><h4 class="font-bold text-sm">"People like you" reviews</h4></div>
+              <p class="text-xs text-[#535766]">Filter reviews by users with similar body metrics / purchase history so the social proof is immediately relatable.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RANK 3 ── -->
+    <div class="card overflow-hidden mb-5 relative">
+      <div class="rank-badge absolute top-0 right-0" style="background:#5C6BC0">🔎 Rank 3 · Next</div>
+      <div class="flex flex-col md:flex-row">
+        <div class="p-6 md:w-[340px] shrink-0 border-b md:border-b-0 md:border-r border-[#EAEAEC] bg-[#FAFAFA]">
+          <div class="flex items-end gap-2 mb-3">
+            <span class="text-5xl font-extrabold text-[#282C3F]">75</span>
+            <span class="text-lg text-[#535766] mb-1">%</span>
+          </div>
+          <h2 class="text-xl font-extrabold text-[#282C3F] mb-2 leading-snug">Wishlist Comparison &amp; Decision Engine</h2>
+          <p class="text-sm text-[#535766] mb-4">75% add items to compare with alternatives. 25% chose "Wishlist comparison" as the most useful new feature.</p>
+          <div class="bg-[#FEE8ED] border border-[#FFD9E2] rounded p-3 text-sm">
+            <p class="font-bold text-[#C2185B] mb-1">Survey evidence</p>
+            <ul class="text-[#535766] space-y-1 text-xs list-disc list-inside">
+              <li>75% add to wishlist to compare with other options</li>
+              <li>43.8% want to save for later consideration</li>
+              <li>25% chose "Wishlist comparison" as most useful feature</li>
+              <li>18.8% compare prices on another platform</li>
+              <li>18.8% compare with other products on Myntra</li>
+            </ul>
+          </div>
+          <div class="mt-3 flex gap-2 flex-wrap">
+            <span class="feature-pill pill-next">Next</span>
+            <span class="feature-pill" style="background:#F3E5F5;color:#6A1B9A">Medium effort</span>
+          </div>
+        </div>
+        <div class="p-6 flex-1">
+          <h3 class="font-bold text-[#282C3F] mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#535766] text-[20px]">construction</span> AI Solutions
+          </h3>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="border border-[#EAEAEC] rounded p-4 hover:border-[#FF3F6C] transition-colors">
+              <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-[#FF3F6C] text-[18px]">compare_arrows</span><h4 class="font-bold text-sm">Side-by-side wishlist compare</h4></div>
+              <p class="text-xs text-[#535766]">Pin up to 4 wishlisted items into a structured comparison table — fabric, size range, price, ratings, return policy.</p>
+            </div>
+            <div class="border border-[#EAEAEC] rounded p-4 hover:border-[#FF3F6C] transition-colors">
+              <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-[#FF3F6C] text-[18px]">recommend</span><h4 class="font-bold text-sm">AI "best pick" recommendation</h4></div>
+              <p class="text-xs text-[#535766]">After comparing, ML scores each shortlisted item for the user's profile and highlights the highest-confidence choice.</p>
+            </div>
+            <div class="border border-[#EAEAEC] rounded p-4 hover:border-[#FF3F6C] transition-colors">
+              <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-[#FF3F6C] text-[18px]">price_check</span><h4 class="font-bold text-sm">Cross-platform price intelligence</h4></div>
+              <p class="text-xs text-[#535766]">Surfaces whether the item is cheaper elsewhere so users don't need to leave. Reduces off-platform research drops.</p>
+            </div>
+            <div class="border border-[#EAEAEC] rounded p-4 hover:border-[#FF3F6C] transition-colors">
+              <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-[#FF3F6C] text-[18px]">auto_awesome</span><h4 class="font-bold text-sm">Smart grouping</h4></div>
+              <p class="text-xs text-[#535766]">Auto-group wishlist items by occasion, style, or duplicate need (e.g. "3 similar kurtas — keep 1?") to reduce decision paralysis.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RANK 4 ── -->
+    <div class="card overflow-hidden mb-5 relative">
+      <div class="rank-badge absolute top-0 right-0" style="background:#2E7D32">📦 Rank 4 · Next</div>
+      <div class="flex flex-col md:flex-row">
+        <div class="p-6 md:w-[340px] shrink-0 border-b md:border-b-0 md:border-r border-[#EAEAEC] bg-[#FAFAFA]">
+          <div class="flex items-end gap-2 mb-3">
+            <span class="text-5xl font-extrabold text-[#282C3F]">56.3</span>
+            <span class="text-lg text-[#535766] mb-1">%</span>
+          </div>
+          <h2 class="text-xl font-extrabold text-[#282C3F] mb-2 leading-snug">Return Policy Confidence &amp; Inventory Clarity</h2>
+          <p class="text-sm text-[#535766] mb-4">56.3% check return/exchange policy before purchasing. Open text: users want out-of-stock items separated and discounts surfaced proactively.</p>
+          <div class="bg-[#FEE8ED] border border-[#FFD9E2] rounded p-3 text-sm">
+            <p class="font-bold text-[#C2185B] mb-1">Survey evidence</p>
+            <ul class="text-[#535766] space-y-1 text-xs list-disc list-inside">
+              <li>56.3% check return/exchange policy pre-purchase</li>
+              <li>Open text: "Separate out-of-stock items for better view"</li>
+              <li>Open text: "Pricing dropdown notification &amp; highlight discounted products"</li>
+              <li>25% add to wishlist to wait for a price drop</li>
+            </ul>
+          </div>
+          <div class="mt-3 flex gap-2 flex-wrap">
+            <span class="feature-pill pill-next">Next</span>
+            <span class="feature-pill" style="background:#E8F5E9;color:#2E7D32">Low effort</span>
+          </div>
+        </div>
+        <div class="p-6 flex-1">
+          <h3 class="font-bold text-[#282C3F] mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#535766] text-[20px]">construction</span> AI Solutions
+          </h3>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="border border-[#EAEAEC] rounded p-4 hover:border-[#FF3F6C] transition-colors">
+              <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-[#FF3F6C] text-[18px]">inventory</span><h4 class="font-bold text-sm">Out-of-stock separation</h4></div>
+              <p class="text-xs text-[#535766]">Move OOS items to a separate "Unavailable" section in wishlist so actionable items are always at the top.</p>
+            </div>
+            <div class="border border-[#EAEAEC] rounded p-4 hover:border-[#FF3F6C] transition-colors">
+              <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-[#FF3F6C] text-[18px]">notifications_active</span><h4 class="font-bold text-sm">Price drop &amp; restock alerts</h4></div>
+              <p class="text-xs text-[#535766]">Predictive ML triggers personalised alerts when a wishlisted item hits the user's implied price threshold or comes back in stock.</p>
+            </div>
+            <div class="border border-[#EAEAEC] rounded p-4 hover:border-[#FF3F6C] transition-colors">
+              <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-[#FF3F6C] text-[18px]">assignment_return</span><h4 class="font-bold text-sm">Return policy summary pill</h4></div>
+              <p class="text-xs text-[#535766]">Show a 1-line return window prominently on every wishlist card — removing the need to click into the product page to find out.</p>
+            </div>
+            <div class="border border-[#EAEAEC] rounded p-4 hover:border-[#FF3F6C] transition-colors">
+              <div class="flex items-center gap-2 mb-2"><span class="material-symbols-outlined text-[#FF3F6C] text-[18px]">local_offer</span><h4 class="font-bold text-sm">Discount highlighting</h4></div>
+              <p class="text-xs text-[#535766]">Surface coupon eligibility and active sale status on wishlisted items, reducing the need to hunt for coupon codes externally.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RANK 5 ── -->
+    <div class="card overflow-hidden mb-5 relative opacity-90 hover:opacity-100 transition-opacity">
+      <div class="rank-badge absolute top-0 right-0" style="background:#795548">⏰ Rank 5 · Later</div>
+      <div class="flex flex-col md:flex-row">
+        <div class="p-6 md:w-[340px] shrink-0 border-b md:border-b-0 md:border-r border-[#EAEAEC] bg-[#FAFAFA]">
+          <div class="flex items-end gap-2 mb-3">
+            <span class="text-5xl font-extrabold text-[#535766]">43.8</span>
+            <span class="text-lg text-[#535766] mb-1">%</span>
+          </div>
+          <h2 class="text-xl font-extrabold text-[#282C3F] mb-2 leading-snug">Fabric &amp; Material Confidence</h2>
+          <p class="text-sm text-[#535766] mb-4">43.8% check fabric/material information before buying. Users want honest, detailed material breakdowns — not just "polyester blend".</p>
+          <div class="mt-3 flex gap-2 flex-wrap">
+            <span class="feature-pill pill-later">Later</span>
+            <span class="feature-pill" style="background:#FFF3E0;color:#E65100">Medium effort</span>
+          </div>
+        </div>
+        <div class="p-6 flex-1">
+          <ul class="space-y-3">
+            <li class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-[#535766] text-[20px] mt-0.5">check_circle</span>
+              <div><h4 class="font-bold text-sm">AI material extraction</h4><p class="text-xs text-[#535766]">NLP extracts fabric composition from listing text and review mentions, building a verified material profile per product.</p></div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-[#535766] text-[20px] mt-0.5">check_circle</span>
+              <div><h4 class="font-bold text-sm">Fabric-based filtering on wishlist</h4><p class="text-xs text-[#535766]">Let users filter their wishlist by fabric type (cotton, linen, etc.) matching their skin/season preference.</p></div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-[#535766] text-[20px] mt-0.5">check_circle</span>
+              <div><h4 class="font-bold text-sm">Care instruction surfacing</h4><p class="text-xs text-[#535766]">Show wash/care icons directly on wishlist cards for users who factor care effort into purchase decisions.</p></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RANK 6 ── -->
+    <div class="card overflow-hidden mb-8 relative opacity-80 hover:opacity-100 transition-opacity">
+      <div class="rank-badge absolute top-0 right-0" style="background:#455A64">🔔 Rank 6 · Later</div>
+      <div class="flex flex-col md:flex-row">
+        <div class="p-6 md:w-[340px] shrink-0 border-b md:border-b-0 md:border-r border-[#EAEAEC] bg-[#FAFAFA]">
+          <div class="flex items-end gap-2 mb-3">
+            <span class="text-5xl font-extrabold text-[#535766]">12.5</span>
+            <span class="text-lg text-[#535766] mb-1">%</span>
+          </div>
+          <h2 class="text-xl font-extrabold text-[#282C3F] mb-2 leading-snug">Smart Wishlist Reminders</h2>
+          <p class="text-sm text-[#535766] mb-4">12.5% chose smart reminders as most useful feature. Lower priority vs fit/reviews but completes the conversion loop for high-intent users.</p>
+          <div class="mt-3 flex gap-2 flex-wrap">
+            <span class="feature-pill pill-later">Later</span>
+          </div>
+        </div>
+        <div class="p-6 flex-1">
+          <ul class="space-y-3">
+            <li class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-[#535766] text-[20px] mt-0.5">check_circle</span>
+              <div><h4 class="font-bold text-sm">Occasion-aware nudges</h4><p class="text-xs text-[#535766]">ML detects upcoming occasions (weddings, Diwali, etc.) from browsing and nudges users to act on wishlisted ethnic wear.</p></div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-[#535766] text-[20px] mt-0.5">check_circle</span>
+              <div><h4 class="font-bold text-sm">Re-engagement on price drop</h4><p class="text-xs text-[#535766]">Push notification when a wishlisted item drops below the user's implicit price threshold (inferred from browse behaviour).</p></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Implementation timeline -->
+    <div class="card p-6 mb-8">
+      <h2 class="font-bold text-lg mb-5">Suggested implementation timeline</h2>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="border-l-4 border-[#FF3F6C] pl-4">
+          <p class="text-xs font-bold uppercase tracking-widest text-[#FF3F6C] mb-2">Now — Q1/Q2</p>
+          <ul class="text-sm text-[#535766] space-y-2">
+            <li class="flex items-start gap-2"><span class="text-[#FF3F6C] font-bold mt-0.5">1</span>Smart size recommendation (ML)</li>
+            <li class="flex items-start gap-2"><span class="text-[#FF3F6C] font-bold mt-0.5">2</span>Customer photo aggregation by body type</li>
+            <li class="flex items-start gap-2"><span class="text-[#FF3F6C] font-bold mt-0.5">3</span>AI review summary card on wishlist items</li>
+            <li class="flex items-start gap-2"><span class="text-[#FF3F6C] font-bold mt-0.5">4</span>Return policy pill on wishlist cards</li>
+            <li class="flex items-start gap-2"><span class="text-[#FF3F6C] font-bold mt-0.5">5</span>Out-of-stock separation in wishlist view</li>
+          </ul>
+        </div>
+        <div class="border-l-4 border-[#E65100] pl-4">
+          <p class="text-xs font-bold uppercase tracking-widest text-[#E65100] mb-2">Next — Q3</p>
+          <ul class="text-sm text-[#535766] space-y-2">
+            <li class="flex items-start gap-2"><span class="text-[#E65100] font-bold mt-0.5">6</span>Wishlist side-by-side comparison</li>
+            <li class="flex items-start gap-2"><span class="text-[#E65100] font-bold mt-0.5">7</span>Verified purchase review filter</li>
+            <li class="flex items-start gap-2"><span class="text-[#E65100] font-bold mt-0.5">8</span>Price drop &amp; restock ML alerts</li>
+            <li class="flex items-start gap-2"><span class="text-[#E65100] font-bold mt-0.5">9</span>Reddit/social signal ingestion</li>
+          </ul>
+        </div>
+        <div class="border-l-4 border-[#2E7D32] pl-4">
+          <p class="text-xs font-bold uppercase tracking-widest text-[#2E7D32] mb-2">Later — Q4+</p>
+          <ul class="text-sm text-[#535766] space-y-2">
+            <li class="flex items-start gap-2"><span class="text-[#2E7D32] font-bold mt-0.5">10</span>Virtual try-on (AR)</li>
+            <li class="flex items-start gap-2"><span class="text-[#2E7D32] font-bold mt-0.5">11</span>AI "best pick" recommendation engine</li>
+            <li class="flex items-start gap-2"><span class="text-[#2E7D32] font-bold mt-0.5">12</span>Fabric/material extraction &amp; filtering</li>
+            <li class="flex items-start gap-2"><span class="text-[#2E7D32] font-bold mt-0.5">13</span>Occasion-aware smart reminders</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div><!-- /tab-roadmap -->
+
+  <!-- ════════════════ TAB: SURVEY FINDINGS ════════════════ -->
+  <div id="tab-survey" class="hidden">
+
+    <div class="grid md:grid-cols-2 gap-6 mb-6">
+
+      <!-- Age -->
+      <div class="card p-5">
+        <h3 class="font-bold mb-1">Age group</h3>
+        <p class="text-xs text-[#535766] mb-4">16 responses</p>
+        <div class="space-y-3">
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span>25–34</span><span class="font-bold">75% (12)</span></div>
+            <div class="survey-bar-track"><div class="survey-bar-fill" style="width:75%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span>18–24</span><span class="font-bold">12.5% (2)</span></div>
+            <div class="survey-bar-track"><div class="survey-bar-fill" style="width:12.5%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span>35–44</span><span class="font-bold">12.5% (2)</span></div>
+            <div class="survey-bar-track"><div class="survey-bar-fill" style="width:12.5%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wishlist size -->
+      <div class="card p-5">
+        <h3 class="font-bold mb-1">Items in wishlist right now</h3>
+        <p class="text-xs text-[#535766] mb-4">16 responses</p>
+        <div class="space-y-3">
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span>1–5 items</span><span class="font-bold">37.5% (6)</span></div>
+            <div class="survey-bar-track"><div class="survey-bar-fill" style="width:37.5%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span>30+ items</span><span class="font-bold">25% (4)</span></div>
+            <div class="survey-bar-track"><div class="survey-bar-fill" style="width:25%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span>5–15 items</span><span class="font-bold">18.8% (3)</span></div>
+            <div class="survey-bar-track"><div class="survey-bar-fill" style="width:18.8%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span>15–25 items</span><span class="font-bold">18.8% (3)</span></div>
+            <div class="survey-bar-track"><div class="survey-bar-fill" style="width:18.8%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Purchase likelihood -->
+      <div class="card p-5">
+        <h3 class="font-bold mb-1">Likelihood to buy something wishlisted (1–5)</h3>
+        <p class="text-xs text-[#535766] mb-4">16 responses</p>
+        <div class="space-y-3">
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span>3 — Neutral</span><span class="font-bold text-[#FF3F6C]">62.5% (10)</span></div>
+            <div class="survey-bar-track"><div class="survey-bar-fill" style="width:62.5%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span>2 — Unlikely</span><span class="font-bold">25% (4)</span></div>
+            <div class="survey-bar-track"><div class="survey-bar-fill" style="width:25%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span>4 — Likely</span><span class="font-bold">12.5% (2)</span></div>
+            <div class="survey-bar-track"><div class="survey-bar-fill" style="width:12.5%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span>1 or 5</span><span class="font-bold">0%</span></div>
+            <div class="survey-bar-track"><div class="survey-bar-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+        <p class="text-xs text-[#535766] mt-3 bg-[#FEE8ED] p-2 rounded">⚠️ No one rates themselves 5/5. The wishlist is a consideration stage, not a purchase queue — confidence builders are the unlock.</p>
+      </div>
+
+      <!-- Shopping frequency -->
+      <div class="card p-5">
+        <h3 class="font-bold mb-1">How often do you shop for fashion online?</h3>
+        <p class="text-xs text-[#535766] mb-4">16 responses</p>
+        <div class="space-y-3">
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span>Once a month</span><span class="font-bold text-[#FF3F6C]">37.5% (6)</span></div>
+            <div class="survey-bar-track"><div class="survey-bar-fill" style="width:37.5%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span>Once every 2–3 months</span><span class="font-bold">25% (4)</span></div>
+            <div class="survey-bar-track"><div class="survey-bar-fill" style="width:25%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span>2–3 times a month</span><span class="font-bold">18.8% (3)</span></div>
+            <div class="survey-bar-track"><div class="survey-bar-fill" style="width:18.8%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span>Less than once / 3 months</span><span class="font-bold">12.5% (2)</span></div>
+            <div class="survey-bar-track"><div class="survey-bar-fill" style="width:12.5%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs mb-1"><span>More than 3 times / month</span><span class="font-bold">6.3% (1)</span></div>
+            <div class="survey-bar-track"><div class="survey-bar-fill" style="width:6.3%"></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Reasons for wishlisting (multi-select bar chart) -->
+    <div class="card p-5 mb-6">
+      <h3 class="font-bold mb-1">Main reasons for adding to wishlist <span class="text-xs font-normal text-[#535766]">(select any 3)</span></h3>
+      <p class="text-xs text-[#535766] mb-4">16 responses · multiple selections allowed</p>
+      <div class="space-y-3">
+        <div><div class="flex justify-between text-xs mb-1"><span>I want to compare it with other options</span><span class="font-bold text-[#FF3F6C]">75% (12)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:75%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>I am waiting before deciding</span><span class="font-bold">56.3% (9)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:56.3%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>I genuinely plan to buy it</span><span class="font-bold">50% (8)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:50%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>I like the product but don't know if it'll suit me</span><span class="font-bold">50% (8)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:50%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>I want to save it for later</span><span class="font-bold">43.8% (7)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:43.8%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>I may need it for a future occasion</span><span class="font-bold">25% (4)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:25%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>I am not ready to buy yet</span><span class="font-bold">12.5% (2)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:12.5%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>I want to track the price</span><span class="font-bold">6.3% (1)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:6.3%"></div></div></div>
+      </div>
+    </div>
+
+    <!-- Pre-purchase information checks -->
+    <div class="card p-5 mb-6">
+      <h3 class="font-bold mb-1">Pre-purchase information checks <span class="text-xs font-normal text-[#535766]">(select any 3)</span></h3>
+      <p class="text-xs text-[#535766] mb-4">16 responses</p>
+      <div class="space-y-3">
+        <div><div class="flex justify-between text-xs mb-1"><span>Product photos / videos</span><span class="font-bold text-[#FF3F6C]">75% (12) 🥇</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:75%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Customer reviews</span><span class="font-bold">68.8% (11)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:68.8%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Size chart</span><span class="font-bold">56.3% (9)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:56.3%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Return / exchange policy</span><span class="font-bold">56.3% (9)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:56.3%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Fabric / material information</span><span class="font-bold">43.8% (7)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:43.8%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Product ratings</span><span class="font-bold">37.5% (6)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:37.5%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>My own body measurements</span><span class="font-bold">31.3% (5)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:31.3%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Product videos</span><span class="font-bold">31.3% (5)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:31.3%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>YouTube / influencer reviews</span><span class="font-bold">25% (4)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:25%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Compare price on another platform</span><span class="font-bold">25% (4)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:25%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Compare with other products on Myntra</span><span class="font-bold">18.8% (3)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:18.8%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Reviews on Reddit / social media</span><span class="font-bold">12.5% (2)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:12.5%"></div></div></div>
+      </div>
+    </div>
+
+    <!-- Most useful feature -->
+    <div class="card p-5 mb-6">
+      <h3 class="font-bold mb-1">Most useful new feature <span class="text-xs font-normal text-[#535766]">(single choice)</span></h3>
+      <p class="text-xs text-[#535766] mb-4">16 responses</p>
+      <div class="space-y-3">
+        <div><div class="flex justify-between text-xs mb-1"><span>Personalized size/fit confidence (based on measurements)</span><span class="font-bold text-[#FF3F6C]">25% (4) 🥇</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:25%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Wishlist comparison ("You saved 4 similar products")</span><span class="font-bold text-[#FF3F6C]">25% (4) 🥇</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:25%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Real customer proof (more photos/videos)</span><span class="font-bold">18.8% (3)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:18.8%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Smart reminders ("Remind me about this")</span><span class="font-bold">12.5% (2)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:12.5%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Product confidence summary (reviews + material + return)</span><span class="font-bold">12.5% (2)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:12.5%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Styling confidence ("Show how this looks on me")</span><span class="font-bold">6.3% (1)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:6.3%"></div></div></div>
+      </div>
+    </div>
+
+    <!-- Top confidence factor -->
+    <div class="card p-5 mb-6">
+      <h3 class="font-bold mb-1">Single factor that would most increase purchase confidence</h3>
+      <p class="text-xs text-[#535766] mb-4">16 responses</p>
+      <div class="space-y-3">
+        <div><div class="flex justify-between text-xs mb-1"><span>Better size/fit recommendation</span><span class="font-bold text-[#FF3F6C]">31.3% (5) 🥇</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:31.3%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>More genuine customer reviews</span><span class="font-bold">25% (4)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:25%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Better product/material information</span><span class="font-bold">12.5% (2)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:12.5%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>More customer photos/videos</span><span class="font-bold">12.5% (2)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:12.5%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Ability to compare shortlisted products</span><span class="font-bold">6.3% (1)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:6.3%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Styling recommendation / better return info / social proof</span><span class="font-bold">~4% each</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:4%"></div></div></div>
+      </div>
+    </div>
+
+  </div><!-- /tab-survey -->
+
+  <!-- ════════════════ TAB: USER SIGNALS ════════════════ -->
+  <div id="tab-signals" class="hidden">
+    <div class="card p-5 mb-5">
+      <h2 class="font-bold text-lg mb-4">Open-text: "If you could improve one thing about the wishlist experience"</h2>
+      <p class="text-xs text-[#535766] mb-5">11 responses (AI summary from Google Forms)</p>
+      <div class="space-y-4">
+        <div class="border-l-4 border-[#FF3F6C] pl-4 py-2">
+          <p class="font-bold text-sm mb-1">📦 Inventory management</p>
+          <p class="text-sm text-[#535766]">Users want out-of-stock items separated into a distinct section so the actionable wishlist is not cluttered. Multiple respondents mentioned frustration at having to scroll past unavailable items.</p>
+        </div>
+        <div class="border-l-4 border-[#FF3F6C] pl-4 py-2">
+          <p class="font-bold text-sm mb-1">💰 Pricing &amp; promotions</p>
+          <p class="text-sm text-[#535766]">Feedback included requests for a pricing dropdown notification and a clear preference for highlighting discounted products directly on wishlist items. Users want to be told when their wishlisted item goes on sale — not have to check manually.</p>
+        </div>
+        <div class="border-l-4 border-[#FF3F6C] pl-4 py-2">
+          <p class="font-bold text-sm mb-1">📐 Size &amp; fit clarity</p>
+          <p class="text-sm text-[#535766]">Several users mentioned wanting to see fit information (sizing comparison, "will this fit me?") directly from the wishlist without navigating to the product page. The friction of clicking through kills purchase momentum.</p>
+        </div>
+        <div class="border-l-4 border-[#535766] pl-4 py-2">
+          <p class="font-bold text-sm mb-1">🔍 Better organisation</p>
+          <p class="text-sm text-[#535766]">Requests for folders/collections within the wishlist to separate occasions (work, casual, wedding season). Currently it's a flat list that becomes overwhelming at 30+ items.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key insight callouts -->
+    <div class="grid md:grid-cols-3 gap-4 mb-5">
+      <div class="card p-4 border-t-4 border-[#FF3F6C]">
+        <p class="text-2xl font-extrabold text-[#282C3F] mb-1">87.5%</p>
+        <p class="text-sm font-bold mb-1">Wishlist ≠ purchase intent</p>
+        <p class="text-xs text-[#535766]">Only 12.5% rate purchase likelihood at 4/5. The majority are in a consider-and-wait state — not ready to buy.</p>
+      </div>
+      <div class="card p-4 border-t-4 border-[#E65100]">
+        <p class="text-2xl font-extrabold text-[#282C3F] mb-1">75%</p>
+        <p class="text-sm font-bold mb-1">Using wishlist to compare</p>
+        <p class="text-xs text-[#535766]">Three-quarters add items specifically to compare options — the wishlist is a shortlisting tool, not a buy-later list.</p>
+      </div>
+      <div class="card p-4 border-t-4 border-[#2E7D32]">
+        <p class="text-2xl font-extrabold text-[#282C3F] mb-1">56.3%</p>
+        <p class="text-sm font-bold mb-1">Leave to check return policy</p>
+        <p class="text-xs text-[#535766]">More than half check return/exchange policy before buying — a piece of information that should be surfaced on the wishlist card itself.</p>
+      </div>
+    </div>
+
+    <!-- Wishlist open frequency -->
+    <div class="card p-5 mb-5">
+      <h3 class="font-bold mb-1">How often do users open the wishlist page?</h3>
+      <p class="text-xs text-[#535766] mb-4">16 responses</p>
+      <div class="space-y-3">
+        <div><div class="flex justify-between text-xs mb-1"><span>Rarely — only when I remember a specific item</span><span class="font-bold text-[#FF3F6C]">25% (4)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:25%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>A few times a week</span><span class="font-bold">25% (4)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:25%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Almost every time I open the app</span><span class="font-bold">18.8% (3)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:18.8%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>A few times a month</span><span class="font-bold">18.8% (3)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:18.8%"></div></div></div>
+        <div><div class="flex justify-between text-xs mb-1"><span>Almost never</span><span class="font-bold">12.5% (2)</span></div><div class="survey-bar-track"><div class="survey-bar-fill" style="width:12.5%"></div></div></div>
+      </div>
+      <p class="text-xs text-[#535766] mt-3 bg-[#F5F5F6] p-2 rounded">Insight: 37.5% open the wishlist rarely or almost never. Smart reminders and push notifications at the right moment could activate this dormant segment.</p>
+    </div>
+
+  </div><!-- /tab-signals -->
+
 </main>
 
 <script src="config.js"></script>
 <script>
-(function () {
-  var url = (window.STREAMLIT_BACKEND_URL || "").replace(/\/$/, "");
-  if (!url) return;
-  document.querySelectorAll("a[href='#']").forEach(function () {});
+(function(){
+  // Tab switching
+  var tabs = document.querySelectorAll(".tab-btn");
+  tabs.forEach(function(btn){
+    btn.addEventListener("click", function(){
+      tabs.forEach(function(b){ b.classList.remove("active"); });
+      btn.classList.add("active");
+      ["roadmap","survey","signals"].forEach(function(id){
+        var el = document.getElementById("tab-"+id);
+        if(el) el.classList.add("hidden");
+      });
+      var target = document.getElementById("tab-"+btn.getAttribute("data-tab"));
+      if(target) target.classList.remove("hidden");
+    });
+  });
+  // Streamlit link
+  var url = (window.STREAMLIT_BACKEND_URL||"").replace(/\/$/,"");
   var link = document.getElementById("streamlit-backend-link");
-  if (link) link.href = url;
+  if(url && link) link.href = url;
+  // Animate bars on load
+  document.querySelectorAll(".survey-bar-fill").forEach(function(bar){
+    var w = bar.style.width;
+    bar.style.width = "0";
+    setTimeout(function(){ bar.style.width = w; }, 100);
+  });
 })();
 </script>
-
-</body></html>
+</body>
+</html>
