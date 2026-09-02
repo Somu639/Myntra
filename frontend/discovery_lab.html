@@ -488,19 +488,23 @@
           ? table(["#", "Category", "Stage", "Leverage", "Mentions", "Sources", "VOC score", "WPC-weighted"], blockerRows)
           : "<p class='font-body text-secondary'>No blockers match the selected filter.</p>");
 
-    } else if (id === "q3" && p) {
-      // Uncertainty breakdown — show with chips + inline quotes
+    } else if ((id === "q3" || id === "q4" || id === "q5") && p) {
+      // ── q3 Uncertainty / q4 Postponement / q5 Comparison ──────────────────
+      // All three share the same payload shape: mentions, share_of_blockers_pct,
+      // breakdown: [["blocker_type", count], …], quotes: [{text, source, rating, blocker_type}]
       kpis += kpi("Mentions", p.mentions || 0);
       if (p.share_of_blockers_pct != null) kpis += kpi("Share of blockers", p.share_of_blockers_pct + "%");
+      if (p.label) kpis += kpi("Label", p.label);
+
       var br = p.breakdown || [];
       var breakdownHtml = br.length
         ? table(
             ["Category", "Mentions"],
             br.map(function (r) { return [blockerChip(r[0]), r[1]]; })
           )
-        : "<p class='font-body text-secondary'>No breakdown for this cut.</p>";
+        : "<p class='font-body text-secondary'>No breakdown data for this cut.</p>";
 
-      // Show payload quotes grouped by blocker type under the table
+      // Group payload quotes by blocker type and show below the table
       var pQuotes = p.quotes || [];
       var groupedByBlocker = {};
       pQuotes.forEach(function (q) {
@@ -510,20 +514,129 @@
       });
       var quotesHtml = "";
       if (pQuotes.length) {
-        quotesHtml = "<h4 class='font-h3 text-h3 mt-6 mb-3'>Sample quotes by uncertainty type</h4>";
+        var qSectionLabel = id === "q3" ? "uncertainty type"
+          : id === "q4" ? "postponement reason"
+          : "comparison driver";
+        quotesHtml = "<h4 class='font-h3 text-h3 mt-6 mb-3'>Sample quotes by " + qSectionLabel + "</h4>";
         Object.keys(groupedByBlocker).forEach(function (bt) {
           quotesHtml += '<div class="mb-4">'
             + '<div class="mb-2">' + blockerChip(bt) + '</div>'
             + groupedByBlocker[bt].map(function (q) {
                 return '<div class="border-l-4 border-primary bg-primary-fixed/5 p-3 rounded-r-DEFAULT mb-2">'
-                  + '<p class="italic text-sm mb-1">' + esc((q.text || "").slice(0, 360)) + "</p>"
-                  + '<span class="font-label text-secondary text-xs">' + esc(q.source || "") + (q.rating != null ? ' · ★' + esc(q.rating) : "") + "</span>"
-                  + "</div>";
+                  + '<p class="italic text-sm mb-1">' + esc((q.text || "").slice(0, 400)) + "</p>"
+                  + '<span class="font-label text-secondary text-xs">'
+                  + esc(q.source || "")
+                  + (q.rating != null ? ' · ★' + esc(q.rating) : "")
+                  + "</span></div>";
               }).join("")
             + "</div>";
         });
       }
       body = platformNotice + breakdownHtml + quotesHtml;
+
+    } else if (id === "q6" && p) {
+      // ── q6 Off-platform research ────────────────────────────────────────────
+      kpis += kpi("Off-platform mentions", p.off_platform_total != null ? p.off_platform_total : "—");
+      if (p.off_platform_pct_of_relevant != null)
+        kpis += kpi("% of relevant", p.off_platform_pct_of_relevant + "%");
+
+      // Human-readable channel labels
+      var CHANNEL_LABELS = {
+        "none_mentioned":        "No off-platform research mentioned",
+        "in_app_reviews":        "Used in-app reviews",
+        "external_friends_family":"Asked friends / family",
+        "external_youtube":      "Watched YouTube reviews",
+        "external_google_search":"Googled the product",
+        "social_media_influencer":"Checked social / influencer content",
+        "in_store_trial":        "Visited store to try on"
+      };
+
+      var channels = p.by_channel || [];
+      var channelHtml = channels.length
+        ? table(
+            ["Research channel", "Mentions"],
+            channels.map(function (r) {
+              var key = r[0] || "";
+              var label = CHANNEL_LABELS[key] || key;
+              // Highlight off-platform rows
+              var isOffPlat = key !== "none_mentioned" && key !== "in_app_reviews";
+              var display = isOffPlat
+                ? "<span style='color:#E65100;font-weight:700'>" + esc(label) + "</span>"
+                : esc(label);
+              return [display, r[1]];
+            })
+          )
+        : "<p class='font-body text-secondary'>No channel breakdown for this cut.</p>";
+
+      // Add note about off-platform significance
+      var offNote = p.captured
+        ? "<div class='platform-notice mt-4'>ℹ️ Every off-platform mention (highlighted in orange) is a moment a user left Myntra to answer a question the app didn't answer — a direct product opportunity.</div>"
+        : "";
+
+      // Show payload quotes — these tend to reference off-platform research context
+      var q6Quotes = p.quotes || [];
+      var q6QuotesHtml = "";
+      if (q6Quotes.length) {
+        q6QuotesHtml = "<h4 class='font-h3 text-h3 mt-6 mb-3'>Sample quotes mentioning research behaviour</h4>"
+          + q6Quotes.map(function (q) {
+              var chip = q.blocker_type ? '<span style="margin-left:4px">' + blockerChip(q.blocker_type) + '</span>' : "";
+              return '<div class="border-l-4 border-primary bg-primary-fixed/5 p-3 rounded-r-DEFAULT mb-3">'
+                + '<p class="italic text-sm mb-1">' + esc((q.text || "").slice(0, 400)) + "</p>"
+                + '<span class="font-label text-secondary text-xs">' + esc(q.source || "")
+                + (q.rating != null ? ' · ★' + esc(q.rating) : "") + chip + "</span></div>";
+            }).join("");
+      }
+      body = platformNotice + channelHtml + offNote + q6QuotesHtml;
+
+    } else if (id === "q7" && p) {
+      // ── q7 Dimension roles ──────────────────────────────────────────────────
+      if (p.total_with_blocker != null) kpis += kpi("Records with a blocker", p.total_with_blocker);
+      var dims = p.by_dimension || [];
+      body = platformNotice + (dims.length
+        ? table(
+            ["Dimension", "Mentions", "Share %"],
+            dims.map(function (r) { return [r.dimension, r.mentions, r.share_pct]; })
+          )
+        : "<p class='font-body text-secondary'>No dimension breakdown for this cut.</p>");
+
+    } else if (id === "q8" && p) {
+      // ── q8 Intent vs bookmark ───────────────────────────────────────────────
+      var total = p.wishlist_mentions || 1; // avoid /0
+      var genuinePct = p.genuine_intent != null ? Math.round(100 * p.genuine_intent / total) : 0;
+      var bookmarkPct = p.bookmarking != null ? Math.round(100 * p.bookmarking / total) : 0;
+      var unclearPct  = p.unclear != null      ? Math.round(100 * p.unclear  / total) : 0;
+
+      kpis += kpi("Wishlist signals", p.wishlist_mentions || 0);
+      kpis += kpi("Genuine intent", (p.genuine_intent || 0) + " (" + genuinePct + "%)");
+      kpis += kpi("Bookmarking", (p.bookmarking || 0) + " (" + bookmarkPct + "%)");
+      kpis += kpi("Unclear", (p.unclear || 0) + " (" + unclearPct + "%)");
+
+      // Visual proportion bar
+      var barHtml = '<div class="mt-4 mb-6">'
+        + '<p class="font-label text-secondary uppercase mb-2">Intent split across ' + esc(p.wishlist_mentions) + ' wishlist signals</p>'
+        + '<div class="flex h-6 rounded overflow-hidden w-full">'
+        + '<div style="width:' + genuinePct + '%;background:#FF3F6C" title="Genuine intent: ' + genuinePct + '%"></div>'
+        + '<div style="width:' + bookmarkPct + '%;background:#5C6BC0" title="Bookmarking: ' + bookmarkPct + '%"></div>'
+        + '<div style="width:' + unclearPct + '%;background:#EAEAEC" title="Unclear: ' + unclearPct + '%"></div>'
+        + '</div>'
+        + '<div class="flex gap-4 mt-2 text-xs text-[#535766]">'
+        + '<span><span style="display:inline-block;width:10px;height:10px;background:#FF3F6C;border-radius:2px;margin-right:4px"></span>Genuine intent (' + genuinePct + '%)</span>'
+        + '<span><span style="display:inline-block;width:10px;height:10px;background:#5C6BC0;border-radius:2px;margin-right:4px"></span>Bookmarking (' + bookmarkPct + '%)</span>'
+        + '<span><span style="display:inline-block;width:10px;height:10px;background:#EAEAEC;border-radius:2px;margin-right:4px"></span>Unclear (' + unclearPct + '%)</span>'
+        + '</div></div>';
+
+      var intentTable = table(
+        ["Intent type", "Count", "Share"],
+        [
+          ["✅ Genuine purchase intent", p.genuine_intent || 0, genuinePct + "%"],
+          ["🔖 Bookmarking / saving for later", p.bookmarking || 0, bookmarkPct + "%"],
+          ["❓ Unclear intent", p.unclear || 0, unclearPct + "%"]
+        ]
+      );
+
+      body = platformNotice + barHtml + intentTable
+        + "<p class='font-body text-secondary mt-4 text-sm'>Note: sample size is small (only " + esc(p.wishlist_mentions)
+        + " signals with a clear wishlist mention in public VOC). Treat as directional.</p>";
 
     } else if (id === "q9" && p && p.personas) {
       kpis += kpi("Personas", (p.personas || []).length);
@@ -538,30 +651,32 @@
           );
 
     } else if (p && typeof p === "object" && !Array.isArray(p)) {
+      // ── Generic object fallback (should not be reached for q1-q10 in normal use) ──
       if (p.mentions != null) kpis += kpi("Mentions", p.mentions);
       if (p.share_of_blockers_pct != null) kpis += kpi("Share of blockers", p.share_of_blockers_pct + "%");
       if (p.off_platform_total != null) kpis += kpi("Off-platform", p.off_platform_total);
       if (p.wishlist_mentions != null) kpis += kpi("Wishlist mentions", p.wishlist_mentions);
       if (p.genuine_intent != null) kpis += kpi("Genuine", p.genuine_intent);
       if (p.bookmarking != null) kpis += kpi("Bookmarking", p.bookmarking);
+      if (p.total_with_blocker != null) kpis += kpi("With blocker", p.total_with_blocker);
 
-      // Breakdown with chips where the item key is a known blocker type
-      var br2 = p.breakdown || p.by_channel || [];
-      if (br2.length) {
+      // Try to render whatever structured data is present
+      var fallbackBr = p.breakdown || p.by_channel || [];
+      if (fallbackBr.length) {
         body = platformNotice + table(
-          ["Category", "Count"],
-          br2.map(function (r) {
+          ["Item", "Count"],
+          fallbackBr.map(function (r) {
             var key = r[0] || r.channel || "";
             var display = BLOCKER_META[key] ? blockerChip(key) : esc(key);
             return [display, r[1] != null ? r[1] : r.mentions];
           })
         );
       }
-      var dims = p.by_dimension || [];
-      if (dims.length) {
+      var fallbackDims = p.by_dimension || [];
+      if (fallbackDims.length) {
         body = platformNotice + table(
           ["Dimension", "Mentions", "Share %"],
-          dims.map(function (r) { return [r.dimension, r.mentions, r.share_pct]; })
+          fallbackDims.map(function (r) { return [r.dimension, r.mentions, r.share_pct]; })
         );
       }
 
