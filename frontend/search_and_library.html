@@ -221,22 +221,22 @@
 </div>
 <div class="grid grid-cols-3 gap-4 mb-8" id="lib-tops"></div>
 <div class="flat-card mb-8">
-<h2 class="font-h3 text-h3 mb-4">Volume vs frustration vs WPC-weighted</h2>
+<h2 class="font-h3 text-h3 mb-4">Volume vs frustration vs intent weightage</h2>
 <div id="lib-bars" class="space-y-4"></div>
 </div>
 <div class="flat-card p-0 overflow-hidden mb-8">
 <div class="p-card_padding border-b border-myntra-light">
 <h2 class="font-h3 text-h3">Opportunity comparison</h2>
-<p class="font-body text-secondary text-sm mt-1">WPC-weighted = VOC score × journey leverage. Not a measured conversion lift.</p>
+<p class="font-body text-secondary text-sm mt-1">Intent + survey max weightage. Weightage is stated pre-purchase check share, not a funnel or WPC rate.</p>
 </div>
 <div class="overflow-x-auto">
 <table class="w-full text-left border-collapse">
 <thead>
 <tr class="bg-myntra-gray border-b border-myntra-light text-label font-label text-secondary">
-<th class="py-3 px-4">Area</th><th class="py-3 px-4">Stage</th><th class="py-3 px-4">Leverage</th>
+<th class="py-3 px-4">Area</th><th class="py-3 px-4">Intent</th><th class="py-3 px-4">Rank</th>
 <th class="py-3 px-4 text-right">Mentions</th><th class="py-3 px-4 text-right">Frustration</th>
 <th class="py-3 px-4 text-right">Sources</th><th class="py-3 px-4 text-right">VOC</th>
-<th class="py-3 px-4 text-right">WPC-w</th>
+<th class="py-3 px-4 text-right">Weightage</th>
 </tr>
 </thead>
 <tbody id="lib-rows" class="text-body font-body"></tbody>
@@ -265,21 +265,27 @@
   var meta = document.getElementById("lib-meta");
   if (meta) meta.innerHTML = '<span><strong class="text-on-background">' + esc(cov.total_records) + '</strong> records</span><span class="w-1 h-1 rounded-full bg-myntra-light"></span><span><strong class="text-myntra-pink">' + esc(cov.relevant) + '</strong> relevant</span>';
   var tops = document.getElementById("lib-tops");
+  var intents = d.intents || {};
+  var maxW = intents.maximum_weightage_pct;
+  var atMax = (intents.personas || []).filter(function (p) { return p.max_weightage_pct === maxW; }).map(function (p) { return p.name; }).join(" · ");
   if (tops) {
-    [["Highest volume","top_by_volume"],["Highest frustration","top_by_frustration"],["Highest WPC-weighted","top_by_wpc_weighted"]].forEach(function(pair){
+    [["Highest volume","top_by_volume"],["Highest frustration","top_by_frustration"]].forEach(function(pair){
       var hit = cmp[pair[1]] || {};
       tops.innerHTML += '<div class="flat-card"><p class="font-label text-secondary uppercase">' + pair[0] + '</p><p class="font-h3">' + esc(hit.blocker_type||"—") + '</p><p class="text-sm text-secondary">' + esc(hit.value) + '</p></div>';
     });
+    tops.innerHTML += '<div class="flat-card"><p class="font-label text-secondary uppercase">Maximum survey weightage</p><p class="font-h3">' + esc(maxW != null ? maxW + "%" : "—") + '</p><p class="text-sm text-secondary">' + esc(atMax || "") + '</p></div>';
   }
   var maxM = Math.max.apply(null, rows.map(function(r){return r.mentions||0;}).concat([1]));
   var bars = document.getElementById("lib-bars");
   if (bars) bars.innerHTML = rows.slice(0,8).map(function(r){
     var w = Math.round(100*(r.mentions||0)/maxM);
-    return '<div><div class="flex justify-between text-label text-secondary mb-1"><span>' + esc(r.dimension) + ' · ' + esc(r.wpc_stage) + '</span><span>' + esc(r.frustration_rate_pct) + '% frustrated · WPC-w ' + esc(r.wpc_weighted_score) + '</span></div><div class="h-3 bg-[#F5F5F6] rounded-sm overflow-hidden"><div class="h-3 bg-[#FF3F6C]" style="width:' + w + '%"></div></div></div>';
+    var wt = r.survey_weightage_pct != null ? r.survey_weightage_pct + "%" : "—";
+    return '<div><div class="flex justify-between text-label text-secondary mb-1"><span>' + esc(r.dimension) + ' · ' + esc(r.purchase_intent || "—") + '</span><span>' + esc(r.frustration_rate_pct) + '% frustrated · weightage ' + esc(wt) + '</span></div><div class="h-3 bg-[#F5F5F6] rounded-sm overflow-hidden"><div class="h-3 bg-[#FF3F6C]" style="width:' + w + '%"></div></div></div>';
   }).join("");
   var tbody = document.getElementById("lib-rows");
   if (tbody) tbody.innerHTML = rows.map(function(r,i){
-    return '<tr class="border-b border-myntra-light' + (i===0?' bg-[#FF3F6C]/5':'') + '"><td class="py-3 px-4 font-body-bold">' + esc(r.dimension) + '</td><td class="py-3 px-4">' + esc(r.wpc_stage) + '</td><td class="py-3 px-4">' + esc(r.wpc_leverage) + '</td><td class="py-3 px-4 text-right">' + esc(r.mentions) + '</td><td class="py-3 px-4 text-right">' + esc(r.frustration_rate_pct) + '%</td><td class="py-3 px-4 text-right">' + esc(r.source_count) + '</td><td class="py-3 px-4 text-right font-body-bold text-myntra-pink">' + esc(r.opportunity_score) + '</td><td class="py-3 px-4 text-right">' + esc(r.wpc_weighted_score) + '</td></tr>';
+    var wt = r.survey_weightage_pct != null ? r.survey_weightage_pct + "%" : "—";
+    return '<tr class="border-b border-myntra-light' + (i===0?' bg-[#FF3F6C]/5':'') + '"><td class="py-3 px-4 font-body-bold">' + esc(r.dimension) + '</td><td class="py-3 px-4">' + esc(r.purchase_intent || "—") + '</td><td class="py-3 px-4">' + esc(r.intent_rank || "—") + '</td><td class="py-3 px-4 text-right">' + esc(r.mentions) + '</td><td class="py-3 px-4 text-right">' + esc(r.frustration_rate_pct) + '%</td><td class="py-3 px-4 text-right">' + esc(r.source_count) + '</td><td class="py-3 px-4 text-right font-body-bold text-myntra-pink">' + esc(r.opportunity_score) + '</td><td class="py-3 px-4 text-right">' + esc(wt) + '</td></tr>';
   }).join("");
   var src = document.getElementById("lib-sources");
   if (src) src.innerHTML = (cov.by_source||[]).map(function(s){

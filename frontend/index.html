@@ -196,7 +196,7 @@ Analyze eight public sources, answer ten wishlist→purchase questions, then ide
 <h3 class="font-h3 text-h3 text-neutral border-b border-outline-variant pb-2 mb-6">Sources analyzed</h3>
 <div id="home-sources" class="space-y-2"></div>
 <h3 class="font-h3 text-h3 text-neutral border-b border-outline-variant pb-2 mt-8 mb-4">Opportunity comparison</h3>
-<p class="font-body text-secondary text-sm mb-3">WPC-weighted = VOC score × journey leverage. Not a measured lift.</p>
+<p class="font-body text-secondary text-sm mb-3">Intent cut with survey max weightage. Weightage is stated pre-purchase check share, not a funnel or WPC rate.</p>
 <div id="home-opp" class="overflow-x-auto"></div>
 </div>
 </div>
@@ -244,10 +244,13 @@ Analyze eight public sources, answer ten wishlist→purchase questions, then ide
   var d = window.HOME_DATA || {};
   var cov = d.coverage || {};
   var top = (d.areas || [])[0] || {};
+  var intents = d.intents || {};
+  var maxW = intents.maximum_weightage_pct;
+  var atMax = (intents.personas || []).filter(function (p) { return p.max_weightage_pct === maxW; }).map(function (p) { return p.name; }).join(" · ");
   document.getElementById("home-kpis").innerHTML =
     '<div class="card-surface p-4"><p class="font-label text-secondary uppercase">Records analyzed</p><p class="font-h2">' + esc(cov.total_records) + ' <span class="font-body text-secondary">' + esc(cov.relevant) + ' relevant</span></p></div>' +
     '<div class="card-surface p-4 border-l-4" style="border-left-color:#FF3F6C;"><p class="font-label text-secondary uppercase">Top VOC opportunity</p><p class="font-h2">' + esc(top.dimension || "—") + ' <span class="pink-brand font-body-bold">score ' + esc(top.opportunity_score) + '</span></p></div>' +
-    '<div class="card-surface p-4"><p class="font-label text-secondary uppercase">Highest WPC-weighted</p><p class="font-h2">' + esc(((d.comparison||{}).top_by_wpc_weighted||{}).blocker_type || "—") + '</p></div>';
+    '<div class="card-surface p-4 border-l-4" style="border-left-color:#FF3F6C;"><p class="font-label text-secondary uppercase">Maximum survey weightage</p><p class="font-h2">' + esc(maxW != null ? maxW + "%" : "—") + ' <span class="pink-brand font-body-bold">' + esc(atMax || "Size & Fit · Wishlist comparison") + '</span></p></div>';
   document.getElementById("home-questions").innerHTML = (d.questions||[]).map(function(q,i){
     return '<li><a class="hover:text-primary" href="discovery_lab.html">' + esc(q.question) + '</a></li>';
   }).join("");
@@ -255,9 +258,10 @@ Analyze eight public sources, answer ten wishlist→purchase questions, then ide
     return '<div class="card-surface p-3 flex justify-between gap-3"><span class="font-body-bold text-sm">' + esc(s.source) + '</span><span class="font-label text-secondary">' + esc(s.records) + ' · ' + esc(s.relevant) + ' relevant</span></div>';
   }).join("");
   var rows = d.areas || [];
-  document.getElementById("home-opp").innerHTML = '<table class="w-full text-sm"><thead><tr class="text-left text-secondary"><th class="py-1">Area</th><th>Stage</th><th>Mentions</th><th>VOC</th><th>WPC-w</th></tr></thead><tbody>' +
+  document.getElementById("home-opp").innerHTML = '<table class="w-full text-sm"><thead><tr class="text-left text-secondary"><th class="py-1">Area</th><th>Intent</th><th>Mentions</th><th>VOC</th><th>Weightage</th></tr></thead><tbody>' +
     rows.slice(0,8).map(function(r){
-      return '<tr class="border-t border-outline-variant"><td class="py-1">' + esc(r.dimension) + '</td><td>' + esc(r.wpc_stage) + '</td><td>' + esc(r.mentions) + '</td><td>' + esc(r.opportunity_score) + '</td><td>' + esc(r.wpc_weighted_score) + '</td></tr>';
+      var w = r.survey_weightage_pct;
+      return '<tr class="border-t border-outline-variant"><td class="py-1">' + esc(r.dimension) + '</td><td>' + esc(r.purchase_intent || "—") + '</td><td>' + esc(r.mentions) + '</td><td>' + esc(r.opportunity_score) + '</td><td>' + (w != null ? esc(w) + "%" : "—") + '</td></tr>';
     }).join("") + '</tbody></table>';
 })();
 </script>

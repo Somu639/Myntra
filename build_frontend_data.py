@@ -172,6 +172,7 @@ def main() -> None:
         "questions": [{"id": q["id"], "short": q["short"], "question": q["question"]} for q in QUESTIONS],
         "comparison": report.get("opportunity_comparison") or {},
         "areas": report.get("opportunity_areas") or [],
+        "intents": report.get("intent_segments") or {},
     }
     (FRONT / "home_data.js").write_text(
         "window.HOME_DATA = " + json.dumps(home, ensure_ascii=False) + ";\n",
@@ -182,6 +183,7 @@ def main() -> None:
             "coverage": report.get("coverage") or {},
             "comparison": report.get("opportunity_comparison") or {},
             "areas": report.get("opportunity_areas") or [],
+            "intents": report.get("intent_segments") or {},
         }, ensure_ascii=False) + ";\n",
         encoding="utf-8",
     )

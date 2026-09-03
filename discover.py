@@ -588,6 +588,26 @@ def q_intent_segments(areas: list[dict]) -> dict:
     }
 
 
+def attach_purchase_intent(areas: list[dict]) -> list[dict]:
+    """Map each VOC blocker to a purchase-intent segment and its survey weightage."""
+    spec = load_intent_segments()
+    by_bt = {}
+    for seg in spec.get("segments") or []:
+        for bt in seg.get("voc_blockers") or []:
+            by_bt[bt] = seg
+    for a in areas:
+        seg = by_bt.get(a.get("blocker_type"))
+        if not seg:
+            a["purchase_intent"] = "—"
+            a["intent_rank"] = None
+            a["survey_weightage_pct"] = None
+            continue
+        a["purchase_intent"] = seg.get("name")
+        a["intent_rank"] = seg.get("rank")
+        a["survey_weightage_pct"] = seg.get("max_weightage_pct")
+    return areas
+
+
 def q_segments(relevant):
     # Concentration per blocker: is a blocker focused in one segment (sharp
     # signal) or spread out (broad)? segment_signal is model-inferred free text.
@@ -628,7 +648,7 @@ def build_report(records: list[dict]) -> dict:
     failed = sum(1 for r in records
                  if r.get("extraction_error") or r.get("relevant") is None)
     relevant = [r for r in records if r.get("relevant") is True]
-    areas = opportunity_areas(relevant)
+    areas = attach_purchase_intent(opportunity_areas(relevant))
     intent_seg = q_intent_segments(areas)
 
     return {

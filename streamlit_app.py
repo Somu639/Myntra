@@ -390,8 +390,17 @@ def page_home(report: dict, records: list[dict]) -> None:
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Records analyzed", cov.get("total_records") or len(records) or "—")
     c2.metric("Relevant to WPC", cov.get("relevant") or "—")
-    c3.metric("Sources in scope", "8")
-    c4.metric("Discovery questions", "10")
+    areas = report.get("opportunity_areas") or []
+    top = areas[0] if areas else {}
+    c3.metric("Top VOC opportunity", top.get("dimension") or "—", f"score {top.get('opportunity_score')}" if top else None)
+    intents = report.get("intent_segments") or report.get("q9_by_segment") or {}
+    max_w = intents.get("maximum_weightage_pct")
+    at_max = " · ".join(
+        p.get("name") or ""
+        for p in (intents.get("personas") or [])
+        if p.get("max_weightage_pct") == max_w
+    )
+    c4.metric("Maximum survey weightage", f"{max_w}%" if max_w is not None else "—", at_max or None)
 
     left, right = st.columns([3, 2], gap="large")
     with left:
@@ -431,15 +440,18 @@ def page_home(report: dict, records: list[dict]) -> None:
     rows = cmp.get("rows") or report.get("opportunity_areas") or []
     if rows:
         st.markdown("#### Opportunity areas compared (north-star: wishlist → purchase)")
-        st.caption(cmp.get("note") or "Compare volume, pain, and WPC leverage. Scores are not conversion lifts.")
+        st.caption(cmp.get("note") or "Intent cut with survey max weightage. Weightage is not a funnel rate.")
         show = pd.DataFrame(rows)
         cols = [c for c in (
-            "blocker_type", "dimension", "wpc_stage", "wpc_leverage",
-            "mentions", "reach_pct_of_relevant", "frustration_rate_pct",
-            "source_count", "opportunity_score", "wpc_weighted_score",
-            "volume_rank", "frustration_rank", "wpc_weighted_rank",
+            "blocker_type", "dimension", "purchase_intent", "intent_rank",
+            "survey_weightage_pct", "mentions", "reach_pct_of_relevant",
+            "frustration_rate_pct", "source_count", "opportunity_score",
         ) if c in show.columns]
-        st.dataframe(show[cols], hide_index=True, use_container_width=True)
+        st.dataframe(show[cols].rename(columns={
+            "purchase_intent": "intent",
+            "survey_weightage_pct": "max weightage %",
+            "opportunity_score": "VOC score",
+        }), hide_index=True, use_container_width=True)
 
     st.markdown("---")
     st.markdown("#### Where to go in this dashboard")
@@ -447,7 +459,7 @@ def page_home(report: dict, records: list[dict]) -> None:
         ("Discovery Lab", "The ten questions with quantified cuts and verbatim quotes."),
         ("Search and Library", "Compare opportunity areas across volume, pain, and WPC leverage."),
         ("Reviewer", "RAG over VOC + ChatGPT research, and fetch reviews from any of the eight platforms."),
-        ("Segments", "Who feels which blocker — model-inferred concentration."),
+        ("Segments", "Purchase-intent segments with survey max weightage (75%)."),
         ("Raw Data", "Browse extracted conversations by the eight sources."),
         ("Phase 1", "First-party funnel map — empty until warehouse data."),
         ("AI Roadmap", "Prioritized solutions from opportunity_proposal.md."),
@@ -715,25 +727,35 @@ def page_library(report: dict, records: list[dict]) -> None:
         cmp = report.get("opportunity_comparison") or {}
         st.caption(cmp.get("note") or "")
         tops = st.columns(3)
-        for col, key, label in (
-            (tops[0], "top_by_volume", "Highest volume"),
-            (tops[1], "top_by_frustration", "Highest frustration"),
-            (tops[2], "top_by_wpc_weighted", "Highest WPC-weighted"),
-        ):
-            hit = cmp.get(key) or {}
-            col.metric(label, hit.get("blocker_type") or "—", str(hit.get("value") or ""))
+        hit_v = cmp.get("top_by_volume") or {}
+        hit_f = cmp.get("top_by_frustration") or {}
+        intents = report.get("intent_segments") or {}
+        max_w = intents.get("maximum_weightage_pct")
+        at_max = " · ".join(
+            p.get("name") or ""
+            for p in (intents.get("personas") or [])
+            if p.get("max_weightage_pct") == max_w
+        )
+        tops[0].metric("Highest volume", hit_v.get("blocker_type") or "—", str(hit_v.get("value") or ""))
+        tops[1].metric("Highest frustration", hit_f.get("blocker_type") or "—", str(hit_f.get("value") or ""))
+        tops[2].metric("Maximum survey weightage", f"{max_w}%" if max_w is not None else "—", at_max or None)
         rows = cmp.get("rows") or report.get("opportunity_areas") or []
         if rows:
             df = pd.DataFrame(rows)
-            chart_cols = [c for c in ("mentions", "wpc_weighted_score") if c in df.columns]
-            if chart_cols:
-                st.bar_chart(df.set_index("dimension")[chart_cols], color=["#FF3F6C", "#282C3F"])
+            if "survey_weightage_pct" in df.columns:
+                st.bar_chart(
+                    df.set_index("dimension")[["mentions", "survey_weightage_pct"]],
+                    color=["#FF3F6C", "#282C3F"],
+                )
             show_cols = [c for c in (
-                "blocker_type", "wpc_stage", "wpc_leverage", "mentions",
-                "frustration_rate_pct", "source_count", "opportunity_score",
-                "wpc_weighted_score", "volume_rank", "frustration_rank", "wpc_weighted_rank",
+                "blocker_type", "purchase_intent", "intent_rank", "survey_weightage_pct",
+                "mentions", "frustration_rate_pct", "source_count", "opportunity_score",
             ) if c in df.columns]
-            st.dataframe(df[show_cols], hide_index=True, use_container_width=True)
+            st.dataframe(df[show_cols].rename(columns={
+                "purchase_intent": "intent",
+                "survey_weightage_pct": "max weightage %",
+                "opportunity_score": "VOC score",
+            }), hide_index=True, use_container_width=True)
     with tab_src:
         src_rows = cov.get("by_source") or []
         if src_rows:
