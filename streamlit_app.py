@@ -101,7 +101,7 @@ DISCOVERY_QUESTIONS = [
         "short_title": "Segments",
         "question": "How do these behaviors differ across user segments?",
         "key": "q9_by_segment",
-        "lens": "Age-band personas (intended profiles) sized by hypothesized VOC barriers",
+        "lens": "Purchase-intent segments with survey max weightage; VOC sizes related blockers",
     },
     {
         "id": "q10",
@@ -653,17 +653,20 @@ def page_discovery_lab(report: dict, quotes: dict, records: list[dict]) -> None:
     elif spec["id"] == "q9":
         if isinstance(payload, dict):
             st.caption(payload.get("note") or "")
+            max_w = payload.get("maximum_weightage_pct")
+            if max_w is not None:
+                st.metric("Maximum survey weightage", f"{max_w}%")
             personas = payload.get("personas") or []
             if personas:
                 st.dataframe(
                     pd.DataFrame([{
-                        "segment": p.get("name"),
-                        "age": p.get("age"),
-                        "wishlist behavior": p.get("wishlist_behavior"),
+                        "rank": p.get("rank"),
+                        "intent": p.get("name"),
+                        "when": p.get("horizon"),
+                        "max weightage %": p.get("max_weightage_pct"),
                         "primary need": p.get("primary_need"),
                         "main barrier": p.get("main_barrier"),
                         "VOC mentions": p.get("voc_mentions"),
-                        "top VOC score": p.get("top_voc_score"),
                     } for p in personas]),
                     hide_index=True,
                     use_container_width=True,
@@ -751,40 +754,63 @@ def page_library(report: dict, records: list[dict]) -> None:
 
 def page_segments(report: dict) -> None:
     st.markdown("### Segments")
-    age = report.get("age_segments") or report.get("q9_by_segment") or {}
+    data = report.get("intent_segments") or report.get("q9_by_segment") or report.get("age_segments") or {}
     st.caption(
-        age.get("note")
-        or "Age bands are intended profiles. Public VOC has no verified age."
+        data.get("note")
+        or "Purchase-intent segments. Survey weightage is not a funnel rate."
     )
-    personas = age.get("personas") or []
+    personas = data.get("personas") or []
     if not personas:
-        st.info("No age-segment table. Re-run `python discover.py`.")
+        st.info("No intent-segment table. Re-run `python discover.py`.")
         return
-    st.markdown("#### Age-band personas")
+
+    max_w = data.get("maximum_weightage_pct")
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Maximum weightage", f"{max_w}%" if max_w is not None else "—")
+    c2.metric("Intent segments", len(personas))
+    c3.metric("Cut", "Intent (not age)")
+    if data.get("weightage_source"):
+        st.caption(data["weightage_source"])
+
+    st.markdown("#### Intent segments")
     st.dataframe(
         pd.DataFrame([{
-            "segment": p.get("name"),
-            "age": p.get("age"),
-            "wishlist behavior": p.get("wishlist_behavior"),
+            "rank": p.get("rank"),
+            "intent": p.get("name"),
+            "when": p.get("horizon"),
+            "max weightage %": p.get("max_weightage_pct"),
+            "impact": p.get("impact"),
             "primary need": p.get("primary_need"),
-            "main conversion barrier": p.get("main_barrier"),
-            "VOC mentions (barrier)": p.get("voc_mentions"),
-            "top VOC score": p.get("top_voc_score"),
+            "main barrier": p.get("main_barrier"),
+            "VOC mentions (related blockers)": p.get("voc_mentions"),
         } for p in personas]),
         hide_index=True,
         use_container_width=True,
     )
-    chart = pd.DataFrame(personas).set_index("name")["voc_mentions"]
-    st.bar_chart(chart, color="#FF3F6C")
-    st.caption("VOC mentions size the hypothesized barrier in this corpus — not how many shoppers are that age.")
+    wdf = pd.DataFrame(personas).set_index("name")["max_weightage_pct"]
+    st.bar_chart(wdf, color="#FF3F6C")
+    st.caption("Bar length is survey max weightage (%), not VOC volume and not a conversion lift.")
 
     for p in personas:
-        with st.expander(f"{p.get('name')} · {p.get('age')}"):
-            st.markdown(f"**Wishlist behavior:** {p.get('wishlist_behavior')}")
+        tag = f"{p.get('horizon') or ''} · {p.get('impact') or ''}".strip(" ·")
+        with st.expander(f"#{p.get('rank')} {p.get('name')} · {p.get('max_weightage_pct')}% max weightage · {tag}"):
             st.markdown(f"**Primary need:** {p.get('primary_need')}")
             st.markdown(f"**Main conversion barrier:** {p.get('main_barrier')}")
+            ev = p.get("survey_evidence") or []
+            if ev:
+                st.markdown("**Survey evidence**")
+                for line in ev:
+                    st.markdown(f"- {line}")
+            if p.get("conversion_hypothesis"):
+                st.caption(p["conversion_hypothesis"])
+            sols = p.get("ai_solutions") or []
+            if sols:
+                st.markdown("**AI solutions (proposed)**")
+                for line in sols:
+                    st.markdown(f"- {line}")
             match = p.get("voc_match") or []
             if match:
+                st.markdown("**Related public-VOC blockers**")
                 st.dataframe(pd.DataFrame(match), hide_index=True, use_container_width=True)
 
     inferred = (report.get("q9_by_segment") or {}).get("inferred_blockers") or []

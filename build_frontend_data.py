@@ -162,7 +162,7 @@ def main() -> None:
         encoding="utf-8",
     )
     (FRONT / "segments_data.js").write_text(
-        "window.SEGMENTS_DATA = " + json.dumps(report.get("age_segments") or report.get("q9_by_segment") or {}, ensure_ascii=False) + ";\n",
+        "window.SEGMENTS_DATA = " + json.dumps(report.get("intent_segments") or report.get("q9_by_segment") or report.get("age_segments") or {}, ensure_ascii=False) + ";\n",
         encoding="utf-8",
     )
     home = {

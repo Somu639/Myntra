@@ -639,14 +639,14 @@
         + " signals with a clear wishlist mention in public VOC). Treat as directional.</p>";
 
     } else if (id === "q9" && p && p.personas) {
-      kpis += kpi("Personas", (p.personas || []).length);
-      // Show chips in barrier column
+      kpis += kpi("Intents", (p.personas || []).length);
+      if (p.maximum_weightage_pct != null) kpis += kpi("Max weightage", p.maximum_weightage_pct + "%");
       body = platformNotice
-        + "<p class='font-body text-secondary mb-3'>" + esc(p.note || "Age bands are intended profiles. VOC mentions size the hypothesized barrier, not the age group.") + "</p>"
+        + "<p class='font-body text-secondary mb-3'>" + esc(p.note || "Purchase-intent segments. Survey weightage is not a funnel rate.") + "</p>"
         + table(
-            ["Segment", "Age", "Need", "Main barrier", "VOC mentions"],
+            ["Rank", "Intent", "When", "Max weightage %", "Need", "Main barrier", "VOC mentions"],
             (p.personas || []).map(function (s) {
-              return [s.name, s.age, s.primary_need, s.main_barrier, s.voc_mentions];
+              return [s.rank, s.name, s.horizon, s.max_weightage_pct, s.primary_need, s.main_barrier, s.voc_mentions];
             })
           );
 

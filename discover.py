@@ -69,6 +69,44 @@ BLOCKER_DIMENSION = {
     "other": "Other",
 }
 
+# Display order when grouping fetched reviews by reason.
+CATEGORY_ORDER = [
+    "Size issue",
+    "Fit issue",
+    "Fit & Size",
+    "Returns & Exchange",
+    "Price & Value",
+    "Quality",
+    "Styling",
+    "Trust & Reviews",
+    "Choice / Comparison",
+    "Occasion & Timing",
+    "Social Validation",
+    "Payment",
+    "Other",
+    "Uncategorized",
+]
+
+
+def review_category(record: dict) -> str:
+    """Human reason for a review: Size vs Fit when the text supports it, else taxonomy dimension."""
+    text = (record.get("text") or "").lower()
+    bt = record.get("blocker_type")
+    has_size = bool(re.search(
+        r"\b(size|sizing|size.?chart|xxl|xxxl)\b|\bsmall\b|\blarge\b|\btoo (small|big|large)\b",
+        text,
+    ))
+    has_fit = bool(re.search(r"\b(fit|tight|loose|baggy|snug|fitting)\b", text))
+    if bt == "fit_sizing" or has_size or has_fit:
+        if has_size and not has_fit:
+            return "Size issue"
+        if has_fit and not has_size:
+            return "Fit issue"
+        return "Fit & Size"
+    if bt:
+        return BLOCKER_DIMENSION.get(bt, "Other")
+    return "Uncategorized"
+
 # Brief source labels (the eight public-VOC channels this engine analyzes).
 SOURCE_BRIEF = {
     "app_store_myntra": "App Store reviews",
@@ -497,17 +535,19 @@ def q_off_platform(relevant):
     }
 
 
-def load_age_segments() -> dict:
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "age_segments.json")
-    if not os.path.exists(path):
-        return {"note": "", "segments": []}
-    with open(path, "r", encoding="utf-8") as fh:
-        return json.load(fh)
+def load_intent_segments() -> dict:
+    here = os.path.dirname(os.path.abspath(__file__))
+    for name in ("intent_segments.json", "age_segments.json"):
+        path = os.path.join(here, name)
+        if os.path.exists(path):
+            with open(path, "r", encoding="utf-8") as fh:
+                return json.load(fh)
+    return {"note": "", "segments": []}
 
 
-def q_age_segments(areas: list[dict]) -> dict:
-    """Size each age-band persona's hypothesized barrier from VOC. Not a census."""
-    spec = load_age_segments()
+def q_intent_segments(areas: list[dict]) -> dict:
+    """Size each purchase-intent's hypothesized VOC blockers. Survey weightage is separate."""
+    spec = load_intent_segments()
     by_bt = {r.get("blocker_type"): r for r in areas}
     personas = []
     for seg in spec.get("segments") or []:
@@ -534,9 +574,16 @@ def q_age_segments(areas: list[dict]) -> dict:
             "top_voc_score": best_score or None,
             "voc_match": matched,
         })
-    personas.sort(key=lambda r: r.get("voc_mentions") or 0, reverse=True)
+    personas.sort(key=lambda r: (r.get("rank") or 99, -(r.get("max_weightage_pct") or 0)))
+    weights = [p.get("max_weightage_pct") for p in personas if p.get("max_weightage_pct") is not None]
+    max_w = spec.get("maximum_weightage_pct")
+    if max_w is None and weights:
+        max_w = max(weights)
     return {
+        "cut": spec.get("cut") or "intent",
         "note": spec.get("note") or "",
+        "weightage_source": spec.get("weightage_source") or "",
+        "maximum_weightage_pct": max_w,
         "personas": personas,
     }
 
@@ -582,7 +629,7 @@ def build_report(records: list[dict]) -> dict:
                  if r.get("extraction_error") or r.get("relevant") is None)
     relevant = [r for r in records if r.get("relevant") is True]
     areas = opportunity_areas(relevant)
-    age_seg = q_age_segments(areas)
+    intent_seg = q_intent_segments(areas)
 
     return {
         "north_star": "Wishlist / consideration → purchase conversion on Myntra",
@@ -619,14 +666,16 @@ def build_report(records: list[dict]) -> dict:
         "q8_intent_vs_bookmark": q_intent_vs_bookmark(relevant),
         "q9_by_segment": {
             "note": (
-                "Primary cut is age-band personas (intended profiles). "
-                "Public VOC has no verified age — voc_mentions size the hypothesized barrier. "
+                "Primary cut is purchase intent (size/fit, reviews, comparison, returns), not age. "
+                "max_weightage_pct is survey share of pre-purchase checks — not a funnel rate. "
+                "voc_mentions size related public-review blockers in this corpus. "
                 "inferred_blockers is the older free-text segment_signal table."
             ),
-            **age_seg,
+            **intent_seg,
             "inferred_blockers": q_segments(relevant),
         },
-        "age_segments": age_seg,
+        "intent_segments": intent_seg,
+        "age_segments": intent_seg,
     }
 
 
@@ -772,13 +821,16 @@ def render_markdown(rep: dict) -> str:
     q9 = rep.get("q9_by_segment") or {}
     L.append("## Q9 — How do behaviors differ across user segments?")
     L.append(q9.get("note") or "")
+    max_w = q9.get("maximum_weightage_pct")
+    if max_w is not None:
+        L.append(f"- **Maximum survey weightage:** {max_w}% (Size & Fit, and Wishlist comparison).")
     L.append("")
-    L.append("| Segment | Age | Wishlist behavior | Primary need | Barrier | VOC mentions |")
+    L.append("| Rank | Intent | When | Max weightage % | Barrier | VOC mentions |")
     L.append("| --- | --- | --- | --- | --- | --- |")
     for s in q9.get("personas") or []:
         L.append(
-            f"| {s.get('name')} | {s.get('age')} | {s.get('wishlist_behavior')} | "
-            f"{s.get('primary_need')} | {s.get('main_barrier')} | "
+            f"| {s.get('rank')} | {s.get('name')} | {s.get('horizon')} | "
+            f"{s.get('max_weightage_pct')} | {s.get('main_barrier')} | "
             f"{s.get('voc_mentions')} |"
         )
     L.append("")

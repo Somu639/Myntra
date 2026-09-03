@@ -188,15 +188,18 @@
 <main class="p-container_padding flex-1">
 <div class="mb-8">
 <h1 class="font-h1 text-h1 text-myntra-dark mb-2">Segments</h1>
-<p id="seg-note" class="font-body text-body text-myntra-muted">Age-band personas. Public VOC has no verified age — VOC mentions size the hypothesized barrier, not the age group.</p>
+<p id="seg-note" class="font-body text-body text-myntra-muted">Purchase-intent segments. Survey weightage is not a funnel rate.</p>
+<p id="seg-maxw" class="font-h3 text-h3 myntra-pink mt-3">Maximum weightage: 75%</p>
+<p id="seg-wsrc" class="font-body text-sm text-myntra-muted mb-6"></p>
 </div>
 <div class="overflow-x-auto card-surface rounded-DEFAULT border border-myntra-divider mb-8">
 <table class="w-full text-left border-collapse text-sm">
 <thead>
 <tr class="bg-myntra-muted-bg border-y border-myntra-divider">
-<th class="py-3 px-4">Segment</th>
-<th class="py-3 px-4">Age</th>
-<th class="py-3 px-4">Wishlist behavior</th>
+<th class="py-3 px-4">Rank</th>
+<th class="py-3 px-4">Intent</th>
+<th class="py-3 px-4">When</th>
+<th class="py-3 px-4 text-right">Max weightage</th>
 <th class="py-3 px-4">Primary need</th>
 <th class="py-3 px-4">Main conversion barrier</th>
 <th class="py-3 px-4 text-right">VOC mentions</th>
@@ -205,7 +208,7 @@
 <tbody id="seg-rows"></tbody>
 </table>
 </div>
-<h3 class="font-h3 text-h3 mb-4">Barrier size in this corpus</h3>
+<h3 class="font-h3 text-h3 mb-4">Survey max weightage</h3>
 <div id="seg-bars" class="space-y-4 mb-8"></div>
 <div id="seg-cards" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
 </main>
@@ -222,18 +225,25 @@
   var d = window.SEGMENTS_DATA || {};
   var note = document.getElementById("seg-note");
   if (note && d.note) note.textContent = d.note;
+  var maxW = d.maximum_weightage_pct;
+  var maxEl = document.getElementById("seg-maxw");
+  if (maxEl && maxW != null) maxEl.textContent = "Maximum weightage: " + maxW + "%";
+  var wsrc = document.getElementById("seg-wsrc");
+  if (wsrc && d.weightage_source) wsrc.textContent = d.weightage_source;
   var rows = d.personas || [];
-  var max = Math.max.apply(null, rows.map(function(r){return r.voc_mentions||0;}).concat([1]));
+  var barMax = Math.max.apply(null, rows.map(function(r){return r.max_weightage_pct||0;}).concat([maxW||1, 1]));
   document.getElementById("seg-rows").innerHTML = rows.map(function(p){
-    return "<tr class='border-b border-myntra-divider'><td class='py-3 px-4 font-body-bold'>"+esc(p.name)+"</td><td class='py-3 px-4'>"+esc(p.age)+"</td><td class='py-3 px-4'>"+esc(p.wishlist_behavior)+"</td><td class='py-3 px-4'>"+esc(p.primary_need)+"</td><td class='py-3 px-4'>"+esc(p.main_barrier)+"</td><td class='py-3 px-4 text-right font-body-bold myntra-pink'>"+esc(p.voc_mentions)+"</td></tr>";
+    return "<tr class='border-b border-myntra-divider'><td class='py-3 px-4 font-body-bold'>#"+esc(p.rank)+"</td><td class='py-3 px-4 font-body-bold'>"+esc(p.name)+"</td><td class='py-3 px-4'>"+esc(p.horizon)+(p.impact?" · "+esc(p.impact):"")+"</td><td class='py-3 px-4 text-right font-body-bold myntra-pink'>"+esc(p.max_weightage_pct)+"%</td><td class='py-3 px-4'>"+esc(p.primary_need)+"</td><td class='py-3 px-4'>"+esc(p.main_barrier)+"</td><td class='py-3 px-4 text-right'>"+esc(p.voc_mentions)+"</td></tr>";
   }).join("");
   document.getElementById("seg-bars").innerHTML = rows.map(function(p){
-    var w = Math.round(100*(p.voc_mentions||0)/max);
-    return "<div><div class='flex justify-between text-sm mb-1'><span>"+esc(p.name)+" · "+esc(p.age)+"</span><span class='text-myntra-muted'>"+esc(p.voc_mentions)+" mentions</span></div><div class='h-3 bg-myntra-muted-bg rounded-sm overflow-hidden'><div class='bg-myntra-pink h-3' style='width:"+w+"%'></div></div></div>";
+    var w = Math.round(100*(p.max_weightage_pct||0)/barMax);
+    return "<div><div class='flex justify-between text-sm mb-1'><span>"+esc(p.name)+"</span><span class='myntra-pink font-body-bold'>"+esc(p.max_weightage_pct)+"%</span></div><div class='h-3 bg-myntra-muted-bg rounded-sm overflow-hidden'><div class='bg-myntra-pink h-3' style='width:"+w+"%'></div></div></div>";
   }).join("");
   document.getElementById("seg-cards").innerHTML = rows.map(function(p){
+    var ev = (p.survey_evidence||[]).map(function(line){ return "<li>"+esc(line)+"</li>"; }).join("");
+    var sols = (p.ai_solutions||[]).map(function(line){ return "<li>"+esc(line)+"</li>"; }).join("");
     var match = (p.voc_match||[]).map(function(m){ return esc(m.blocker_type)+" ("+esc(m.mentions||0)+")"; }).join(" · ");
-    return "<div class='card-surface border border-myntra-divider rounded p-4'><p class='font-label text-primary uppercase'>"+esc(p.age)+"</p><h3 class='font-h3 mb-2'>"+esc(p.name)+"</h3><p class='text-sm mb-1'><strong>Wishlist:</strong> "+esc(p.wishlist_behavior)+"</p><p class='text-sm mb-1'><strong>Need:</strong> "+esc(p.primary_need)+"</p><p class='text-sm mb-2'><strong>Barrier:</strong> "+esc(p.main_barrier)+"</p><p class='text-xs text-myntra-muted'>VOC: "+match+"</p></div>";
+    return "<div class='card-surface border border-myntra-divider rounded p-4'><p class='font-label text-primary uppercase'>Rank "+esc(p.rank)+" · "+esc(p.horizon)+" · "+esc(p.max_weightage_pct)+"% max weightage</p><h3 class='font-h3 mb-2'>"+esc(p.name)+"</h3><p class='text-sm mb-1'><strong>Need:</strong> "+esc(p.primary_need)+"</p><p class='text-sm mb-2'><strong>Barrier:</strong> "+esc(p.main_barrier)+"</p><p class='font-label text-secondary uppercase mt-3 mb-1'>Survey evidence</p><ul class='text-sm list-disc pl-4 mb-2'>"+ev+"</ul><p class='font-label text-secondary uppercase mt-3 mb-1'>AI solutions</p><ul class='text-sm list-disc pl-4 mb-2'>"+sols+"</ul><p class='text-xs text-myntra-muted'>Related VOC: "+match+"</p></div>";
   }).join("");
 })();
 </script>

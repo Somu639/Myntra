@@ -1,0 +1,101 @@
+{
+  "cut": "intent",
+  "maximum_weightage_pct": 75,
+  "weightage_source": "Shopper survey of pre-purchase checks and most-useful features. Not a Myntra funnel or WPC rate, and not computed from public VOC.",
+  "note": "Segments are purchase intents, not age bands. Maximum weightage in the survey is 75% (Size & Fit, and Wishlist comparison). Survey % is stated intent/check behaviour. VOC mentions size related public-review blockers in this corpus only.",
+  "segments": [
+    {
+      "id": "size_fit_confidence",
+      "rank": 1,
+      "horizon": "Now",
+      "impact": "High impact",
+      "name": "Personalised Size & Fit Confidence",
+      "primary_need": "Confirm the garment will fit this body before buying",
+      "main_barrier": "Fit and size doubt on the PDP / wishlist",
+      "max_weightage_pct": 75,
+      "survey_evidence": [
+        "75% check product photos/videos before buying",
+        "56.3% check size charts",
+        "31.3% use body measurements",
+        "31.3% watch product videos",
+        "31.3% chose this as the most useful feature"
+      ],
+      "conversion_hypothesis": "Moving users from 3/5 to 4/5 purchase intent by confirming fit visually. Hypothesis from the survey, not a measured lift.",
+      "ai_solutions": [
+        "Virtual try-on overlay from a user photo",
+        "Smart size recommendation from measurements and purchase history",
+        "Cluster real customer photos by body type",
+        "Pin review videos that mention fit/size"
+      ],
+      "voc_blockers": ["fit_sizing"]
+    },
+    {
+      "id": "reviews_social_proof",
+      "rank": 2,
+      "horizon": "Now",
+      "impact": "High impact",
+      "name": "Genuine Customer Reviews & Social Proof",
+      "primary_need": "Trust that the product is real and looks as shown",
+      "main_barrier": "Doubt about authenticity, quality, and whose reviews to believe",
+      "max_weightage_pct": 68.8,
+      "survey_evidence": [
+        "68.8% check customer reviews pre-purchase",
+        "25% say genuine reviews would most increase confidence",
+        "18.8% chose real customer proof as the most useful new feature",
+        "12.5% check Reddit/social media reviews"
+      ],
+      "conversion_hypothesis": "Surface verified, similar-shopper proof so people do not leave for Reddit. Hypothesis from the survey, not a measured lift.",
+      "ai_solutions": [
+        "Verified-purchase badge on reviews",
+        "AI review summary card (quality, fit, value)",
+        "Ingest organic Reddit/social mentions",
+        "People-like-you review filter"
+      ],
+      "voc_blockers": ["trust_authenticity", "quality_doubt", "social_validation"]
+    },
+    {
+      "id": "wishlist_comparison",
+      "rank": 3,
+      "horizon": "Next",
+      "impact": "Medium effort",
+      "name": "Wishlist Comparison & Decision Engine",
+      "primary_need": "Pick one item from a shortlist without leaving the app",
+      "main_barrier": "Choice overload and off-platform price/product comparison",
+      "max_weightage_pct": 75,
+      "survey_evidence": [
+        "75% add items to wishlist specifically to compare alternatives",
+        "43.8% want to save items for later consideration",
+        "25% chose wishlist comparison as the most useful new feature",
+        "18.8% compare prices on other platforms",
+        "18.8% compare with other products on Myntra"
+      ],
+      "conversion_hypothesis": "A side-by-side compare plus a best-pick score reduces stall on a 3/5 shortlist. Hypothesis from the survey, not a measured lift.",
+      "ai_solutions": [
+        "Side-by-side wishlist compare (up to 4 items)",
+        "AI best-pick score on the shortlist",
+        "Cross-platform price intelligence",
+        "Smart grouping by occasion, style, or duplicate need"
+      ],
+      "voc_blockers": ["decision_paralysis_too_many_options", "price"]
+    },
+    {
+      "id": "returns_inventory",
+      "rank": 4,
+      "horizon": "Next",
+      "impact": "Next",
+      "name": "Return Policy Confidence & Inventory Clarity",
+      "primary_need": "Know it is easy to return and that the saved size is still buyable",
+      "main_barrier": "Fear of painful returns and unclear stock/price on the wishlist",
+      "max_weightage_pct": 56.3,
+      "survey_evidence": [
+        "56.3% check the return/exchange policy before purchasing"
+      ],
+      "conversion_hypothesis": "Visible return window plus OOS/price-drop handling keeps the wishlist actionable. Hypothesis from the survey, not a measured lift.",
+      "ai_solutions": [
+        "Separate out-of-stock items from actionable wishlist rows",
+        "Price-drop and restock alerts"
+      ],
+      "voc_blockers": ["return_hassle"]
+    }
+  ]
+}
