@@ -165,7 +165,6 @@ def source_label(src: str | None) -> str:
 
 NAV_PAGES = [
     "Home",
-    "Phase 1",
     "Discovery Lab",
     "Search and Library",
     "Segments",
@@ -175,7 +174,6 @@ NAV_PAGES = [
 ]
 NAV_ICONS = {
     "Home": "🏠",
-    "Phase 1": "📊",
     "Discovery Lab": "🔬",
     "Search and Library": "📚",
     "Segments": "👥",
@@ -461,7 +459,6 @@ def page_home(report: dict, records: list[dict]) -> None:
         ("Reviewer", "RAG over VOC + ChatGPT research, and fetch reviews from any of the eight platforms."),
         ("Segments", "Purchase-intent segments with survey max weightage (75%)."),
         ("Raw Data", "Browse extracted conversations by the eight sources."),
-        ("Phase 1", "First-party funnel map — empty until warehouse data."),
         ("AI Roadmap", "Prioritized solutions from opportunity_proposal.md."),
     ]
     cols = st.columns(2)
@@ -1070,7 +1067,6 @@ def main() -> None:
     report = load_report(_file_stamp(REPORT_PATH))
     records = load_insights(_file_stamp(INSIGHTS_PATH))
     quotes = load_quotes(_file_stamp(QUOTES_PATH))
-    phase1 = load_phase1(_file_stamp(PHASE1_PATH))
 
     groq_ok = bool(os.getenv("GROQ_API_KEY"))
     st.sidebar.markdown("---")
@@ -1082,8 +1078,6 @@ def main() -> None:
 
     if page == "Home":
         page_home(report, records)
-    elif page == "Phase 1":
-        page_phase1(phase1)
     elif page == "Discovery Lab":
         page_discovery_lab(report, quotes, records)
     elif page == "Search and Library":
